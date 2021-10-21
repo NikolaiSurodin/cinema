@@ -11,6 +11,7 @@ const router = new VueRouter( {
         {
             path: '/films',
             component: MainLayout,
+            props: true
         },
         {
             path: '/films/:id',

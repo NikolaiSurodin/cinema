@@ -1,70 +1,64 @@
 <template>
   <div>
-    <template class="wrap" v-if="!showReview">
-      <b-card :title="film.title" :img-src="film.img" img-alt="Image" img-top class="card">
-        <b-icon icon="arrow-left-circle" scale="2" style="cursor: pointer" @click="goBack"></b-icon>
-        <b-card-text style="color: white" class="card-body">
-          {{ film.description }}
-          <p class="actors-title">Актёры:</p>
-          <div class="actors" v-for="(actor, idx) in film.actors" :key="idx">
-            {{ actor }}
+    <main>
+      <b-card  style="margin: 5rem" :img-src="getIMG_URL+film.backdrop_path" img-alt="Image" img-left class="mb-3" v-if="!showReview">
+        <b-card-text>
+          <h1>{{ film.title }} ({{ new Date( film.release_date ).getFullYear() }})</h1>
+
+          <div class="about">
+            <h4>About:</h4>
+            {{ film.overview }}
           </div>
-          <p class="actors-title">Режиссёр:</p>
-          {{ film.directors[0] }}
-          <div class="button-review">
-            <p>Review
-              <b-icon style="cursor: pointer;padding: 0 2px;margin: 0 4px;" @click="sendReview" icon="info-circle-fill" scale="2" variant="info"></b-icon>
-            </p>
+          <div class="genres">
+            <h4>Genres:</h4>
+            <div v-for="genre in film.genres" :key="genre.id">
+              {{ genre.name }}
+            </div>
+          </div>
+          <div class="social-footer-card">
+            <div class="social-item" >
+              <img src="https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-13-heart-white-28d2cc2d6418c5047efcfd2438bfc5d109192671263c270993c05f130cc4584e.svg"/>
+
+            </div>
           </div>
         </b-card-text>
-        <template #footer style="position: relative">
-          <iframe width="950" height="400" :src="film.url" title="YouTube video player" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
-
-          <footer>
-            <div class="up-button-block">
-              <b-button class="up-btn" @click="scrollUp">
-                <b-icon icon="chevron-up" class="chevron-up"></b-icon>
-              </b-button>
-            </div>
-          </footer>
-        </template>
       </b-card>
-    </template>
-    <div :class="{'open':showReview}" v-else>
-      <review-popup :review="film.review"
-
-                    @close="showReview = false"
-      />
-    </div>
+      <div :class="{'open':showReview}" v-else>
+        <review-popup
+            @close="showReview = false"
+        />
+      </div>
+    </main>
   </div>
 
 </template>
 
 <script>
-import ReviewPopup from "@/components/popup/ReviewPopup";
-import {mapGetters, mapActions} from 'vuex'
+import ReviewPopup from "@/components/popup/ReviewPopup"
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "FilmItem",
+  data() {
+    return {
+      showReview: false,
+    }
+  },
   components: {
     ReviewPopup
   },
-  data() {
-    return {
-      showReview: false
-    }
-  },
   computed: {
-    ...mapGetters( [ 'getFilmList' ] ),
+    ...mapGetters( [
+      'getIMG_URL',
+      'getFilm'
+    ] ),
     film() {
-      let filterFilm = this.getFilmList.filter( film => film.id == this.$route.params.id )
-      return filterFilm[0]
-    }
+      return this.getFilm
+    },
+
   },
   methods: {
-    ...mapActions( [ 'sendReview' ] ),
+    ...mapActions( [ 'fetchInfoDetailFilm', 'clearFIlmItem' ] ),
     sendReview() {
       this.showReview = true
     },
@@ -72,11 +66,14 @@ export default {
       window.scrollTo( 0, 0 )
     },
     goBack() {
-      this.$router.go(-1)
+      this.$router.go( -1 )
     }
   },
-  created() {
-    this.getFilmList
+  mounted() {
+    this.fetchInfoDetailFilm( this.$route.params.id )
+  },
+  beforeDestroy() {
+    this.clearFIlmItem()
   }
 
 }
@@ -142,5 +139,22 @@ export default {
   transition: transform 1s, height 1s 1s;
   width: 100%;
   max-width: 100%;
+}
+.social-item {
+  background-color: #000000;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  color: black;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.social-item :hover {
+  background-color: #626262;
+  border-radius: 50%;
+
 }
 </style>
