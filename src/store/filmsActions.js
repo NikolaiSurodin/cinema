@@ -1,66 +1,78 @@
-import axios from "axios"
-import { endpoints } from "@/endpoints"
-
-const API_KEY = 'a1a84ce3dd10a1eb326873af2b7d9e60'
-const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${ API_KEY }`
-const MOVIE_URL = `https://api.themoviedb.org/3/movie/{movie_id}?api_key=${ API_KEY }&language=en-US`
-const GLOBAL_SEARCH_URL = `https://api.themoviedb.org/3/search/movie?api_key=a1a84ce3dd10a1eb326873af2b7d9e60&language=ru-RU&query={:search}&page=1&include_adult=false`
+import { globalFilm, recomendFilmList, infoFilm, filmList, getNewFilms } from "@/services/film.service"
 
 export default {
     fetchFilmList( { commit } ) {
-        return new Promise( ( resolve, reject )=> {
-            let films = []
-            axios
-                .get( `${ BASE_URL }&${ endpoints.films.get }` )
-                .then( response => {
-                    films = response.data.results
-                    commit( 'SET_FILM_LIST', films )
-                    resolve()
-                } )
-                .catch(() => {reject()})
-
+        return new Promise( ( resolve, reject ) => {
+            filmList().then((films) => {
+                commit( 'SET_FILM_LIST', films )
+            })
+            resolve()
+            reject()
         } )
     },
     fetchOnPageFilms( { commit }, page ) {
         return new Promise( resolve => {
-            let arr = []
-            axios
-                .get( `${ BASE_URL }&${ endpoints.films.get }`.replace( 'page=1', `page=${ page }` ) )
-                .then( response => {
-                    arr = response.data.results
-                    commit( 'PUSH', arr )
+            getNewFilms(page)
+                .then((filmList) => {
+                    commit( 'PUSH', filmList )
                     resolve()
-                } )
+                })
         } )
     },
     fetchInfoDetailFilm( { commit }, id ) {
         return new Promise( resolve => {
-            let film = {}
-            axios
-                .get( `${ MOVIE_URL }`.replace( '{movie_id}', id ) )
-                .then( response => {
-                    film = response.data
+            infoFilm( id )
+                .then( (film) => {
                     commit( 'SET_FILM_INFO', film )
-                    resolve()
                 } )
+            resolve()
         } )
     },
-    clearFIlmItem({commit}){
-        commit('CLEAR')
+    clearFIlmItem( { commit } ) {
+        return new Promise( resolve => {
+            commit( 'CLEAR' )
+            resolve()
+        } )
     },
-    globalSearchFilm({commit}, searchValue){
-        return new Promise(resolve => {
-            let globalSearchFilm = {}
-            axios
-                .get( `${ GLOBAL_SEARCH_URL }`.replace( '{:search}', searchValue ) )
-                .then( response => {
-                    globalSearchFilm = response.data.results
-                    commit( 'SET_GLOBAL_FILM', globalSearchFilm )
-                    resolve()
+    globalSearchFilm( { commit }, searchValue ) {
+        return new Promise( resolve => {
+            globalFilm( searchValue )
+                .then( ( film ) => {
+                    commit( 'SET_GLOBAL_FILM', film )
                 } )
-        })
+            resolve()
+        } )
+
     },
-    removeGlobalFilm({commit}){
-        commit('REMOVE_GLOBAL_FILM')
+    removeGlobalFilm( { commit } ) {
+        commit( 'REMOVE_GLOBAL_FILM' )
+    },
+    addLikeFilm( { commit }, film ) {
+        return new Promise( resolve => {
+            commit( 'SET_LIKE_FILM', film )
+            resolve()
+        } )
+    },
+    removeLikeFilm( { commit }, film ) {
+        return new Promise( resolve => {
+            commit( 'DELETE_LIKE_FILM', film )
+            resolve()
+        } )
+    },
+    fetchRecomendFilms( { commit }, id ) {
+        return new Promise( resolve => {
+            recomendFilmList( id )
+                .then( ( films ) => {
+                    commit( 'SET_RECOMEND', films )
+                } )
+            resolve()
+        } )
+
+    },
+    removeRecomendFilmList( { commit } ) {
+        return new Promise( resolve => {
+            commit( 'CLEAR_RECOMEND_LIST' )
+            resolve()
+        } )
     }
 }

@@ -4,6 +4,16 @@
     <b-card-text class="text" style="color: black">
       {{ filmOverview }}
     </b-card-text>
+    <div class="bt-close" v-if="isRouteLike">
+      <b-button variant="light"
+                type="button"
+                class="btn-sm"
+                title="Delete this film"
+                @click.stop="deleteLikeFilm"
+      >
+        <b-icon icon="x-circle" scale="1" style="cursor: pointer;"></b-icon>
+      </b-button>
+    </div>
     <template #footer>
       <small class="text-muted">
         <p class="rating">
@@ -28,13 +38,19 @@ export default {
   },
   methods: {
     toFilm() {
-      this.$router.push( `/films/${ this.film.id }` )
+      this.$emit('clickOnFilm')
+    },
+    deleteLikeFilm() {
+      this.$emit('deleteLikeFilm')
     }
   },
   computed: {
     ...mapGetters( [ 'getIMG_URL' ] ),
     filmOverview() {
       return this.film.overview !== '' ? this.film.overview : 'Overview no'
+    },
+    isRouteLike() {
+      return !!this.$route.path.includes('likeFilms')
     }
   }
 }
@@ -71,5 +87,9 @@ export default {
   /* width: 370px; */
   /* white-space: nowrap; */
   overflow: hidden;
+}
+.bt-close {
+  display: flex;
+  justify-content: end;
 }
 </style>

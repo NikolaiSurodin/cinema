@@ -1,7 +1,11 @@
 <template>
   <div>
-    <main>
-      <b-card  style="margin: 5rem" :img-src="getIMG_URL+film.backdrop_path" img-alt="Image" img-left class="mb-3" v-if="!showReview">
+    <main-header />
+    <template v-if="loading">
+      <b-spinner class="main-layout-spin" type="grow"></b-spinner>
+    </template>
+    <main v-else>
+      <b-card style="margin: 5rem" :img-src="getIMG_URL+film.backdrop_path" img-alt="Image" img-left class="mb-3">
         <b-card-text>
           <h1>{{ film.title }} ({{ new Date( film.release_date ).getFullYear() }})</h1>
 
@@ -15,62 +19,69 @@
               {{ genre.name }}
             </div>
           </div>
-          <div class="social-footer-card">
-            <div class="social-item" >
-              <img src="https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-13-heart-white-28d2cc2d6418c5047efcfd2438bfc5d109192671263c270993c05f130cc4584e.svg"/>
+          <div class="social-footer-card mt-2">
+            <div class="social-item">
 
+              <b-button variant="light"
+                        type="button"
+                        class="btn-sm"
+                        title="Like this film"
+                        :disabled="like"
+                        @click.stop="likesFilm(film)"
+              >
+                <img src="../assets/like_favorite_heart_5759.png"/>
+              </b-button>
+              <p style="cursor: pointer" @click="showRecomend">show recommendations</p>
             </div>
           </div>
         </b-card-text>
       </b-card>
-      <div :class="{'open':showReview}" v-else>
-        <review-popup
-            @close="showReview = false"
-        />
-      </div>
+      <template v-if="recomend">
+        <recomend-table />
+      </template>
     </main>
   </div>
-
 </template>
 
 <script>
-import ReviewPopup from "@/components/popup/ReviewPopup"
 import { mapGetters, mapActions } from 'vuex'
-
+import RecomendTable from "@/components/RecomendTable"
+import MainHeader from "@/components/MainHeader"
 export default {
   name: "FilmItem",
+  components:{RecomendTable, MainHeader},
   data() {
     return {
-      showReview: false,
+      like: false,
+      loading: true,
+      recomend: false
     }
-  },
-  components: {
-    ReviewPopup
   },
   computed: {
     ...mapGetters( [
       'getIMG_URL',
-      'getFilm'
+      'getFilm',
     ] ),
     film() {
       return this.getFilm
     },
-
   },
   methods: {
-    ...mapActions( [ 'fetchInfoDetailFilm', 'clearFIlmItem' ] ),
-    sendReview() {
-      this.showReview = true
+    ...mapActions( [ 'fetchInfoDetailFilm', 'clearFIlmItem', 'addLikeFilm', 'fetchRecomendFilms' ] ),
+    likesFilm( film ) {
+      this.addLikeFilm( film )
+          .then( () => {
+            this.like = true
+            this.$popup.success( 'this movie was added to the "Like" list', 'Like!' )
+          } )
     },
-    scrollUp() {
-      window.scrollTo( 0, 0 )
-    },
-    goBack() {
-      this.$router.go( -1 )
+    showRecomend() {
+      this.recomend = true
+      this.fetchRecomendFilms( this.$route.params.id )
     }
   },
   mounted() {
-    this.fetchInfoDetailFilm( this.$route.params.id )
+    this.fetchInfoDetailFilm( this.$route.params.id ).then( () => this.loading = false )
   },
   beforeDestroy() {
     this.clearFIlmItem()
@@ -140,21 +151,17 @@ export default {
   width: 100%;
   max-width: 100%;
 }
-.social-item {
-  background-color: #000000;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  display: flex;
-  color: black;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.social-item :hover {
-  background-color: #626262;
-  border-radius: 50%;
 
+.social-item {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+}
+.layout {
+  display: grid;
+  /*grid-template-rows: 1fr 1fr 1fr;*/
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 2vw;
+  padding: 4px;
 }
 </style>
