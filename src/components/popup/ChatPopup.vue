@@ -1,10 +1,12 @@
 <template>
-$END$
+<div>
+  Chat
+</div>
 </template>
 
 <script>
 export default {
-name: "ChatPopup"
+  name: "ChatPopup"
 }
 </script>
 
