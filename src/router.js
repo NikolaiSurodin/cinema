@@ -4,6 +4,7 @@ import MainLayout from "@/view/MainLayout";
 import FilmItem from "@/components/FilmItem";
 import Login from "@/components/Login";
 import FavoriteFilms from "@/components/FavoriteFilms";
+import PopularListFilm from "@/components/PopularListFilm";
 
 Vue.use( VueRouter )
 
@@ -18,6 +19,11 @@ const router = new VueRouter( {
         {
             path: '/films',
             component: MainLayout,
+            props: true
+        },
+        {
+            path: '/popularFilms',
+            component: PopularListFilm,
             props: true
         },
         {

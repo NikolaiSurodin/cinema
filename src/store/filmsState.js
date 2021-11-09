@@ -1,8 +1,9 @@
 export default {
     filmList: [],
+    recomendFilmList:[],
+    popularFilmList:[],
     film: {},
     globalFilm:{},
-    likesFilm:JSON.parse(localStorage.getItem('likesFilms')) || [],
-    IMG_URL: 'https://image.tmdb.org/t/p/w500/',
-    recomendFilmList:[]
+    likesFilmList:JSON.parse(localStorage.getItem('likesFilmList')) || [],
+    IMG_URL: 'https://image.tmdb.org/t/p/w500/'
 }

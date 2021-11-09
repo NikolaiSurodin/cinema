@@ -19,13 +19,19 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: "MainHeader",
+  data() {
+    return{
+
+    }
+  },
+  props:['value'],
   methods: {
     toFavoriteFilms() {
       this.$router.push( '/likeFilms' )
     },
     toHome() {
       this.$router.push( '/films' )
-    }
+    },
   },
   computed: {
     ...mapGetters( [ 'getFavoriteFilms' ] )

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <header class="header">
-      <main-header/>
+      <main-header />
     </header>
     <main class="main">
       <div class="header-search">
@@ -12,11 +12,8 @@
         ></b-input>
       </div>
       <div class="pop d-flex justify-content-center">
-        <b-button class="mt-2" style="background: unset">What`s popular?</b-button>
+        <b-button class="mt-2" style="background: unset" @click="toPopularFilm">What`s popular?</b-button>
       </div>
-      <template v-if="loading">
-        <b-spinner class="main-layout-spin" type="grow"></b-spinner>
-      </template>
       <template>
         <div class="welcome-text">
           <div class="text-title">
@@ -24,6 +21,9 @@
           </div>
           <p>Millions of movies, TV shows and people. Explore now.</p>
         </div>
+      </template>
+      <template v-if="loading">
+        <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
       </template>
       <template>
         <div class="layout" v-if="filteredFilm.length">
@@ -39,7 +39,10 @@
         </div>
       </template>
       <div class="load-button">
-        <b-button style="background-color: inherit" @click="add" :disabled="!filteredFilm.length">Loading</b-button>
+        <b-button style="background-color: inherit"
+                  @click="addFilmsInList"
+                  :disabled="!filteredFilm.length">Loading
+        </b-button>
         <button-to-up @goToUpPage="goToUpPage"/>
       </div>
     </main>
@@ -80,7 +83,11 @@ export default {
     toFilm( id ) {
       this.$router.push( `/films/${ id }` )
     },
-    add() {
+    toPopularFilm(){
+      this.$router.push( `/popularFilms` )
+
+    },
+    addFilmsInList() {
       const query = { ...this.$route.query, page: this.currentPage++ }
       this.$router.replace( { query } )
       this.fetchOnPageFilms( this.$route.query.page )
@@ -90,7 +97,7 @@ export default {
     },
     globalSearch() {
       this.globalSearchFilm( this.search.toLowerCase() )
-    },
+    }
   },
   computed: {
     ...mapGetters( [ 'getFilmList', 'getGlobalFilm' ] ),
@@ -98,7 +105,7 @@ export default {
       return this.getFilmList.filter( el => el.title.toLowerCase().includes( this.search.toLowerCase() ) )
     },
     isGlobalFilm() {
-      // есть ли глабл фильм вообще
+      // есть ли глобл фильм вообще
       return Object.keys( this.getGlobalFilm ).length !== 0
     }
   },
@@ -107,36 +114,17 @@ export default {
         .then( () => {
           this.loading = false
           this.removeGlobalFilm()
-          if ( !this.isGlobalFilm ) {
-            this.$router.replace( '/films' )
-          }
         } )
   }
 }
 </script>
 
 <style scoped>
-@media (max-width: 500px) {
-  .layout {
-    display: grid;
-    grid-gap: 2vw;
-    padding: 4px;
-    grid-template-columns: 1fr;
+@media (max-width: 540px) {
+  .form-control {
+    width: unset;
   }
 }
-
-.title {
-  text-align: center;
-}
-
-.layout {
-  display: grid;
-  /*grid-template-rows: 1fr 1fr 1fr;*/
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 2vw;
-  padding: 4px;
-}
-
 .header-search {
   padding: 0 12em;
   margin-top: 6px;
@@ -144,29 +132,11 @@ export default {
   justify-content: center;
   height: 50px;
 }
-
 .load-button {
   display: flex;
   justify-content: center;
   margin-top: 5rem;
 }
-
-.btn-secondary:hover {
-  background-color: inherit;
-}
-
-.main-layout-spin {
-  position: absolute;
-  top: 10rem;
-  left: 49%;
-}
-
-.wrapper {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 .main {
   flex: 1 1 auto;
 }

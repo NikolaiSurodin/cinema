@@ -35,12 +35,4 @@ export default {
 </script>
 
 <style scoped>
-.layout {
-  display: grid;
-  /*grid-template-rows: 1fr 1fr 1fr;*/
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 2vw;
-  padding: 4px;
-}
-
 </style>

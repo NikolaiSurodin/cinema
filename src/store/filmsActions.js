@@ -1,28 +1,35 @@
-import { globalFilm, recomendFilmList, infoFilm, filmList, getNewFilms } from "@/services/film.service"
+import {
+    globalFilm,
+    recomendFilmList,
+    infoFilm,
+    filmList,
+    getNewFilms,
+    getPopularFilmList
+} from "@/services/film.service"
 
 export default {
     fetchFilmList( { commit } ) {
         return new Promise( ( resolve, reject ) => {
-            filmList().then((films) => {
+            filmList().then( ( films ) => {
                 commit( 'SET_FILM_LIST', films )
-            })
+            } )
             resolve()
             reject()
         } )
     },
     fetchOnPageFilms( { commit }, page ) {
         return new Promise( resolve => {
-            getNewFilms(page)
-                .then((filmList) => {
+            getNewFilms( page )
+                .then( ( filmList ) => {
                     commit( 'PUSH', filmList )
                     resolve()
-                })
+                } )
         } )
     },
     fetchInfoDetailFilm( { commit }, id ) {
         return new Promise( resolve => {
             infoFilm( id )
-                .then( (film) => {
+                .then( ( film ) => {
                     commit( 'SET_FILM_INFO', film )
                 } )
             resolve()
@@ -47,12 +54,16 @@ export default {
     removeGlobalFilm( { commit } ) {
         commit( 'REMOVE_GLOBAL_FILM' )
     },
-    addLikeFilm( { commit }, film ) {
-        return new Promise( resolve => {
-            commit( 'SET_LIKE_FILM', film )
-            resolve()
+    addLikeFilm( { commit, state }, film ) {
+        return new Promise( ( resolve, reject ) => {
+            const found = state.likesFilmList.some( el => el.id === film.id )
+            if ( !found ) {
+                resolve( commit( 'SET_LIKE_FILM', film ) )
+            }
+            reject()
         } )
     },
+
     removeLikeFilm( { commit }, film ) {
         return new Promise( resolve => {
             commit( 'DELETE_LIKE_FILM', film )
@@ -72,6 +83,15 @@ export default {
     removeRecomendFilmList( { commit } ) {
         return new Promise( resolve => {
             commit( 'CLEAR_RECOMEND_LIST' )
+            resolve()
+        } )
+    },
+    fetchPopularFilmList( { commit }, page ) {
+        return new Promise( resolve => {
+            getPopularFilmList( page )
+                .then( ( films ) => {
+                    commit( 'SET_POPULAR_FILM_LIST', films )
+                } )
             resolve()
         } )
     }
