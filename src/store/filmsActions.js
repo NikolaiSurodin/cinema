@@ -54,13 +54,16 @@ export default {
     removeGlobalFilm( { commit } ) {
         commit( 'REMOVE_GLOBAL_FILM' )
     },
-    addLikeFilm( {  commit }, film ) {
-        return new Promise( ( resolve ) => {
-            resolve()
-            commit( 'SET_LIKE_FILM', film )
-            resolve()
+    addLikeFilm( { commit, state }, film ) {
+        return new Promise( ( resolve, reject ) => {
+            const found = state.likesFilmList.some( el => el.id === film.id )
+            if ( !found ) {
+                resolve( commit( 'SET_LIKE_FILM', film ) )
+            }
+            reject()
         } )
     },
+
     removeLikeFilm( { commit }, film ) {
         return new Promise( resolve => {
             commit( 'DELETE_LIKE_FILM', film )
