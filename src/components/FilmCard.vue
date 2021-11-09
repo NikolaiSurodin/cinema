@@ -1,5 +1,8 @@
 <template>
-  <b-card :title="film.title" :img-src="getIMG_URL+film.poster_path" img-alt="Image" img-top class="card"
+  <b-card :title="film.title"
+          :img-src="getIMG_URL+film.poster_path"
+          img-alt="Image" img-top
+          class="card"
           @click="toFilm()">
     <b-card-text class="text" style="color: black">
       {{ filmOverview }}
@@ -61,6 +64,8 @@ export default {
   cursor: pointer;
   box-shadow: 1px 1px 1px white;
   transition: 1s;
+  display: flex;
+  width: 100%;
 }
 
 .card :hover {

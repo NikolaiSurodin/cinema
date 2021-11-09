@@ -25,7 +25,9 @@ class Popup {
             title: title,
             [ html ? 'html' : 'text' ]: message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
+            background:'#e2e2e2',
+
         } )
     }
 
@@ -40,6 +42,21 @@ class Popup {
             [ html ? 'html' : 'text' ]: message,
         } )
     }
+   video(key){
+        return this.$swal.fire({
+            title: '',
+            icon: '',
+            html:
+                `<iframe width="560" height="315" src="https://www.youtube.com/embed/${key}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
+            showCloseButton: false,
+            showCancelButton: false,
+            confirmButtonColor:'black',
+            confirmButtonText:'close',
+            focusConfirm: false,
+            width:'45em',
+            background:'#000000'
+        })
+   }
 
 }
 
