@@ -17,7 +17,7 @@
       <template>
         <div class="welcome-text">
           <div class="text-title">
-            <p>Welcome</p>
+            <p>Welcome <span>, {{ user  }}</span></p>
           </div>
           <p>Millions of movies, TV shows and people. Explore now.</p>
         </div>
@@ -100,13 +100,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters( [ 'getFilmList', 'getGlobalFilm' ] ),
+    ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser' ] ),
     filteredFilm() {
       return this.getFilmList.filter( el => el.title.toLowerCase().includes( this.search.toLowerCase() ) )
     },
     isGlobalFilm() {
       // есть ли глобл фильм вообще
       return Object.keys( this.getGlobalFilm ).length !== 0
+    },
+    user() {
+      return this.getUser ? this.getUser : ''
     }
   },
   mounted() {
