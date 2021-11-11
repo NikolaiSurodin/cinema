@@ -1,9 +1,9 @@
 <template>
   <div>
     <main-header/>
-    <template v-if="loading">
+    <div v-if="loading" class="text-center mt-5">
       <b-spinner class="main-layout-spin" type="grow"></b-spinner>
-    </template>
+    </div>
     <main v-else>
       <b-card
           :img-src="getIMG_URL+film.backdrop_path"
@@ -23,7 +23,7 @@
               {{ genre.name }}
             </div>
           </div>
-            <div class="social-item">
+            <div class="actions-item">
 
               <b-button variant="light"
                         type="button"
@@ -103,7 +103,10 @@ export default {
     }
   },
   mounted() {
-    this.fetchInfoDetailFilm( this.$route.params.id ).then( () => this.loading = false )
+    this.fetchInfoDetailFilm( this.$route.params.id )
+        .then( () => {
+          this.loading = false
+        } )
   },
   beforeDestroy() {
     this.clearFIlmItem()
@@ -126,6 +129,10 @@ export default {
 
   img {
     width: 100%;
+  }
+  .actions-item {
+    position: relative;
+    margin-top: 16px;
   }
 }
 
@@ -168,15 +175,16 @@ export default {
   bottom: -90%;
   left: 100%;
 }
-.social-item {
+.actions-item {
   display: flex;
   text-align: center;
   justify-content: space-between;
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 97%;
   align-items: center;
   padding-bottom: 6px;
+
 }
 
 .card-body {

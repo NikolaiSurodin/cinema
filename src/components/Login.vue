@@ -79,16 +79,12 @@ export default {
   margin: auto;
   border: 1px transparent;
   margin-top: 50px;
-  /* display: inline-block; */
-  /* justify-content: center; */
-  /* align-items: center; */
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   background: white;
   max-width: 25rem;
-  height: 20rem;
   border-radius: 5px;
   box-shadow: 1px -1px 11px -4px;
 }

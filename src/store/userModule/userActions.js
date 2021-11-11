@@ -29,6 +29,7 @@ export default {
                             resolve()
                         } )
                         .catch( () => {
+                            dispatch('logout')
                             reject()
                         } )
                 } )

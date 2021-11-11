@@ -49,12 +49,7 @@ export default {
 </script>
 
 <style scoped>
-.info-section {
-  padding: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+
 
 .section-content p {
   width: 17rem;

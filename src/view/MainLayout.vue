@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <header class="header">
-      <main-header />
+      <main-header/>
     </header>
     <main class="main">
       <div class="header-search">
@@ -17,7 +17,7 @@
       <template>
         <div class="welcome-text">
           <div class="text-title">
-            <p>Welcome <span>, {{ user  }}</span></p>
+            <p>Welcome <span>, {{ user }}</span></p>
           </div>
           <p>Millions of movies, TV shows and people. Explore now.</p>
         </div>
@@ -25,17 +25,20 @@
       <template v-if="loading">
         <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
       </template>
-      <template>
+      <template v-else>
         <div class="layout" v-if="filteredFilm.length">
           <film-card v-for="film in filteredFilm" :key="film.id"
                      :film="film"
                      @clickOnFilm="toFilm(film.id)"
           />
         </div>
-        <div class="layout" v-if="isGlobalFilm">
-          <film-card :film="getGlobalFilm[0]"
-                     @clickOnFilm="toFilm(getGlobalFilm[0].id)"
-          />
+        <div class="found-film" v-if="isGlobalFilm">
+          <div>
+            <film-card :film="getGlobalFilm[0]"
+                       @clickOnFilm="toFilm(getGlobalFilm[0].id)"
+            />
+          </div>
+
         </div>
       </template>
       <div class="load-button">
@@ -83,9 +86,8 @@ export default {
     toFilm( id ) {
       this.$router.push( `/films/${ id }` )
     },
-    toPopularFilm(){
+    toPopularFilm() {
       this.$router.push( `/popularFilms` )
-
     },
     addFilmsInList() {
       const query = { ...this.$route.query, page: this.currentPage++ }
@@ -128,6 +130,7 @@ export default {
     width: unset;
   }
 }
+
 .header-search {
   padding: 0 12em;
   margin-top: 6px;
@@ -135,25 +138,30 @@ export default {
   justify-content: center;
   height: 50px;
 }
+
 .load-button {
   display: flex;
   justify-content: center;
   margin-top: 5rem;
 }
+
 .main {
   flex: 1 1 auto;
 }
+
 .welcome-text {
   margin-left: 4em;
   display: block;
   border-left: 1px solid;
 }
+
 .text-title p {
   font-size: 44px;
   font-family: fantasy;
   line-height: 2;
   letter-spacing: 8px;
 }
+
 p {
   font-size: 20px;
   font-family: sans-serif;
