@@ -1,17 +1,15 @@
 <template>
   <div>
     <form class="form">
-      <h1 class="h3 mb-3 font-weight-normal" style="text-align: center; font-size: 30px; font-weight: bold;">Login</h1>
       <p class="text">Sign In to your account</p>
       <b-input-group size="md" class="mb-3">
         <b-input-group-prepend is-text>
           <b-icon icon="envelope"></b-icon>
         </b-input-group-prepend>
         <b-form-input class="form-input"
-                      type="email"
-                      placeholder="me@example.com"
+                      placeholder="username"
                       required
-                      v-model="user.email"
+                      v-model="user.username"
         />
       </b-input-group>
 
@@ -32,10 +30,10 @@
         <b-button class="mt-3"
                   variant="primary"
                   type="submit"
-                  :disabled="!user.password || !user.email"
                   @click.prevent="loginClick"
         >
-          Login
+          <b-spinner variant="primary" small v-if="loading"></b-spinner>
+          login
         </b-button>
       </div>
     </form>
@@ -43,22 +41,32 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: "Login",
   data() {
     return {
       error: false,
+      loading: false,
       user: {
-        email: '',
+        username: '',
         password: ''
       }
     }
   },
-  methods:{
+  methods: {
+    ...mapActions( [ 'sendLogin', 'login' ] ),
     loginClick() {
-      if ( this.user.email === 'kolya@mail.ru' && this.user.password === '1234') {
-        this.$router.push('/films')
-      }
+      this.loading = true
+      this.login( this.user )
+          .then( () => {
+            this.$router.push( '/films' )
+          } )
+          .catch( () => {
+            this.$popup.error( 'ERROR' )
+            this.loading = false
+          } )
     }
   }
 }
@@ -71,16 +79,12 @@ export default {
   margin: auto;
   border: 1px transparent;
   margin-top: 50px;
-  /* display: inline-block; */
-  /* justify-content: center; */
-  /* align-items: center; */
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   background: white;
   max-width: 25rem;
-  height: 20rem;
   border-radius: 5px;
   box-shadow: 1px -1px 11px -4px;
 }

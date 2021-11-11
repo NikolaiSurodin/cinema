@@ -26,20 +26,19 @@ class Popup {
             [ html ? 'html' : 'text' ]: message,
             showConfirmButton: false,
             timer: 1500,
-            background:'#e2e2e2',
-
+            background:'#e2e2e2'
         } )
     }
 
     info( message, title, url, text, html = false ) {
         return this.$swal( {
             title: title,
-            text: 'asfasfa',
             imageUrl: `https://image.tmdb.org/t/p/w500/${ url }`,
             imageWidth: 200,
             imageHeight: 300,
             imageAlt: 'Custom image',
             [ html ? 'html' : 'text' ]: message,
+
         } )
     }
    video(key){

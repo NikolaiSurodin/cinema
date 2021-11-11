@@ -10,11 +10,16 @@ import {
 export default {
     fetchFilmList( { commit } ) {
         return new Promise( ( resolve, reject ) => {
-            filmList().then( ( films ) => {
-                commit( 'SET_FILM_LIST', films )
-            } )
-            resolve()
-            reject()
+            filmList()
+                .then( ( films ) => {
+                    commit( 'SET_FILM_LIST', films )
+                    resolve()
+                } )
+                .catch( () => {
+                    reject()
+                } )
+
+
         } )
     },
     fetchOnPageFilms( { commit }, page ) {
@@ -27,12 +32,16 @@ export default {
         } )
     },
     fetchInfoDetailFilm( { commit }, id ) {
-        return new Promise( resolve => {
+        return new Promise( ( resolve, reject ) => {
             infoFilm( id )
                 .then( ( film ) => {
                     commit( 'SET_FILM_INFO', film )
+                    resolve()
                 } )
-            resolve()
+                .catch( () => {
+                    reject()
+                } )
+
         } )
     },
     clearFIlmItem( { commit } ) {
