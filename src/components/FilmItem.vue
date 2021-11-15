@@ -23,27 +23,29 @@
               {{ genre.name }}
             </div>
           </div>
-            <div class="actions-item">
+          <div class="actions-item">
 
-              <b-button variant="light"
-                        type="button"
-                        class="btn-sm"
-                        title="Like this film"
-                        :disabled="like"
-                        @click.stop="likesFilm(film)"
-              >
-                <img src="../assets/like_favorite_heart_5759.png"/>
-              </b-button>
-              <p style="cursor: pointer" @click="showVideo">
-                <b-icon icon="play" aria-hidden="true"></b-icon>
-                trailer
-              </p>
-              <p style="cursor: pointer" @click="showRecomend">show recommendations</p>
-            </div>
-
+            <b-button variant="light"
+                      type="button"
+                      class="btn-sm"
+                      title="Like this film"
+                      :disabled="like"
+                      @click.stop="likesFilm(film)"
+            >
+              <img src="../assets/like_favorite_heart_5759.png"/>
+            </b-button>
+            <p style="cursor: pointer" @click="showVideo">
+              <b-icon icon="play" aria-hidden="true"></b-icon>
+              trailer
+            </p>
+            <p style="cursor: pointer" @click="showRecomend">similar films</p>
+          </div>
         </b-card-text>
       </b-card>
-      <template v-if="recomend">
+      <template>
+        <slider :film="film"/>
+      </template>
+      <template v-if="similar">
         <recomend-table/>
       </template>
     </main>
@@ -54,17 +56,18 @@
 import { mapGetters, mapActions } from 'vuex'
 import RecomendTable from "@/components/RecomendTable"
 import MainHeader from "@/components/MainHeader"
+import slider from '@/components/slider'
 import { getVideo } from "@/services/film.service"
+
 
 export default {
   name: "FilmItem",
-  components: { RecomendTable, MainHeader },
+  components: { RecomendTable, MainHeader, slider },
   data() {
     return {
       like: false,
       loading: true,
-      recomend: false,
-      searchText: ''
+      similar: false,
     }
   },
   computed: {
@@ -77,7 +80,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions( [ 'fetchInfoDetailFilm', 'clearFIlmItem', 'addLikeFilm', 'fetchRecomendFilms' ] ),
+    ...mapActions( [ 'fetchInfoDetailFilm', 'clearFIlmItem', 'addLikeFilm', 'fetchSimilarFilms' ] ),
     likesFilm( film ) {
       this.addLikeFilm( film )
           .then( () => {
@@ -89,11 +92,8 @@ export default {
           } )
     },
     showRecomend() {
-      this.recomend = true
-      this.fetchRecomendFilms( this.$route.params.id )
-    },
-    test() {
-
+      this.similar = true
+      this.fetchSimilarFilms( this.$route.params.id )
     },
     showVideo() {
       getVideo( this.$route.params.id )
@@ -130,6 +130,7 @@ export default {
   img {
     width: 100%;
   }
+
   .actions-item {
     position: relative;
     margin-top: 16px;
@@ -175,6 +176,7 @@ export default {
   bottom: -90%;
   left: 100%;
 }
+
 .actions-item {
   display: flex;
   text-align: center;

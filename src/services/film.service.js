@@ -41,7 +41,7 @@ export const filmList = () => {
     return new Promise( ( resolve, reject ) => {
         let films = []
         axios
-            .get( `${ BASE }${ endpoints.films.getFilmList }`.replace('{:api_key}', API_KEY) )
+            .get( `${ BASE }${ endpoints.films.getFilmList }`.replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -56,7 +56,7 @@ export const getNewFilms = ( page ) => {
     return new Promise( resolve => {
         let addedFilms = [] // добавленные новые фильмы
         axios
-            .get( `${ BASE }${ endpoints.films.getFilmList }`.replace('{:api_key}', API_KEY).replace( 'page=1', `page=${ page }` ) )
+            .get( `${ BASE }${ endpoints.films.getFilmList }`.replace( '{:api_key}', API_KEY ).replace( 'page=1', `page=${ page }` ) )
             .then( response => {
                 addedFilms = response.data.results
                 resolve( addedFilms )
@@ -68,6 +68,17 @@ export const getPopularFilmList = ( page ) => {
         let films = []
         axios
             .get( `${ BASE }${ endpoints.films.getPopularFilmList }`.replace( 'numberPage', page ).replace( '{:api_key}', API_KEY ) )
+            .then( response => {
+                films = response.data.results
+                resolve( films )
+            } )
+    } )
+}
+export const getSimilarFilmList = ( id ) => {
+    return new Promise( resolve => {
+        let films = []
+        axios
+            .get( `${ BASE }${ endpoints.films.getSimilarList }`.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )

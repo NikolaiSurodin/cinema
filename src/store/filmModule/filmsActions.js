@@ -4,7 +4,8 @@ import {
     infoFilm,
     filmList,
     getNewFilms,
-    getPopularFilmList
+    getPopularFilmList,
+    getSimilarFilmList
 } from "@/services/film.service"
 
 export default {
@@ -72,7 +73,6 @@ export default {
             reject()
         } )
     },
-
     removeLikeFilm( { commit }, film ) {
         return new Promise( resolve => {
             commit( 'DELETE_LIKE_FILM', film )
@@ -87,7 +87,15 @@ export default {
                 } )
             resolve()
         } )
-
+    },
+    fetchSimilarFilms( { commit }, id ) {
+        return new Promise( resolve => {
+            getSimilarFilmList( id )
+                .then( ( films ) => {
+                    commit( 'SET_SIMILAR_FILM_LIST', films )
+                } )
+            resolve()
+        } )
     },
     removeRecomendFilmList( { commit } ) {
         return new Promise( resolve => {

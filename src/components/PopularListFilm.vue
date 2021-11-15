@@ -34,7 +34,7 @@ export default {
   computed: {
     ...mapGetters( [ 'getPopularFilmList' ] ),
     page() {
-      return  this.$route.hash.replace('#page=', '')
+      return this.$route.hash.replace( '#page=', '' )
     },
   },
   watch: {
