@@ -26,8 +26,28 @@ class Popup {
             [ html ? 'html' : 'text' ]: message,
             showConfirmButton: false,
             timer: 1500,
-            background:'#e2e2e2'
+            background: '#e2e2e2'
         } )
+    }
+
+    toast(message) {
+        const Toast = this.$swal.mixin( {
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: ( toast ) => {
+                toast.addEventListener( 'mouseenter', this.$swal.stopTimer )
+                toast.addEventListener( 'mouseleave', this.$swal.resumeTimer )
+            }
+        } )
+
+        Toast.fire( {
+            icon: 'success',
+            title: message
+        } )
+
     }
 
     info( message, title, url, text, html = false ) {
@@ -41,21 +61,22 @@ class Popup {
 
         } )
     }
-   video(key){
-        return this.$swal.fire({
+
+    video( key ) {
+        return this.$swal.fire( {
             title: '',
             icon: '',
             html:
-                `<iframe width="560" height="315" src="https://www.youtube.com/embed/${key}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
+                `<iframe width="560" height="315" src="https://www.youtube.com/embed/${ key }" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
             showCloseButton: false,
             showCancelButton: false,
-            confirmButtonColor:'black',
-            confirmButtonText:'close',
+            confirmButtonColor: 'black',
+            confirmButtonText: 'close',
             focusConfirm: false,
-            width:'45em',
-            background:'#000000'
-        })
-   }
+            width: '45em',
+            background: '#000000'
+        } )
+    }
 
 }
 

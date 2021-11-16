@@ -1,6 +1,6 @@
 <template>
   <swiper class="swiper" :options="swiperOption">
-    <swiper-slide class="slider-card" v-for="actor in film.credits.cast" :key="actor.id">
+    <swiper-slide class="slider-card" v-for="actor in actorList" :key="actor.id">
       {{ actor.name }}
       <img :src="getIMG_URL+actor.profile_path"/>
     </swiper-slide>
@@ -34,7 +34,21 @@ export default {
     film: Object
   },
   computed: {
-    ...mapGetters( [ 'getIMG_URL' ] )
+    ...mapGetters( [ 'getIMG_URL' ] ),
+    actorList() {
+      if ( Object.keys( this.film ).length > 0 && this.film.credits.cast ) {
+        return this.film.credits.cast
+      }
+      return ''
+
+    },
+    username: function () {
+      if ( Object.keys( this.getUser ).length > 0 && this.getUser.public_id ) {
+        return this.getUser.profile.full_name
+      }
+      return ''
+    }
+
   }
 }
 </script>
@@ -53,6 +67,7 @@ img {
   max-width: 150px;
   height: 100%;
 }
+
 .swiper-container {
   cursor: grab;
   padding: 20px;

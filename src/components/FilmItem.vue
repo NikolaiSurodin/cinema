@@ -1,54 +1,58 @@
 <template>
-  <div>
+  <div class="alo">
     <main-header/>
     <div v-if="loading" class="text-center mt-5">
       <b-spinner class="main-layout-spin" type="grow"></b-spinner>
     </div>
-    <main v-else>
-      <b-card
-          :img-src="getIMG_URL+film.backdrop_path"
-          img-alt="Image"
-          img-left class="card mb-3"
 
-      >
-        <b-card-text>
-          <h1>{{ film.title }} ({{ new Date( film.release_date ).getFullYear() }})</h1>
-          <div class="about">
-            <h4>About:</h4>
-            {{ film.overview }}
-          </div>
-          <div class="genres">
-            <h4>Genres:</h4>
-            <div v-for="genre in film.genres" :key="genre.id">
-              {{ genre.name }}
+    <div class="wrapper-card" v-else>
+      <section class="film-card">
+
+        <b-card
+            :img-src="getIMG_URL+film.backdrop_path"
+            img-alt="Image"
+            img-left class="card mb-3"
+
+        >
+          <b-card-text>
+            <h1>{{ film.title }} ({{ new Date( film.release_date ).getFullYear() }})</h1>
+            <div class="about">
+              <h4>About:</h4>
+              {{ film.overview }}
             </div>
-          </div>
-          <div class="actions-item">
+            <div class="genres">
+              <h4>Genres:</h4>
+              <div v-for="genre in film.genres" :key="genre.id">
+                {{ genre.name }}
+              </div>
+            </div>
+            <div class="actions-item">
 
-            <b-button variant="light"
-                      type="button"
-                      class="btn-sm"
-                      title="Like this film"
-                      :disabled="like"
-                      @click.stop="likesFilm(film)"
-            >
-              <img src="../assets/like_favorite_heart_5759.png"/>
-            </b-button>
-            <p style="cursor: pointer" @click="showVideo">
-              <b-icon icon="play" aria-hidden="true"></b-icon>
-              trailer
-            </p>
-            <p style="cursor: pointer" @click="showRecomend">similar films</p>
-          </div>
-        </b-card-text>
-      </b-card>
-      <template>
-        <slider :film="film"/>
-      </template>
-      <template v-if="similar">
-        <recomend-table/>
-      </template>
-    </main>
+              <b-button variant="light"
+                        type="button"
+                        class="btn-sm"
+                        title="Like this film"
+                        :disabled="like"
+                        @click.stop="likesFilm(film)"
+              >
+                <img src="../assets/like_favorite_heart_5759.png"/>
+              </b-button>
+              <p style="cursor: pointer" @click="showVideo">
+                <b-icon icon="play" aria-hidden="true"></b-icon>
+                trailer
+              </p>
+              <p style="cursor: pointer" @click="showRecomend">similar films</p>
+            </div>
+          </b-card-text>
+        </b-card>
+      </section>
+    </div>
+    <div class="slider-card">
+      <slider :film="film"/>
+    </div>
+    <div class="table" v-if="similar">
+      <recomend-table/>
+    </div>
   </div>
 </template>
 
@@ -85,7 +89,8 @@ export default {
       this.addLikeFilm( film )
           .then( () => {
             this.like = true
-            this.$popup.success( 'this movie was added to the "Like" list', 'Like!' )
+            //this.$popup.success( 'this movie was added to the "Like" list', 'Like!' )
+            this.$popup.toast('this movie was added to the "Like" list')
           } )
           .catch( () => {
             this.$popup.error( 'This film in you favorite list already' )
@@ -192,5 +197,7 @@ export default {
 .card-body {
   position: relative;
 }
-
+h1 {
+  font-size: 22px;
+}
 </style>
