@@ -4,7 +4,7 @@
       <p class="text">Sign In to your account</p>
       <b-input-group size="md" class="mb-3">
         <b-input-group-prepend is-text>
-          <b-icon icon="envelope"></b-icon>
+          <b-icon icon="person"></b-icon>
         </b-input-group-prepend>
         <b-form-input class="form-input"
                       placeholder="username"
