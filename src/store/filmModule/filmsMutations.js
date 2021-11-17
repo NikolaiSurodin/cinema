@@ -36,5 +36,23 @@ export default {
     },
     SET_SIMILAR_FILM_LIST( state, films ) {
         state.similarFIlmList = films
+    },
+    SET_GENRES_LIST( state, genres ) {
+        genres.forEach( ( el ) => {
+            state.genres.push( {
+                name: el.name,
+                id: el.id,
+                isActive: false
+            } )
+        } )
+    },
+    REMOVE_GENRES_LIST( state ) {
+        state.genres = []
+    },
+    SET_ACTIVE_GENRE( state, genre ) {
+        genre.isActive = !genre.isActive
+    },
+    SET_FILMS_BY_GENRE( state, films ) {
+        state.filmListByGenre = films
     }
 }

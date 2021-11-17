@@ -94,4 +94,22 @@ export const getVideo = ( id ) => {
     } )
 }
 
+export const getGenres = () => {
+    return new Promise( resolve => {
+        axios.get( `${ BASE }${ endpoints.genres.getGenres }`.replace( '{:api_key}', API_KEY ) )
+            .then( response => {
+                resolve( response.data.genres )
+            } )
+    } )
+}
+
+export const getFilmListByGenre = ( genres ) => {
+    return new Promise( resolve => {
+        axios.get( `${ BASE }${ endpoints.films.getListByGenre }`.replace( '{:api_key}', API_KEY ).replace( '{genres}', genres ) )
+            .then( response => {
+                resolve( response.data.results )
+            } )
+    } )
+}
+
 

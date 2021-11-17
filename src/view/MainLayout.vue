@@ -22,17 +22,26 @@
           <p>Millions of movies, TV shows and people. Explore now.</p>
         </div>
       </template>
+      <template>
+        <genres-list/>
+      </template>
       <template v-if="loading">
         <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
       </template>
       <template v-else>
-        <div class="layout" v-if="filteredFilm.length">
+        <div class="layout" v-if="getFilmsByGenre.length">
+          <film-card v-for="film in getFilmsByGenre" :key="film.id"
+                     :film="film"
+                     @clickOnFilm="toFilm(film.id)"
+          />
+        </div>
+        <div class="layout" v-else-if="filteredFilm.length">
           <film-card v-for="film in filteredFilm" :key="film.id"
                      :film="film"
                      @clickOnFilm="toFilm(film.id)"
           />
         </div>
-        <div class="found-film" v-if="isGlobalFilm">
+        <div class="found-film" v-else-if="isGlobalFilm">
           <div>
             <film-card :film="getGlobalFilm[0]"
                        @clickOnFilm="toFilm(getGlobalFilm[0].id)"
@@ -60,6 +69,7 @@ import FilmCard from "@/components/FilmCard"
 import AppFooter from "@/components/AppFooter"
 import ButtonToUp from "@/components/ButtonToUp"
 import MainHeader from "@/components/MainHeader"
+import GenresList from "@/components/GenresList"
 
 import { mapActions, mapGetters } from "vuex"
 
@@ -79,7 +89,8 @@ export default {
     FilmCard,
     AppFooter,
     ButtonToUp,
-    MainHeader
+    MainHeader,
+    GenresList
   },
   methods: {
     ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm' ] ),
@@ -102,7 +113,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser' ] ),
+    ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser', 'getFilmsByGenre' ] ),
     filteredFilm() {
       return this.getFilmList.filter( el => el.title.toLowerCase().includes( this.search.toLowerCase() ) )
     },
