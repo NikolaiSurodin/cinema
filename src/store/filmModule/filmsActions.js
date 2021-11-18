@@ -21,8 +21,6 @@ export default {
                 .catch( () => {
                     reject()
                 } )
-
-
         } )
     },
     fetchOnPageFilms( { commit }, page ) {
@@ -128,11 +126,11 @@ export default {
     selectedGenre( { commit }, genre ) {
         commit( 'SET_ACTIVE_GENRE', genre )
     },
-    fetchListByGenre( { commit }, genres ) {
+    fetchListByGenre( { commit }, { genres, page  } ) {
         return new Promise( resolve => {
-            getFilmListByGenre( genres )
+            getFilmListByGenre( genres, page )
                 .then( ( films ) => {
-                    commit('SET_FILMS_BY_GENRE', films)
+                    commit( 'SET_FILMS_BY_GENRE', films )
                     resolve()
                 } )
         } )

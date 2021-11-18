@@ -3,13 +3,17 @@
     <div class="genres">
       <div class="genres__item"
            v-for="genre in getGenresList" :key="genre.id"
-           :class="{'genres__item_underline':genre.isActive}"
+           :class="{'genres__item_active':genre.isActive}"
            @click="selectGenre(genre)"
       >
         {{ genre.name }}
       </div>
       <div class="genres__button">
-        <b-button @click="search">Search</b-button>
+        <b-button class="genres__button_button"
+                  v-if="activeGenre.length"
+                  @click="search">
+          Search
+        </b-button>
       </div>
     </div>
   </div>
@@ -30,29 +34,36 @@ export default {
     ...mapActions( [ 'fetchGenres', 'clearGenresList', 'selectedGenre', 'fetchListByGenre' ] ),
     selectGenre( genre ) {
       this.selectedGenre( genre )
-      this.arr = [ ...this.getGenresList.filter( el => el.isActive ) ]
+      this.activeGenre = [ ...this.getGenresList.filter( el => el.isActive ) ]
     },
     search() {
-      let a = this.arr.map( ( el ) => ({
-            id: el.id
+      let a = this.activeGenre.map( ( el ) => ({
+            id: el.id,
+            name: el.name
           })
       )
       let ids = []
       for ( let i = 0; i < a.length; i++ ) {
         ids.push( a[ i ].id )
       }
-      this.fetchListByGenre(ids)
+      let names = []
+      for ( let i = 0; i < a.length; i++ ) {
+        names.push( a[ i ].name )
+      }
+      this.fetchListByGenre( { genres: ids, page: 1 } )
+          .then( () => {
+            this.$router.push( { path: '/films', query: { genres: `${ names }` } } )
+          } )
     }
   },
   computed: {
-    ...
-        mapGetters( [ 'getGenresList' ] ),
+    ...mapGetters( [ 'getGenresList' ] ),
   },
   created() {
     this.fetchGenres()
   },
   beforeDestroy() {
-    this.clearGenresList()
+     this.clearGenresList()
   }
 }
 </script>
@@ -77,7 +88,8 @@ export default {
 
 }
 
-.genres__item_underline {
+.genres__item_active {
   text-decoration: underline;
+  font-size: 20px;
 }
 </style>

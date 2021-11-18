@@ -1,5 +1,5 @@
 <template>
-  <div class="alo">
+  <div>
     <main-header/>
     <div v-if="loading" class="text-center mt-5">
       <b-spinner class="main-layout-spin" type="grow"></b-spinner>

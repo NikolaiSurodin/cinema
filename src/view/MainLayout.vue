@@ -41,21 +41,27 @@
                      @clickOnFilm="toFilm(film.id)"
           />
         </div>
+
         <div class="found-film" v-else-if="isGlobalFilm">
           <div>
             <film-card :film="getGlobalFilm[0]"
                        @clickOnFilm="toFilm(getGlobalFilm[0].id)"
             />
           </div>
-
         </div>
       </template>
       <div class="load-button">
         <b-button style="background-color: inherit"
+                  v-if="!isGenreList"
                   @click="addFilmsInList"
                   :disabled="!filteredFilm.length">Loading
         </b-button>
         <button-to-up @goToUpPage="goToUpPage"/>
+      </div>
+      <div class="pagination-section" v-if="isGenreList">
+        <pagination :current-page="$route.hash"
+                    @clickToPage="toPage"
+        />
       </div>
     </main>
     <footer class="footer">
@@ -70,6 +76,7 @@ import AppFooter from "@/components/AppFooter"
 import ButtonToUp from "@/components/ButtonToUp"
 import MainHeader from "@/components/MainHeader"
 import GenresList from "@/components/GenresList"
+import Pagination from "@/components/Pagination"
 
 import { mapActions, mapGetters } from "vuex"
 
@@ -90,10 +97,11 @@ export default {
     AppFooter,
     ButtonToUp,
     MainHeader,
-    GenresList
+    GenresList,
+    Pagination
   },
   methods: {
-    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm' ] ),
+    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm', 'fetchListByGenre' ] ),
     toFilm( id ) {
       this.$router.push( `/films/${ id }` )
     },
@@ -110,6 +118,9 @@ export default {
     },
     globalSearch() {
       this.globalSearchFilm( this.search.toLowerCase() )
+    },
+    toPage() {
+      this.fetchListByGenre( { genres: this.$route.query.genres, page: this.$route.hash.replace( '#page=', '' ) } )
     }
   },
   computed: {
@@ -123,7 +134,13 @@ export default {
     },
     user() {
       return this.getUser ? this.getUser : ''
-    }
+    },
+    isGenreList() {
+      return !!this.$route.query.genres
+    },
+    page() {
+      return this.currentPage
+    },
   },
   mounted() {
     this.fetchFilmList()
@@ -177,4 +194,5 @@ p {
   font-size: 20px;
   font-family: sans-serif;
 }
+
 </style>
