@@ -67,7 +67,7 @@ export const getPopularFilmList = ( page ) => {
     return new Promise( resolve => {
         let films = []
         axios
-            .get( `${ BASE }${ endpoints.films.getPopularFilmList }`.replace( 'numberPage', page ).replace( '{:api_key}', API_KEY ) )
+            .get( `${ BASE }${ endpoints.films.getPopularFilmList }`.replace( 'page=1', `page=${page}` ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
