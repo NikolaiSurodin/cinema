@@ -6,7 +6,8 @@
     "start": "json-server --watch db.json",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "surge --project ./dist --domain s-cinema-test.surge.sh"
   },
   "dependencies": {
     "axios": "^0.22.0",
