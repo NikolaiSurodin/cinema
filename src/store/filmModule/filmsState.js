@@ -3,6 +3,8 @@ export default {
     recomendFilmList:[],
     popularFilmList:[],
     similarFIlmList:[],
+    genres:[],
+    filmListByGenre:[],
     film: {},
     globalFilm:{},
     likesFilmList:JSON.parse(localStorage.getItem('likesFilm')) || [],

@@ -6,5 +6,7 @@ export default {
     getFavoriteFilms: state => state.likesFilmList,
     getRecomendFilmList: state => state.recomendFilmList,
     getPopularFilmList: state => state.popularFilmList,
-    getSimilarListFilm: state => state.similarFIlmList
+    getSimilarListFilm: state => state.similarFIlmList,
+    getGenresList: state => state.genres,
+    getFilmsByGenre: state => state.filmListByGenre
 }

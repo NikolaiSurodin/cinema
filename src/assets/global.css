@@ -52,6 +52,7 @@ body {
     }
 
 }
+
 @media (max-width: 730px ) {
     .info-section {
         display: none;
@@ -73,9 +74,14 @@ body {
 .main {
     flex: 1 1 auto;
 }
+
 .found-film {
     display: grid;
-    grid-template: 1fr / repeat(1,216px);
+    grid-template: 1fr / repeat(1, 216px);
     padding: 10px;
+}
+
+.genres__button .genres__button_button {
+    background: unset
 }
 

@@ -22,31 +22,46 @@
           <p>Millions of movies, TV shows and people. Explore now.</p>
         </div>
       </template>
+      <template>
+        <genres-list/>
+      </template>
       <template v-if="loading">
         <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
       </template>
       <template v-else>
-        <div class="layout" v-if="filteredFilm.length">
+        <div class="layout" v-if="getFilmsByGenre.length">
+          <film-card v-for="film in getFilmsByGenre" :key="film.id"
+                     :film="film"
+                     @clickOnFilm="toFilm(film.id)"
+          />
+        </div>
+        <div class="layout" v-else-if="filteredFilm.length">
           <film-card v-for="film in filteredFilm" :key="film.id"
                      :film="film"
                      @clickOnFilm="toFilm(film.id)"
           />
         </div>
-        <div class="found-film" v-if="isGlobalFilm">
+
+        <div class="found-film" v-else-if="isGlobalFilm">
           <div>
             <film-card :film="getGlobalFilm[0]"
                        @clickOnFilm="toFilm(getGlobalFilm[0].id)"
             />
           </div>
-
         </div>
       </template>
       <div class="load-button">
         <b-button style="background-color: inherit"
+                  v-if="!isGenreList"
                   @click="addFilmsInList"
                   :disabled="!filteredFilm.length">Loading
         </b-button>
         <button-to-up @goToUpPage="goToUpPage"/>
+      </div>
+      <div class="pagination-section" v-if="isGenreList">
+        <pagination :current-page="$route.hash"
+                    @clickToPage="toPage"
+        />
       </div>
     </main>
     <footer class="footer">
@@ -60,6 +75,8 @@ import FilmCard from "@/components/FilmCard"
 import AppFooter from "@/components/AppFooter"
 import ButtonToUp from "@/components/ButtonToUp"
 import MainHeader from "@/components/MainHeader"
+import GenresList from "@/components/GenresList"
+import Pagination from "@/components/Pagination"
 
 import { mapActions, mapGetters } from "vuex"
 
@@ -79,10 +96,12 @@ export default {
     FilmCard,
     AppFooter,
     ButtonToUp,
-    MainHeader
+    MainHeader,
+    GenresList,
+    Pagination
   },
   methods: {
-    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm' ] ),
+    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm', 'fetchListByGenre' ] ),
     toFilm( id ) {
       this.$router.push( `/films/${ id }` )
     },
@@ -99,10 +118,13 @@ export default {
     },
     globalSearch() {
       this.globalSearchFilm( this.search.toLowerCase() )
+    },
+    toPage() {
+      this.fetchListByGenre( { genres: this.$route.query.genres, page: this.$route.hash.replace( '#page=', '' ) } )
     }
   },
   computed: {
-    ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser' ] ),
+    ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser', 'getFilmsByGenre' ] ),
     filteredFilm() {
       return this.getFilmList.filter( el => el.title.toLowerCase().includes( this.search.toLowerCase() ) )
     },
@@ -112,7 +134,13 @@ export default {
     },
     user() {
       return this.getUser ? this.getUser : ''
-    }
+    },
+    isGenreList() {
+      return !!this.$route.query.genres
+    },
+    page() {
+      return this.currentPage
+    },
   },
   mounted() {
     this.fetchFilmList()
@@ -166,4 +194,5 @@ p {
   font-size: 20px;
   font-family: sans-serif;
 }
+
 </style>

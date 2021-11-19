@@ -2,7 +2,7 @@
   <swiper class="swiper" :options="swiperOption">
     <swiper-slide class="slider-card" v-for="actor in actorList" :key="actor.id">
       {{ actor.name }}
-      <img :src="getIMG_URL+actor.profile_path"/>
+      <img :src="getIMG_URL+actor.profile_path" alt=""/>
     </swiper-slide>
   </swiper>
 </template>
@@ -71,5 +71,39 @@ img {
 .swiper-container {
   cursor: grab;
   padding: 20px;
+}
+
+img:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 17px;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0 0 0);
+  border: 2px solid rgb(153 153 153);
+  border-radius: 5px;
+}
+
+img:after {
+  content: "" attr(alt);
+  display: block;
+  font-size: 16px;
+  font-style: normal;
+  font-family: FontAwesome;
+  color: rgb(100, 100, 100);
+
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 722px) {
+  .swiper {
+    display: none;
+  }
 }
 </style>

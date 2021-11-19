@@ -5,7 +5,9 @@ import {
     filmList,
     getNewFilms,
     getPopularFilmList,
-    getSimilarFilmList
+    getSimilarFilmList,
+    getGenres,
+    getFilmListByGenre
 } from "@/services/film.service"
 
 export default {
@@ -19,8 +21,6 @@ export default {
                 .catch( () => {
                     reject()
                 } )
-
-
         } )
     },
     fetchOnPageFilms( { commit }, page ) {
@@ -111,5 +111,29 @@ export default {
                 } )
             resolve()
         } )
+    },
+    fetchGenres( { commit } ) {
+        return new Promise( resolve => {
+            getGenres().then( ( genres ) => {
+                commit( 'SET_GENRES_LIST', genres )
+                resolve()
+            } )
+        } )
+    },
+    clearGenresList( { commit } ) {
+        commit( 'REMOVE_GENRES_LIST' )
+    },
+    selectedGenre( { commit }, genre ) {
+        commit( 'SET_ACTIVE_GENRE', genre )
+    },
+    fetchListByGenre( { commit }, { genres, page  } ) {
+        return new Promise( resolve => {
+            getFilmListByGenre( genres, page )
+                .then( ( films ) => {
+                    commit( 'SET_FILMS_BY_GENRE', films )
+                    resolve()
+                } )
+        } )
+
     }
 }

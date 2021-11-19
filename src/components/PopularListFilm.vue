@@ -6,8 +6,10 @@
     <main class="main">
       <template>
         <div class="layout">
-          <film-card v-for="film in getPopularFilmList" :key="film.id"
+          <film-card v-for="film in getPopularFilmList"
+                     :key="film.id"
                      :film="film"
+                     @clickOnFilm="toFilm(film.id)"
           />
         </div>
       </template>
@@ -45,6 +47,9 @@ export default {
     ...mapActions( [ 'fetchPopularFilmList' ] ),
     toPage() {
       this.fetchPopularFilmList( `${ this.page }` )
+    },
+    toFilm( id ) {
+      this.$router.push( `/films/${ id }` )
     }
   },
   created() {

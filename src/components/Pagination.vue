@@ -19,9 +19,7 @@ export default {
       page: this.currentPage
     }
   },
-  props:{
-    currentPage:String
-  },
+  props: ['currentPage'],
   methods:{
     clickToPage() {
       this.$emit('clickToPage')

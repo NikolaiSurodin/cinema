@@ -37,7 +37,7 @@ export const infoFilm = ( id ) => {
             } )
     } )
 }
-export const filmList = () => {
+export const filmList = ( ) => {
     return new Promise( ( resolve, reject ) => {
         let films = []
         axios
@@ -67,7 +67,7 @@ export const getPopularFilmList = ( page ) => {
     return new Promise( resolve => {
         let films = []
         axios
-            .get( `${ BASE }${ endpoints.films.getPopularFilmList }`.replace( 'numberPage', page ).replace( '{:api_key}', API_KEY ) )
+            .get( `${ BASE }${ endpoints.films.getPopularFilmList }`.replace( 'page=1', `page=${page}` ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -90,6 +90,25 @@ export const getVideo = ( id ) => {
         axios.get( `${ BASE }${ endpoints.films.getTrailer }`.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 resolve( response.data.results[ 0 ] )
+            } )
+    } )
+}
+
+export const getGenres = () => {
+    return new Promise( resolve => {
+        axios.get( `${ BASE }${ endpoints.genres.getGenres }`.replace( '{:api_key}', API_KEY ) )
+            .then( response => {
+                resolve( response.data.genres )
+            } )
+    } )
+}
+
+export const getFilmListByGenre = ( genres, page ) => {
+    return new Promise( resolve => {
+
+        axios.get( `${ BASE }${ endpoints.films.getListByGenre }`.replace('page=1', `page=${page}`).replace( '{:api_key}', API_KEY ).replace( '{genres}', genres ) )
+            .then( response => {
+                resolve( response.data.results )
             } )
     } )
 }

@@ -28,8 +28,8 @@ const router = new VueRouter( {
         {
             path: '/films',
             name: 'films',
-            component: MainLayout,
             props: true,
+            component: MainLayout,
             meta: { auth: true }
         },
         {
