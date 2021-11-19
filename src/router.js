@@ -5,6 +5,7 @@ import FilmItem from "@/components/FilmItem";
 import Login from "@/components/Login";
 import FavoriteFilms from "@/components/FavoriteFilms";
 import PopularListFilm from "@/components/PopularListFilm";
+import Page404 from "@/components/pages/Page404";
 
 import { store } from "@/store";
 
@@ -58,6 +59,12 @@ const router = new VueRouter( {
                     meta: { auth: true }
                 }
             ]
+        },
+        {
+            path: '*',
+            name: '404',
+            props: true,
+            component: Page404,
         },
     ]
 } )
