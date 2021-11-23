@@ -54,5 +54,9 @@ export default {
     },
     SET_FILMS_BY_GENRE( state, films ) {
         state.filmListByGenre = films
+    },
+    SET_FAVORITE_FILM_LIST( state, filmList ) {
+        state.favoriteFilmList = filmList
+        localStorage.setItem( 'favoriteFilms', JSON.stringify( state.favoriteFilmList ) )
     }
 }

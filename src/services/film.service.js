@@ -1,14 +1,10 @@
-import axios from "axios"
 import { endpoints } from "@/endpoints"
-
-const BASE = `https://api.themoviedb.org/3`
-const API_KEY = 'a1a84ce3dd10a1eb326873af2b7d9e60'
+import { instance, API_KEY } from "@/helpers/http.helper"
 
 export const globalFilm = ( searchValue ) => {
     return new Promise( resolve => {
         let global = []
-        axios
-            .get( `${ BASE }${ endpoints.films.getSearchFilm }`.replace( '{:search}', searchValue ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getSearchFilm.replace( '{:search}', searchValue ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 global = response.data.results
                 resolve( global )
@@ -18,8 +14,7 @@ export const globalFilm = ( searchValue ) => {
 export const recomendFilmList = ( id ) => {
     return new Promise( resolve => {
         let films = []
-        axios
-            .get( `${ BASE }${ endpoints.films.getRecommendationsFilmList }`.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getRecommendationsFilmList.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -29,19 +24,17 @@ export const recomendFilmList = ( id ) => {
 export const infoFilm = ( id ) => {
     return new Promise( resolve => {
         let film = {}
-        axios
-            .get( `${ BASE }${ endpoints.films.getMovie }`.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getMovie.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 film = response.data
                 resolve( film )
             } )
     } )
 }
-export const filmList = ( ) => {
+export const filmList = () => {
     return new Promise( ( resolve, reject ) => {
         let films = []
-        axios
-            .get( `${ BASE }${ endpoints.films.getFilmList }`.replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getFilmList.replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -49,14 +42,12 @@ export const filmList = ( ) => {
             .catch( () => {
                 reject()
             } )
-
     } )
 }
 export const getNewFilms = ( page ) => {
     return new Promise( resolve => {
         let addedFilms = [] // добавленные новые фильмы
-        axios
-            .get( `${ BASE }${ endpoints.films.getFilmList }`.replace( '{:api_key}', API_KEY ).replace( 'page=1', `page=${ page }` ) )
+        instance.get( endpoints.films.getFilmList.replace( '{:api_key}', API_KEY ).replace( 'page=1', `page=${ page }` ) )
             .then( response => {
                 addedFilms = response.data.results
                 resolve( addedFilms )
@@ -66,8 +57,7 @@ export const getNewFilms = ( page ) => {
 export const getPopularFilmList = ( page ) => {
     return new Promise( resolve => {
         let films = []
-        axios
-            .get( `${ BASE }${ endpoints.films.getPopularFilmList }`.replace( 'page=1', `page=${page}` ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getPopularFilmList.replace( 'page=1', `page=${ page }` ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -77,8 +67,7 @@ export const getPopularFilmList = ( page ) => {
 export const getSimilarFilmList = ( id ) => {
     return new Promise( resolve => {
         let films = []
-        axios
-            .get( `${ BASE }${ endpoints.films.getSimilarList }`.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getSimilarList.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -87,26 +76,39 @@ export const getSimilarFilmList = ( id ) => {
 }
 export const getVideo = ( id ) => {
     return new Promise( resolve => {
-        axios.get( `${ BASE }${ endpoints.films.getTrailer }`.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getTrailer.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 resolve( response.data.results[ 0 ] )
             } )
     } )
 }
-
 export const getGenres = () => {
     return new Promise( resolve => {
-        axios.get( `${ BASE }${ endpoints.genres.getGenres }`.replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.genres.getGenres.replace( '{:api_key}', API_KEY ) )
             .then( response => {
                 resolve( response.data.genres )
             } )
     } )
 }
-
 export const getFilmListByGenre = ( genres, page ) => {
     return new Promise( resolve => {
-
-        axios.get( `${ BASE }${ endpoints.films.getListByGenre }`.replace('page=1', `page=${page}`).replace( '{:api_key}', API_KEY ).replace( '{genres}', genres ) )
+        instance.get( endpoints.films.getListByGenre.replace( 'page=1', `page=${ page }` ).replace( '{:api_key}', API_KEY ).replace( '{genres}', genres ) )
+            .then( response => {
+                resolve( response.data.results )
+            } )
+    } )
+}
+export const markFavorite = ( film, account_id, session_id ) => {
+    return new Promise( resolve => {
+        instance.post( endpoints.films.likeFilm.replace( '{:account_id}', account_id ).replace( '{:session_id}', session_id ).replace( '{:api_key}', API_KEY ), film )
+            .then( () => {
+                resolve()
+            } )
+    } )
+}
+export const favoriteFilmList = ( account_id, session_id ) => {
+    return new Promise( resolve => {
+        instance.get( endpoints.films.getFavoriteFilmList.replace( '{:account_id}', account_id ).replace( '{:api_key}', API_KEY ).replace( '{:session_id}', session_id ) )
             .then( response => {
                 resolve( response.data.results )
             } )

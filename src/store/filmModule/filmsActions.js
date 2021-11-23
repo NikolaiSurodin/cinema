@@ -7,7 +7,9 @@ import {
     getPopularFilmList,
     getSimilarFilmList,
     getGenres,
-    getFilmListByGenre
+    getFilmListByGenre,
+    markFavorite,
+    favoriteFilmList
 } from "@/services/film.service"
 
 export default {
@@ -42,7 +44,6 @@ export default {
                 .catch( () => {
                     reject()
                 } )
-
         } )
     },
     clearFIlmItem( { commit } ) {
@@ -59,18 +60,32 @@ export default {
                 } )
             resolve()
         } )
-
     },
     removeGlobalFilm( { commit } ) {
         commit( 'REMOVE_GLOBAL_FILM' )
     },
-    addLikeFilm( { commit, state }, film ) {
-        return new Promise( ( resolve, reject ) => {
-            const found = state.likesFilmList.some( el => el.id === film.id )
-            if ( !found ) {
-                resolve( commit( 'SET_LIKE_FILM', film ) )
-            }
-            reject()
+    addLikeFilm( { getters }, film ) {
+        return new Promise( ( resolve ) => {
+            markFavorite( {
+                    media_type: "movie",
+                    media_id: film.id,
+                    favorite: true
+                },
+                getters.getUser.username,
+                getters.getSession_id )
+            resolve()
+        } )
+    },
+    deleteLikeFilm( { getters }, film ) {
+        return new Promise( ( resolve ) => {
+            markFavorite( {
+                    media_type: "movie",
+                    media_id: film.id,
+                    favorite: false
+                },
+                getters.getUser.username,
+                getters.getSession_id )
+            resolve()
         } )
     },
     removeLikeFilm( { commit }, film ) {
@@ -126,7 +141,7 @@ export default {
     selectedGenre( { commit }, genre ) {
         commit( 'SET_ACTIVE_GENRE', genre )
     },
-    fetchListByGenre( { commit }, { genres, page  } ) {
+    fetchListByGenre( { commit }, { genres, page } ) {
         return new Promise( resolve => {
             getFilmListByGenre( genres, page )
                 .then( ( films ) => {
@@ -134,6 +149,11 @@ export default {
                     resolve()
                 } )
         } )
-
+    },
+    fetchFavoriteFilmList( { commit, getters } ) {
+        favoriteFilmList( getters.getUser.id, getters.getSession_id )
+            .then( ( filmList ) => {
+                commit( 'SET_FAVORITE_FILM_LIST', filmList )
+            } )
     }
 }

@@ -133,7 +133,7 @@ export default {
       return Object.keys( this.getGlobalFilm ).length !== 0
     },
     user() {
-      return this.getUser ? this.getUser : ''
+      return this.getUser ? this.getUser.username : ''
     },
     isGenreList() {
       return !!this.$route.query.genres

@@ -6,7 +6,7 @@
       <div v-for="film in getFavoriteFilms" :key="film.id">
         <film-card :film="film"
                    @clickOnFilm="toFilm(film.id)"
-                   @deleteLikeFilm="deleteLikeFilm(film)"/>
+                   @deleteLikeFilm="deleteLikeFilms(film)"/>
       </div>
     </div>
   </div>
@@ -21,9 +21,9 @@ export default {
   name: "FavoriteFilms",
   components: { FilmCard, MainHeader },
   methods: {
-    ...mapActions( [ 'removeLikeFilm' ] ),
-    deleteLikeFilm( f ) {
-      this.removeLikeFilm( f )
+    ...mapActions( [ 'removeLikeFilm', 'fetchFavoriteFilmList', 'deleteLikeFilm' ] ),
+    deleteLikeFilms( f ) {
+      this.deleteLikeFilm( f )
           .then( () => {
             if ( !this.getFavoriteFilms.length ) {
               this.$popup.success( 'You have not favorite films', 'OK!' ).then( () => this.$router.push( '/films' ) )
@@ -35,7 +35,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters( [ 'getFavoriteFilms' ] )
+    ...mapGetters( [ 'getFavoriteFilms' ] ),
+    films() {
+      return this.getFavoriteFilms
+    }
+  },
+  created() {
+    this.fetchFavoriteFilmList()
   }
 }
 </script>

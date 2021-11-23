@@ -56,7 +56,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions( [ 'sendLogin', 'login' ] ),
+    ...mapActions( [ 'login' ] ),
     loginClick() {
       this.loading = true
       this.login( this.user )

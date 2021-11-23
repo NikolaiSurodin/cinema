@@ -7,6 +7,6 @@ export default {
     filmListByGenre:[],
     film: {},
     globalFilm:{},
-    likesFilmList:JSON.parse(localStorage.getItem('likesFilm')) || [],
+    favoriteFilmList:JSON.parse(localStorage.getItem('favoriteFilms')) || [],
     IMG_URL: 'https://image.tmdb.org/t/p/w500/'
 }
