@@ -146,7 +146,7 @@ export default {
       return !!this.$route.query.genres
     },
     removeGenresFilms() {
-      return !this.isQueryRouteGenres ? this.clearFilmListByGenre() : ''
+      return !window.location.search.includes('genres') ? this.clearFilmListByGenre() : ''
     }
   },
   mounted() {
