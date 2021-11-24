@@ -1,5 +1,6 @@
 export default {
     token: localStorage.getItem( 'token' ) || '',
-    user: localStorage.getItem( 'user' ) || {},
+    user: JSON.parse( localStorage.getItem( 'user' ) ) || {},
+    session_id: localStorage.getItem( 'id' ) || '',
     isLoggedIn: localStorage.getItem( 'token' ) !== null,
 }

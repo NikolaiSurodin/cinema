@@ -4,6 +4,9 @@
       <main-header/>
     </header>
     <main class="main">
+      <div class="main_title">
+        Popular movies.
+      </div>
       <template>
         <div class="layout">
           <film-card v-for="film in getPopularFilmList"

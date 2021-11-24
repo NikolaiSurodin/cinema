@@ -7,7 +7,7 @@
             <b-nav-item @click="toHome">Home</b-nav-item>
             <b-nav-item-dropdown text="User" right>
               <b-dropdown-item href="#">Account</b-dropdown-item>
-              <b-dropdown-item @click="toFavoriteFilms" v-if="getFavoriteFilms.length">
+              <b-dropdown-item @click="toFavoriteFilms">
                 You favorite films
               </b-dropdown-item>
             </b-nav-item-dropdown>

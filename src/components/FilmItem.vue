@@ -89,7 +89,6 @@ export default {
       this.addLikeFilm( film )
           .then( () => {
             this.like = true
-            //this.$popup.success( 'this movie was added to the "Like" list', 'Like!' )
             this.$popup.toast('this movie was added to the "Like" list')
           } )
           .catch( () => {

@@ -17,13 +17,9 @@ export default {
     REMOVE_GLOBAL_FILM( state ) {
         state.globalFilm = {}
     },
-    SET_LIKE_FILM( state, film ) {
-        state.likesFilmList.push( film )
-        localStorage.setItem( 'likesFilm', JSON.stringify( state.likesFilmList ) )
-    },
     DELETE_LIKE_FILM( state, film ) {
-        state.likesFilmList = state.likesFilmList.filter( el => el.id !== film.id )
-        localStorage.setItem( 'likesFilm', JSON.stringify( state.likesFilmList ) )
+        state.favoriteFilmList = state.favoriteFilmList.filter( el => el.id !== film.id )
+        localStorage.setItem( 'favoriteFilms', JSON.stringify( state.favoriteFilmList ) )
     },
     SET_RECOMEND( state, films ) {
         state.recomendFilmList = films
@@ -54,5 +50,12 @@ export default {
     },
     SET_FILMS_BY_GENRE( state, films ) {
         state.filmListByGenre = films
+    },
+    REMOVE_FILM_LIST_BY_GENRE( state ) {
+        state.filmListByGenre = []
+    },
+    SET_FAVORITE_FILM_LIST( state, filmList ) {
+        state.favoriteFilmList = filmList
+        localStorage.setItem( 'favoriteFilms', JSON.stringify( state.favoriteFilmList ) )
     }
 }

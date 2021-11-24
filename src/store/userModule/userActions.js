@@ -1,4 +1,4 @@
-import { getToken, login } from "@/services/login.service"
+import { getToken, login, openSession, account } from "@/services/me.service"
 
 export default {
 
@@ -18,18 +18,22 @@ export default {
                 window.location.href = `https://www.themoviedb.org/authenticate/${ TOKEN }`
             } )
     },
-    login( { commit, dispatch, state }, data ) {
+    login( { commit, dispatch, state }, user ) {
         return new Promise( ( resolve, reject ) => {
             dispatch( 'fetchToken' )
                 .then( () => {
-                    data.request_token = state.token
-                    login( data )
+                    user.request_token = state.token
+                    login( user )
                         .then( () => {
-                            commit( 'SET_USER', data )
-                            resolve()
+                            openSession( { request_token: state.token } )
+                                .then( ( session ) => {
+                                    commit( 'SET_SESSION_ID', session.data.session_id )
+                                    dispatch( 'fetchAccount' )
+                                    resolve()
+                                } )
                         } )
                         .catch( () => {
-                            dispatch('logout')
+                            dispatch( 'logout' )
                             reject()
                         } )
                 } )
@@ -40,6 +44,15 @@ export default {
         return new Promise( resolve => {
             commit( 'LOGOUT' )
             resolve()
+        } )
+    },
+    fetchAccount( { commit, state } ) {
+        return new Promise( resolve => {
+            account( state.session_id )
+                .then( ( user ) => {
+                    commit( 'SET_USER', user )
+                    resolve()
+                } )
         } )
 
     }
