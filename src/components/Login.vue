@@ -57,20 +57,18 @@ export default {
   },
   methods: {
     ...mapActions( [ 'login', 'sendLogin' ] ),
-    // loginClick() {
-    //   this.loading = true
-    //   this.login( this.user )
-    //       .then( () => {
-    //         this.$router.push( '/films' )
-    //       } )
-    //       .catch( () => {
-    //         this.$popup.error( 'ERROR' )
-    //         this.loading = false
-    //       } )
-    // },
     loginClick() {
-      this.sendLogin()
-    },
+      this.loading = true
+      this.login( this.user )
+          .then( () => {
+            this.$router.push( '/films' )
+          } )
+          .catch( () => {
+            this.$popup.error( 'ERROR' )
+            this.loading = false
+          } )
+    }
+
   }
 }
 </script>
