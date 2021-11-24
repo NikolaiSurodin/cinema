@@ -12,7 +12,7 @@ export default {
         } )
     },
     sendLogin( { dispatch, state } ) {
-        dispatch( 'getToken' )
+        dispatch( 'fetchToken' )
             .then( () => {
                 const TOKEN = state.token
                 window.location.href = `https://www.themoviedb.org/authenticate/${ TOKEN }`

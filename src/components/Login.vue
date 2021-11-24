@@ -56,18 +56,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions( [ 'login' ] ),
+    ...mapActions( [ 'login', 'sendLogin' ] ),
+    // loginClick() {
+    //   this.loading = true
+    //   this.login( this.user )
+    //       .then( () => {
+    //         this.$router.push( '/films' )
+    //       } )
+    //       .catch( () => {
+    //         this.$popup.error( 'ERROR' )
+    //         this.loading = false
+    //       } )
+    // },
     loginClick() {
-      this.loading = true
-      this.login( this.user )
-          .then( () => {
-            this.$router.push( '/films' )
-          } )
-          .catch( () => {
-            this.$popup.error( 'ERROR' )
-            this.loading = false
-          } )
-    }
+      this.sendLogin()
+    },
   }
 }
 </script>
