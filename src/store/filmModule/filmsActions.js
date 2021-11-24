@@ -76,7 +76,7 @@ export default {
             resolve()
         } )
     },
-    deleteLikeFilm( { getters }, film ) {
+    deleteLikeFilm( { commit, getters }, film ) {
         return new Promise( ( resolve ) => {
             markFavorite( {
                     media_type: "movie",
@@ -85,11 +85,6 @@ export default {
                 },
                 getters.getUser.username,
                 getters.getSession_id )
-            resolve()
-        } )
-    },
-    removeLikeFilm( { commit }, film ) {
-        return new Promise( resolve => {
             commit( 'DELETE_LIKE_FILM', film )
             resolve()
         } )
@@ -148,6 +143,12 @@ export default {
                     commit( 'SET_FILMS_BY_GENRE', films )
                     resolve()
                 } )
+        } )
+    },
+    clearFilmListByGenre( { commit } ) {
+        return new Promise( resolve => {
+            commit( 'REMOVE_FILM_LIST_BY_GENRE' )
+            resolve()
         } )
     },
     fetchFavoriteFilmList( { commit, getters } ) {

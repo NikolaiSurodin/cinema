@@ -74,6 +74,11 @@ body {
 .main {
     flex: 1 1 auto;
 }
+.main_title {
+    text-align: center;
+    font-size: 29px;
+    font-family: fantasy;
+}
 
 .found-film {
     display: grid;
@@ -83,5 +88,10 @@ body {
 
 .genres__button .genres__button_button {
     background: unset
+}
+.no-favorite-text {
+    text-align: center;
+    margin: 5rem auto;
+    font-size: 15px;
 }
 

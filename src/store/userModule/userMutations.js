@@ -6,8 +6,6 @@ export default {
     },
     SET_USER( state, user ) {
         state.user = user
-        console.log( user )
-        console.log( state.user )
         localStorage.setItem( 'user', JSON.stringify( state.user ) )
     },
     SET_SESSION_ID( state, id ) {

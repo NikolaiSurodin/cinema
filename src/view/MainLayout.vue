@@ -101,7 +101,7 @@ export default {
     Pagination
   },
   methods: {
-    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm', 'fetchListByGenre' ] ),
+    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm', 'fetchListByGenre', 'clearFilmListByGenre' ] ),
     toFilm( id ) {
       this.$router.push( `/films/${ id }` )
     },
@@ -121,7 +121,8 @@ export default {
     },
     toPage() {
       this.fetchListByGenre( { genres: this.$route.query.genres, page: this.$route.hash.replace( '#page=', '' ) } )
-    }
+    },
+
   },
   computed: {
     ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser', 'getFilmsByGenre' ] ),
@@ -141,6 +142,12 @@ export default {
     page() {
       return this.currentPage
     },
+    isQueryRouteGenres() {
+      return !!this.$route.query.genres
+    },
+    removeGenresFilms() {
+      return !this.isQueryRouteGenres ? this.clearFilmListByGenre() : ''
+    }
   },
   mounted() {
     this.fetchFilmList()
