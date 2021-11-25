@@ -2,7 +2,7 @@
   <swiper class="swiper" :options="swiperOption">
     <swiper-slide class="slider-card" v-for="actor in actorList" :key="actor.id">
       {{ actor.name }}
-      <img :src="getIMG_URL+actor.profile_path" alt=""/>
+      <img :src="getIMG_URL+actor.profile_path" alt="" @click="toActor(actor.id)"/>
     </swiper-slide>
   </swiper>
 </template>
@@ -33,6 +33,11 @@ export default {
   props: {
     film: Object
   },
+  methods: {
+    toActor( id ) {
+      this.$router.push( `/actor/${ id }` )
+    }
+  },
   computed: {
     ...mapGetters( [ 'getIMG_URL' ] ),
     actorList() {
@@ -40,7 +45,6 @@ export default {
         return this.film.credits.cast
       }
       return ''
-
     },
     username: function () {
       if ( Object.keys( this.getUser ).length > 0 && this.getUser.public_id ) {

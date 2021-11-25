@@ -16,10 +16,14 @@ const endpoints = {
         getListByGenre: '/discover/movie?api_key={:api_key}&with_genres={genres}&page=1',
         likeFilm: '/account/{:account_id}/favorite?api_key={:api_key}&session_id={:session_id}',
         getFavoriteFilmList: 'https://api.themoviedb.org/3/account/{:account_id}/favorite/movies?api_key={:api_key}&session_id={:session_id}&language=en-US&sort_by=created_at.asc&page=1',
-        deleteFilm: '/account/{:account_id}/favourite?media_type=movie&media_id={:media_id}'
+
     },
     genres: {
         getGenres: '/genre/movie/list?api_key={:api_key}&language=en-US'
+    },
+    actor: {
+        getPerson: '/person/{:person_id}?api_key={:api_key}&language=en-US',
+        getPersonMovie: '/person/{:person_id}/movie_credits?api_key={:api_key}&language=en-US'
     }
 }
 

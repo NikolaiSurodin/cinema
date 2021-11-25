@@ -60,7 +60,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import RecomendTable from "@/components/RecomendTable"
 import MainHeader from "@/components/MainHeader"
-import slider from '@/components/slider'
+import slider from '@/components/ActorsSlider'
 import { getVideo } from "@/services/film.service"
 
 
