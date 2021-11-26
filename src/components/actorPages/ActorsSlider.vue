@@ -45,14 +45,7 @@ export default {
         return this.film.credits.cast
       }
       return ''
-    },
-    username: function () {
-      if ( Object.keys( this.getUser ).length > 0 && this.getUser.public_id ) {
-        return this.getUser.profile.full_name
-      }
-      return ''
     }
-
   }
 }
 </script>

@@ -23,7 +23,9 @@ const endpoints = {
     },
     actor: {
         getPerson: '/person/{:person_id}?api_key={:api_key}&language=en-US',
-        getPersonMovie: '/person/{:person_id}/movie_credits?api_key={:api_key}&language=en-US'
+        getPersonMovie: '/person/{:person_id}/movie_credits?api_key={:api_key}&language=en-US',
+        getPopularPerson: '/person/popular?api_key={:api_key}&language=en-US&page=1',
+        getSearchPerson: '/search/person?api_key={:api_key}&language=en-US&query={:search}&page=1&include_adult=false'
     }
 }
 

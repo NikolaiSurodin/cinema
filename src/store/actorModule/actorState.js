@@ -1,3 +1,6 @@
 export default {
-    actor: {}
+    actor: {},
+    searchPerson: {},
+    popularFilmListByActor: [],
+    personList: []
 }

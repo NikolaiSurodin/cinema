@@ -30,7 +30,7 @@ class Popup {
         } )
     }
 
-    toast(message) {
+    toast( message ) {
         const Toast = this.$swal.mixin( {
             toast: true,
             position: 'top-end',
@@ -58,7 +58,18 @@ class Popup {
             imageHeight: 300,
             imageAlt: 'Custom image',
             [ html ? 'html' : 'text' ]: message,
+        } )
+    }
 
+    infoActor( message, title, url, text, html = false ) {
+        return this.$swal( {
+            title: title,
+            imageUrl: `https://image.tmdb.org/t/p/w500/${ url }`,
+            confirmButtonText: 'Look at person!',
+            imageWidth: 200,
+            imageHeight: 300,
+            imageAlt: 'Custom image',
+            [ html ? 'html' : 'text' ]: message,
         } )
     }
 

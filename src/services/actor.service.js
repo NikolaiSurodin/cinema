@@ -9,3 +9,27 @@ export const person = ( person_id ) => {
             } )
     } )
 }
+export const filmsByPerson = ( person_id ) => {
+    return new Promise( resolve => {
+        instance.get( endpoints.actor.getPersonMovie.replace( '{:person_id}', person_id ).replace( '{:api_key}', API_KEY ) )
+            .then( response => {
+                resolve( response.data.cast )
+            } )
+    } )
+}
+export const popularPerson = () => {
+    return new Promise( resolve => {
+        instance.get( endpoints.actor.getPopularPerson.replace( '{:api_key}', API_KEY ) )
+            .then( response => {
+                resolve( response.data.results )
+            } )
+    } )
+}
+export const searchPerson = ( search ) => {
+    return new Promise( resolve => {
+        instance.get( endpoints.actor.getSearchPerson.replace( '{:api_key}', API_KEY ).replace( '{:search}', search ) )
+            .then( response => {
+                resolve( response.data.results[ 0 ] )
+            } )
+    } )
+}

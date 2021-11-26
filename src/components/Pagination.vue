@@ -5,7 +5,6 @@
                         number-of-pages="10"
                         base-url="#page="
                         @change="clickToPage">
-
       </b-pagination-nav>
     </div>
   </div>
