@@ -7,7 +7,6 @@
       </div>
       <div class="search">
         <b-input v-model="search" @keydown.enter.prevent="toSearchPerson"></b-input>
-        <b-button @click="toSearchPerson">search</b-button>
       </div>
       <div class="popular-person">
         <popular-actor-item v-for="actor in getPopularPerson"
@@ -34,12 +33,12 @@ export default {
   data() {
     return {
       loading: true,
-      search: ''
+      search: '',
     }
   },
   components: { Pagination, MainHeader, PopularActorItem },
   methods: {
-    ...mapActions( [ 'fetchPopularPerson', 'fetchSearchPerson', 'removeSearchPerson' ] ),
+    ...mapActions( [ 'fetchPopularPerson', 'fetchSearchPerson', 'removeSearchPerson', 'removePopularPersonList' ] ),
     toSearchPerson() {
       this.fetchSearchPerson( this.search )
           .then( () => {
@@ -61,10 +60,19 @@ export default {
         return this.getSearchPerson
       }
       return ''
+    },
+    page() {
+      return this.$route.hash.replace( '#page=', '' )
     }
   },
-  created() {
-    this.fetchPopularPerson().then( () => this.loading = false )
+  watch: {
+    page: 'fetchPopularPerson'
+  },
+  beforeDestroy() {
+    this.removePopularPersonList()
+  },
+  mounted() {
+    this.fetchPopularPerson( this.page ).then( () => this.loading = false )
   }
 }
 </script>

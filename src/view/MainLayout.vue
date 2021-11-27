@@ -110,7 +110,7 @@ export default {
       this.$router.push( { path: '/popularFilms', query: { film: 'popular' } } )
     },
     toPopularPerson() {
-      this.$router.push( '/popularPerson' )
+      this.$router.push( { path: '/popularPerson', hash: '#page1' } )
     },
     addFilmsInList() {
       const query = { ...this.$route.query, page: this.currentPage++ }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <main-header />
+    <main-header/>
     <div class="container">
       <div class="actor-section d-flex">
         <div class="actor-section__img">
@@ -58,7 +58,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions( [ 'fetchActor' ] ),
+    ...mapActions( [ 'fetchActor', 'removeActor' ] ),
   },
   computed: {
     ...mapGetters( [ 'getActor', 'getIMG_URL', 'getFilms' ] ),
@@ -72,6 +72,9 @@ export default {
           this.loading = false
         } )
   },
+  beforeDestroy() {
+    this.removeActor()
+  }
 }
 </script>
 
@@ -80,9 +83,11 @@ export default {
   border: 1px solid;
   margin: 50px auto;
 }
+
 .container {
-  border:none
+  border: none
 }
+
 .actor-section__img {
   width: 20rem;
 }

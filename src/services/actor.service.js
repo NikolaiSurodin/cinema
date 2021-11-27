@@ -17,17 +17,17 @@ export const filmsByPerson = ( person_id ) => {
             } )
     } )
 }
-export const popularPerson = () => {
+export const popularPerson = (page) => {
     return new Promise( resolve => {
-        instance.get( endpoints.actor.getPopularPerson.replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.actor.getPopularPerson.replace( '{:api_key}', API_KEY ).replace('{:page}', page) )
             .then( response => {
                 resolve( response.data.results )
             } )
     } )
 }
-export const searchPerson = ( search ) => {
+export const searchPerson = ( search, page ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.actor.getSearchPerson.replace( '{:api_key}', API_KEY ).replace( '{:search}', search ) )
+        instance.get( endpoints.actor.getSearchPerson.replace( '{:api_key}', API_KEY ).replace( '{:search}', search ).replace( '{:page}', page  ) )
             .then( response => {
                 resolve( response.data.results[ 0 ] )
             } )

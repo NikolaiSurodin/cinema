@@ -10,6 +10,9 @@ export default {
                 } )
         } )
     },
+    removeActor( { commit } ) {
+        commit( 'CLEAR_STATE_ACTOR' )
+    },
     fetchFilmListByPerson( { commit }, id ) {
         return new Promise( resolve => {
             filmsByPerson( id )
@@ -19,14 +22,17 @@ export default {
                 } )
         } )
     },
-    fetchPopularPerson( { commit } ) {
+    fetchPopularPerson( { commit }, page ) {
         return new Promise( resolve => {
-            popularPerson()
+            popularPerson( page )
                 .then( ( personList ) => {
                     commit( 'SET_POPUlAR_PERSON', personList )
                     resolve()
                 } )
         } )
+    },
+    removePopularPersonList({commit} ) {
+        commit('CLEAR_POPULAR_PERSON_LIST')
     },
     fetchSearchPerson( { commit }, search ) {
         return new Promise( resolve => {
@@ -38,6 +44,6 @@ export default {
         } )
     },
     removeSearchPerson( { commit } ) {
-        commit('CLEAR_SEARCH_PERSON')
+        commit( 'CLEAR_SEARCH_PERSON' )
     }
 }

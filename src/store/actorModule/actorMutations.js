@@ -13,5 +13,12 @@ export default {
     },
     CLEAR_SEARCH_PERSON( state ) {
         state.searchPerson = {}
+    },
+    CLEAR_STATE_ACTOR( state ) {
+        state.actor = {}
+    },
+    CLEAR_POPULAR_PERSON_LIST( state ) {
+        state.personList = []
     }
+
 }
