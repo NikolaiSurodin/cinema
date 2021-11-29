@@ -1,7 +1,7 @@
 <template>
   <div class="actor-card">
     <div class="actor-card__img" @click="toActor(actor.id)">
-      <img v-if="!actor.profile_path" src="../../assets/no_photo.png"
+      <img class="actor-card__img_no-photo" v-if="!actor.profile_path" src="../../assets/no_photo.png"
            height="352.5"
            width="235"
       />
@@ -32,13 +32,25 @@ export default {
 .actor-card {
   cursor: pointer;
 }
-.actor-card__title{
+
+.actor-card__title {
   text-align: center;
 }
+
 .actor-card__img img {
   width: 235px;
   border: 1px white;
   border-radius: 16px;
+}
+
+@media (max-width: 480px) {
+  .actor-card__img img {
+    width: 160px;
+  }
+.actor-card__img_no-photo {
+    width: 160px;
+    height: 240px;
+  }
 }
 
 .actor-card {

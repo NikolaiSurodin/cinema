@@ -30,9 +30,8 @@
             {{ getActor.biography }}
           </div>
           <div class="actor-section__info_films">
-            <films-by-actor-slider :id="this.$route.params.id"
-                                   :films="popFilms"
-                                   :url="getIMG_URL"
+            <films-slider :film-list="popFilms"
+                          @toFilm="toFilm"
             />
           </div>
         </div>
@@ -43,13 +42,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import FilmsByActorSlider from "@/components/FilmsByActorSlider"
+import FilmsSlider from "@/components/slider/FilmsSlider"
 import MainHeader from "@/components/MainHeader"
 
 export default {
   name: "ActorPage",
   components: {
-    FilmsByActorSlider,
+    FilmsSlider,
     MainHeader
   },
   data() {
@@ -58,7 +57,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions( [ 'fetchActor', 'removeActor' ] ),
+    ...mapActions( [ 'fetchActor', 'removeActor', 'fetchFilmListByPerson' ] ),
+    toFilm( id ) {
+      this.$router.push( `/films/${ id }` )
+    }
   },
   computed: {
     ...mapGetters( [ 'getActor', 'getIMG_URL', 'getFilms' ] ),
@@ -67,6 +69,7 @@ export default {
     }
   },
   mounted() {
+    this.fetchFilmListByPerson( this.$route.params.id )
     this.fetchActor( this.$route.params.id )
         .then( () => {
           this.loading = false

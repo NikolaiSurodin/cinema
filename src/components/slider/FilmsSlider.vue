@@ -1,21 +1,23 @@
 <template>
- <component-slider  />
+  <swiper class="swiper" :options="swiperOption">
+    <swiper-slide class="slider-card" v-for="film in filmList" :key="film.id">
+      <img v-if="film.poster_path" :src="getIMG_URL+film.poster_path" @click="toFilm(film.id)"/>
+      <img v-else src="../../assets/no_photo.png" height="456" width="302"/>
+      {{ film.title }}
+    </swiper-slide>
+  </swiper>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import componentSlider from "@/components/slider/FilmsSlider"
-
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/swiper-bundle.css'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "FilmsByActorSlider",
+  name: 'FilmsSlider',
   components: {
-    componentSlider
-  },
-  props: {
-    id: String,
-    films: Array,
-    url: String
+    Swiper,
+    SwiperSlide
   },
   data() {
     return {
@@ -29,14 +31,17 @@ export default {
       }
     }
   },
+  props: {
+    filmList: Array
+  },
   methods: {
-    ...mapActions( [ 'fetchFilmListByPerson' ] ),
     toFilm( id ) {
-      this.$router.push( `/films/${ id }` )
+      this.$emit( 'toFilm', id )
     }
   },
-  mounted() {
-    this.fetchFilmListByPerson( this.id )
+  computed: {
+    ...mapGetters( [ 'getIMG_URL' ] ),
+
   }
 }
 </script>
@@ -45,12 +50,10 @@ export default {
 .actor-section__info_films {
   position: absolute;
 }
-
 img {
   height: 170px;
   width: 119px;
 }
-
 .slider-card {
   width: 32px;
   display: flex;
@@ -59,17 +62,14 @@ img {
   max-width: 150px;
   height: 100%;
 }
-
 .swiper-container {
   cursor: grab;
   padding: 20px;
 }
-
 .swiper {
   width: 100%;
   max-width: 50rem;
 }
-
 @media (max-width: 722px) {
   .swiper {
     display: none;

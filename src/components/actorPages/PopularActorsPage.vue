@@ -8,7 +8,10 @@
       <div class="search">
         <b-input v-model="search" @keydown.enter.prevent="toSearchPerson"></b-input>
       </div>
-      <div class="popular-person">
+      <template v-if="loading">
+        <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
+      </template>
+      <div class="popular-person" v-else>
         <popular-actor-item v-for="actor in getPopularPerson"
                             :key="actor.id"
                             :actor="actor"
@@ -89,5 +92,14 @@ export default {
   text-align: center;
   font-size: 20px;
   margin-bottom: 20px;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    max-width: 100%;
+  }
+  .popular-person {
+    justify-content: center;
+  }
 }
 </style>
