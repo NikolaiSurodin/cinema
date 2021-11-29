@@ -4,14 +4,15 @@
       <b-pagination-nav pills size="lg"
                         number-of-pages="10"
                         base-url="#page="
+                        active
                         @change="clickToPage">
-
       </b-pagination-nav>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "Pagination",
   data() {

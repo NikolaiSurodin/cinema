@@ -47,8 +47,10 @@
         </b-card>
       </section>
     </div>
-    <div class="slider-card">
-      <slider :film="film"/>
+    <div class="slider-card container">
+      <actors-slider :actor-list="actors"
+                      @toActor="toActor"
+      />
     </div>
     <div class="table" v-if="similar">
       <recomend-table/>
@@ -60,13 +62,13 @@
 import { mapGetters, mapActions } from 'vuex'
 import RecomendTable from "@/components/RecomendTable"
 import MainHeader from "@/components/MainHeader"
-import slider from '@/components/slider'
+import ActorsSlider from "@/components/slider/ActorsSlider"
 import { getVideo } from "@/services/film.service"
 
 
 export default {
   name: "FilmItem",
-  components: { RecomendTable, MainHeader, slider },
+  components: { RecomendTable, MainHeader, ActorsSlider },
   data() {
     return {
       like: false,
@@ -82,6 +84,12 @@ export default {
     film() {
       return this.getFilm
     },
+    actors() {
+      if ( Object.keys( this.getFilm ).length > 0 && this.getFilm.credits.cast ) {
+        return this.getFilm.credits.cast
+      }
+      return []
+    }
   },
   methods: {
     ...mapActions( [ 'fetchInfoDetailFilm', 'clearFIlmItem', 'addLikeFilm', 'fetchSimilarFilms' ] ),
@@ -89,11 +97,14 @@ export default {
       this.addLikeFilm( film )
           .then( () => {
             this.like = true
-            this.$popup.toast('this movie was added to the "Like" list')
+            this.$popup.toast( 'this movie was added to the "Like" list' )
           } )
           .catch( () => {
             this.$popup.error( 'This film in you favorite list already' )
           } )
+    },
+    toActor( id ) {
+      this.$router.push( `/actor/${ id }` )
     },
     showRecomend() {
       this.similar = true
@@ -106,7 +117,7 @@ export default {
           } )
     }
   },
-  mounted() {
+  created() {
     this.fetchInfoDetailFilm( this.$route.params.id )
         .then( () => {
           this.loading = false
@@ -196,6 +207,7 @@ export default {
 .card-body {
   position: relative;
 }
+
 h1 {
   font-size: 22px;
 }

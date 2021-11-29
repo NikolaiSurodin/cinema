@@ -5,9 +5,11 @@ import FilmItem from "@/components/FilmItem";
 import Login from "@/components/Login";
 import FavoriteFilms from "@/components/FavoriteFilms";
 import PopularListFilm from "@/components/PopularListFilm";
+import ActorPage from "@/components/actorPages/ActorPage";
 import Page404 from "@/components/pages/Page404";
 
 import { store } from "@/store";
+import PopularActorsPage from "@/components/actorPages/PopularActorsPage";
 
 Vue.use( VueRouter )
 
@@ -56,6 +58,27 @@ const router = new VueRouter( {
                 {
                     path: '',
                     component: FilmItem,
+                    meta: { auth: true }
+                }
+            ]
+        },
+        {
+            path: '/popularPerson',
+            component: PopularActorsPage,
+            props: true,
+            meta: { auth: true }
+        },
+        {
+            path: '/actor/:id',
+            component: {
+                render( c ) {
+                    return c( 'router-view' )
+                }
+            },
+            children: [
+                {
+                    path: '',
+                    component: ActorPage,
                     meta: { auth: true }
                 }
             ]

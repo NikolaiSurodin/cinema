@@ -1,8 +1,9 @@
 <template>
   <swiper class="swiper" :options="swiperOption">
     <swiper-slide class="slider-card" v-for="actor in actorList" :key="actor.id">
+      <img v-if="actor.profile_path" :src="getIMG_URL+actor.profile_path" @click="toActor(actor.id)"/>
+      <img v-else src="../../assets/no_photo.png" height="456" width="302"/>
       {{ actor.name }}
-      <img :src="getIMG_URL+actor.profile_path" alt=""/>
     </swiper-slide>
   </swiper>
 </template>
@@ -11,9 +12,8 @@
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 import { mapGetters } from 'vuex'
-
 export default {
-  name: 'slider',
+  name: "ActorsSlider",
   components: {
     Swiper,
     SwiperSlide
@@ -31,24 +31,21 @@ export default {
     }
   },
   props: {
-    film: Object
+    actorList: Array
+  },
+  methods: {
+    toActor( id ) {
+      this.$emit( 'toActor', id )
+    }
   },
   computed: {
     ...mapGetters( [ 'getIMG_URL' ] ),
-    actorList() {
-      if ( Object.keys( this.film ).length > 0 && this.film.credits.cast ) {
-        return this.film.credits.cast
-      }
-      return ''
-
-    },
-    username: function () {
-      if ( Object.keys( this.getUser ).length > 0 && this.getUser.public_id ) {
-        return this.getUser.profile.full_name
-      }
-      return ''
-    }
-
+    // actorList() {
+    //   if ( Object.keys( this.film ).length > 0 && this.film.credits.cast ) {
+    //     return this.film.credits.cast
+    //   }
+    //   return ''
+    // }
   }
 }
 </script>
@@ -71,34 +68,6 @@ img {
 .swiper-container {
   cursor: grab;
   padding: 20px;
-}
-
-img:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 17px;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgb(0 0 0);
-  border: 2px solid rgb(153 153 153);
-  border-radius: 5px;
-}
-
-img:after {
-  content: "" attr(alt);
-  display: block;
-  font-size: 16px;
-  font-style: normal;
-  font-family: FontAwesome;
-  color: rgb(100, 100, 100);
-
-  position: absolute;
-  top: 5px;
-  left: 0;
-  width: 100%;
-  text-align: center;
 }
 
 @media (max-width: 722px) {

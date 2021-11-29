@@ -11,8 +11,9 @@
                  @keyup.enter="globalSearch"
         ></b-input>
       </div>
-      <div class="pop d-flex justify-content-center">
-        <b-button class="mt-2" style="background: unset" @click="toPopularFilm">What`s popular?</b-button>
+      <div class="pop d-flex justify-content-center flex-wrap">
+        <b-button class="mt-2" style="background: unset" @click="toPopularFilm">What`s popular films?</b-button>
+        <b-button class="mt-2" style="background: unset" @click="toPopularPerson">Popular people.</b-button>
       </div>
       <template>
         <div class="welcome-text">
@@ -108,6 +109,9 @@ export default {
     toPopularFilm() {
       this.$router.push( { path: '/popularFilms', query: { film: 'popular' } } )
     },
+    toPopularPerson() {
+      this.$router.push( { path: '/popularPerson', hash: '#page=1' } )
+    },
     addFilmsInList() {
       const query = { ...this.$route.query, page: this.currentPage++ }
       this.$router.replace( { query } )
@@ -144,11 +148,9 @@ export default {
     },
     isQueryRouteGenres() {
       return !!this.$route.query.genres
-    },
-    removeGenresFilms() {
-      return !window.location.search.includes('genres') ? this.clearFilmListByGenre() : ''
     }
   },
+  watch: {},
   mounted() {
     this.fetchFilmList()
         .then( () => {
