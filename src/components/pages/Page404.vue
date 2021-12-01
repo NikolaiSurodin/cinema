@@ -1,7 +1,7 @@
 <template>
-<div>
-  Oooops.. NO this Page
-</div>
+  <div class="container no-page">
+    Oooops.. NO this Page
+  </div>
 </template>
 
 <script>
@@ -11,5 +11,10 @@ export default {
 </script>
 
 <style scoped>
-
+.no-page {
+  margin: 10rem auto;
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+}
 </style>

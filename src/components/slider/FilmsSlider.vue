@@ -72,7 +72,7 @@ img {
 }
 @media (max-width: 722px) {
   .swiper {
-    display: none;
+    /*display: none;*/
   }
 }
 </style>

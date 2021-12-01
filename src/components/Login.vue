@@ -61,7 +61,7 @@ export default {
       this.loading = true
       this.login( this.user )
           .then( () => {
-            this.$router.push( '/films' )
+            this.$router.push( { path: '/films', hash: 'page=1' } )
           } )
           .catch( () => {
             this.$popup.error( 'ERROR' )

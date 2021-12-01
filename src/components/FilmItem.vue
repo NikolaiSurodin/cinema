@@ -4,10 +4,8 @@
     <div v-if="loading" class="text-center mt-5">
       <b-spinner class="main-layout-spin" type="grow"></b-spinner>
     </div>
-
-    <div class="wrapper-card" v-else>
+    <div class="wrapper-card container" v-else>
       <section class="film-card">
-
         <b-card
             :img-src="getIMG_URL+film.backdrop_path"
             img-alt="Image"
@@ -22,9 +20,9 @@
             </div>
             <div class="genres">
               <h4>Genres:</h4>
-              <div v-for="genre in film.genres" :key="genre.id">
-                {{ genre.name }}
-              </div>
+              <ul v-for="genre in film.genres" :key="genre.id">
+                <li>{{ genre.name }}</li>
+              </ul>
             </div>
             <div class="actions-item">
 
@@ -49,7 +47,7 @@
     </div>
     <div class="slider-card container">
       <actors-slider :actor-list="actors"
-                      @toActor="toActor"
+                     @toActor="toActor"
       />
     </div>
     <div class="table" v-if="similar">
@@ -135,6 +133,13 @@ export default {
   margin: 5rem;
   height: 100%;
 }
+.genres h4 {
+  font-size: 18px;
+  margin-top: 10px;
+}
+.about h4 {
+  font-size: 20px;
+}
 
 @media (max-width: 1144px) {
   .card {
@@ -210,5 +215,9 @@ export default {
 
 h1 {
   font-size: 22px;
+}
+
+@media (max-width: 1024px) {
+
 }
 </style>

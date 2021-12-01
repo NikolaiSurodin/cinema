@@ -70,6 +70,9 @@ class Popup {
             imageHeight: 300,
             imageAlt: 'Custom image',
             [ html ? 'html' : 'text' ]: message,
+            width: '45em',
+            background: '#000000',
+            confirmButtonColor: 'black'
         } )
     }
 

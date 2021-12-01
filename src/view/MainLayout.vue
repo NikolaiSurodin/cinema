@@ -78,9 +78,7 @@ import ButtonToUp from "@/components/ButtonToUp"
 import MainHeader from "@/components/MainHeader"
 import GenresList from "@/components/GenresList"
 import Pagination from "@/components/Pagination"
-
 import { mapActions, mapGetters } from "vuex"
-
 export default {
   name: "MainLayout",
   data() {
@@ -90,7 +88,6 @@ export default {
       loading: true,
       currentPage: 2,
       global: false,
-
     }
   },
   components: {
@@ -125,8 +122,8 @@ export default {
     },
     toPage() {
       this.fetchListByGenre( { genres: this.$route.query.genres, page: this.$route.hash.replace( '#page=', '' ) } )
+      window.scrollTo( 0, 0 )
     },
-
   },
   computed: {
     ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser', 'getFilmsByGenre' ] ),
@@ -167,7 +164,6 @@ export default {
     width: unset;
   }
 }
-
 .header-search {
   padding: 0 12em;
   margin-top: 6px;
@@ -175,33 +171,27 @@ export default {
   justify-content: center;
   height: 50px;
 }
-
 .load-button {
   display: flex;
   justify-content: center;
   margin-top: 5rem;
 }
-
 .main {
   flex: 1 1 auto;
 }
-
 .welcome-text {
   margin-left: 4em;
   display: block;
   border-left: 1px solid;
 }
-
 .text-title p {
   font-size: 44px;
   font-family: fantasy;
   line-height: 2;
   letter-spacing: 8px;
 }
-
 p {
   font-size: 20px;
   font-family: sans-serif;
 }
-
 </style>

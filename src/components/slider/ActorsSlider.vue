@@ -12,6 +12,7 @@
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 import { mapGetters } from 'vuex'
+
 export default {
   name: "ActorsSlider",
   components: {
@@ -72,7 +73,11 @@ img {
 
 @media (max-width: 722px) {
   .swiper {
-    display: none;
+    /*display: none;*/
+  }
+
+  .slider-card {
+    margin-right: 101px !important;
   }
 }
 </style>
