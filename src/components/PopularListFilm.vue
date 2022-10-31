@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
     <header class="header">
-      <main-header/>
     </header>
     <main class="main">
       <div class="main_title">
@@ -26,7 +25,6 @@
 import { mapActions, mapGetters } from 'vuex'
 import FilmCard from "@/components/FilmCard"
 import Pagination from "@/components/Pagination"
-import MainHeader from "@/components/MainHeader"
 
 export default {
   name: "PopularListFilm",
@@ -35,7 +33,7 @@ export default {
       currentPage: 1
     }
   },
-  components: { FilmCard, Pagination, MainHeader },
+  components: { FilmCard, Pagination },
   computed: {
     ...mapGetters( [ 'getPopularFilmList' ] ),
     page() {

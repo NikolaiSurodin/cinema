@@ -8,5 +8,5 @@ export default {
     film: {},
     globalFilm:{},
     favoriteFilmList:JSON.parse(localStorage.getItem('favoriteFilms')) || [],
-    IMG_URL: 'https://image.tmdb.org/t/p/w500/'
+    IMG_URL: 'https://image.tmdb.org/t/p/w500/',
 }

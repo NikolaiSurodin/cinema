@@ -57,5 +57,8 @@ export default {
     SET_FAVORITE_FILM_LIST( state, filmList ) {
         state.favoriteFilmList = filmList
         localStorage.setItem( 'favoriteFilms', JSON.stringify( state.favoriteFilmList ) )
+    },
+    REMOVE_GENDER_FILTER(state) {
+        state.genres.forEach(el => el.isActive = false)
     }
 }

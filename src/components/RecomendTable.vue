@@ -1,32 +1,28 @@
 <template>
-  <div class="layout">
-    <film-card v-for="film in getSimilarListFilm" :key="film.id"
-               :film="film"
-               @clickOnFilm="addInfoPopup(film)"
-    />
-  </div>
+ <film-table :film-list="recomendFilmList"/>
 </template>
 
 <script>
-import FilmCard from "@/components/FilmCard"
-import { mapGetters, mapActions } from 'vuex'
+import FilmTable from "@/components/FilmTable"
+import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: "RecomendTable",
-  components: { FilmCard },
+  components: {FilmTable},
+  props: {
+   recomendFilmList:{
+     type: Array,
+     default: () => []
+   }
+  },
   methods: {
-    ...mapActions( [ 'removeRecomendFilmList' ] ),
-    addInfoPopup( film ) {
-      this.$popup.info( `${ film.overview }`, `${ film.title }`, `${ film.poster_path }`, `${ film.overview }` )
+    ...mapActions(['removeRecomendFilmList']),
+    addInfoPopup(film) {
+      this.$popup.info(`${film.overview}`, `${film.title}`, `${film.poster_path}`, `${film.overview}`)
     }
   },
   computed: {
-    ...mapGetters( [
-      'getSimilarListFilm'
-    ] )
-  },
-  beforeDestroy() {
-    this.removeRecomendFilmList()
+    ...mapGetters([])
   }
 }
 </script>

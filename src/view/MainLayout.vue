@@ -1,197 +1,167 @@
 <template>
-  <div class="wrapper">
-    <header class="header">
-      <main-header/>
-    </header>
-    <main class="main">
-      <div class="header-search">
-        <b-input class="mr-sm-2"
-                 placeholder="Search film..."
-                 v-model="search"
-                 @keyup.enter="globalSearch"
-        ></b-input>
-      </div>
-      <div class="pop d-flex justify-content-center flex-wrap">
-        <b-button class="mt-2" style="background: unset" @click="toPopularFilm">What`s popular films?</b-button>
-        <b-button class="mt-2" style="background: unset" @click="toPopularPerson">Popular people.</b-button>
-      </div>
-      <template>
-        <div class="welcome-text">
-          <div class="text-title">
-            <p>Welcome <span>, {{ user }}</span></p>
-          </div>
-          <p>Millions of movies, TV shows and people. Explore now.</p>
-        </div>
-      </template>
-      <template>
-        <genres-list/>
-      </template>
-      <template v-if="loading">
-        <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
-      </template>
-      <template v-else>
-        <div class="layout" v-if="getFilmsByGenre.length">
-          <film-card v-for="film in getFilmsByGenre" :key="film.id"
-                     :film="film"
-                     @clickOnFilm="toFilm(film.id)"
-          />
-        </div>
-        <div class="layout" v-else-if="filteredFilm.length">
-          <film-card v-for="film in filteredFilm" :key="film.id"
-                     :film="film"
-                     @clickOnFilm="toFilm(film.id)"
-          />
-        </div>
-
-        <div class="found-film" v-else-if="isGlobalFilm">
-          <div>
-            <film-card :film="getGlobalFilm[0]"
-                       @clickOnFilm="toFilm(getGlobalFilm[0].id)"
+    <div class="wrapper">
+        <main class="main">
+            <custom-input v-model="search"
+                          @input="searchFilm"
             />
-          </div>
-        </div>
-      </template>
-      <div class="load-button">
-        <b-button style="background-color: inherit"
-                  v-if="!isGenreList"
-                  @click="addFilmsInList"
-                  :disabled="!filteredFilm.length">Loading
-        </b-button>
-        <button-to-up @goToUpPage="goToUpPage"/>
-      </div>
-      <div class="pagination-section" v-if="isGenreList">
-        <pagination :current-page="$route.hash"
-                    @clickToPage="toPage"
-        />
-      </div>
-    </main>
-    <footer class="footer">
-      <app-footer/>
-    </footer>
-  </div>
+            <div class="pop d-flex justify-content-center flex-wrap">
+                <b-button class="mt-2" style="background: unset">What`s popular films?</b-button>
+                <b-button class="mt-2" style="background: unset">Popular people.</b-button>
+            </div>
+            <template>
+                <div class="welcome-text">
+                    <div class="text-title">
+                        <p>Welcome <span>, {{ user }}</span></p>
+                    </div>
+                    <p>Millions of movies, TV shows and people. Explore now.</p>
+                </div>
+            </template>
+            <template>
+                <genres-list
+                        @remove="removeFilterFilmList"
+                />
+            </template>
+            <template v-if="loading">
+                <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
+            </template>
+            <div v-else ref="films">
+                <film-table :film-list="films"
+                            @loadData="loadData"
+                />
+            </div>
+        </main>
+    </div>
 </template>
 
 <script>
-import FilmCard from "@/components/FilmCard"
-import AppFooter from "@/components/AppFooter"
-import ButtonToUp from "@/components/ButtonToUp"
-import MainHeader from "@/components/MainHeader"
-import GenresList from "@/components/GenresList"
-import Pagination from "@/components/Pagination"
-import { mapActions, mapGetters } from "vuex"
+import FilmCard from '@/components/FilmCard'
+import ButtonToUp from '@/components/ButtonToUp'
+import GenresList from '@/components/GenresList'
+import Pagination from '@/components/Pagination'
+import CustomInput from '@/components/_partial/CustomInput'
+import FilmTable from '@/components/FilmTable'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import { filmList, searchFilm } from '@/services/film.service'
+
 export default {
-  name: "MainLayout",
-  data() {
-    return {
-      search: '',
-      globalFilm: {},
-      loading: true,
-      currentPage: 2,
-      global: false,
+    name: 'MainLayout',
+    data() {
+        return {
+            search: '',
+            globalFilm: {},
+            activeFilmId: '',
+            loading: true,
+            currentPage: 1,
+            global: false,
+            films: []
+        }
+    },
+    components: {
+        CustomInput,
+        FilmCard,
+        ButtonToUp,
+        GenresList,
+        Pagination,
+        FilmTable
+    },
+    methods: {
+        ...mapActions(
+            [
+                'fetchFilmList',
+                'fetchOnPageFilms',
+                'globalSearchFilm',
+                'removeGlobalFilm',
+                'fetchListByGenre',
+                'clearFilmListByGenre',
+                'clearGenderFilter'
+            ] ),
+
+        fetchFilmList() {
+            filmList( {
+                with_genres: this.activeFilmId,
+                page: this.currentPage
+            } )
+                .then( ( result ) => {
+                    this.films = result
+                    this.loading = false
+                } )
+        },
+        toFilm( id ) {
+            this.$router.push( `/films/${ id }` )
+        },
+        removeFilterFilmList() {
+            this.activeFilmId = ''
+            this.clearGenderFilter()
+        },
+        searchFilm() {
+            if( this.search ) {
+                this.films = []
+                searchFilm( this.search ).then( ( res ) => {
+                    this.films = res
+                } )
+            } else {
+                this.fetchFilmList()
+            }
+        },
+        loadData() {
+            this.currentPage++
+            filmList( {
+                with_genres: this.activeFilmId,
+                page: this.currentPage
+            } )
+                .then( ( result ) => {
+                    this.films = [ ...this.films, ...result ]
+                    this.loading = false
+                } )
+        }
+    },
+    computed: {
+        ...mapGetters(
+            [
+                'getFilmList',
+                'getGlobalFilm',
+                'getUser',
+                'getFilmsByGenre',
+                'getGenresList'
+            ] ),
+        ...mapState( [ 'user' ] ),
+
+        selectFilterByGenges() {
+            return this.getGenresList.filter( el => el.isActive ).map( ( el ) => ( { id: el.id } ) )
+        }
+    },
+    watch: {
+        selectFilterByGenges() {
+            let genresId = []
+            this.selectFilterByGenges.forEach( el => genresId.push( el.id ) )
+            this.activeFilmId = genresId.toString()
+            this.fetchFilmList()
+        }
     }
-  },
-  components: {
-    FilmCard,
-    AppFooter,
-    ButtonToUp,
-    MainHeader,
-    GenresList,
-    Pagination
-  },
-  methods: {
-    ...mapActions( [ 'fetchFilmList', 'fetchOnPageFilms', 'globalSearchFilm', 'removeGlobalFilm', 'fetchListByGenre', 'clearFilmListByGenre' ] ),
-    toFilm( id ) {
-      this.$router.push( `/films/${ id }` )
-    },
-    toPopularFilm() {
-      this.$router.push( { path: '/popularFilms', query: { film: 'popular' } } )
-    },
-    toPopularPerson() {
-      this.$router.push( { path: '/popularPerson', hash: '#page=1' } )
-    },
-    addFilmsInList() {
-      const query = { ...this.$route.query, page: this.currentPage++ }
-      this.$router.replace( { query } )
-      this.fetchOnPageFilms( this.$route.query.page )
-    },
-    goToUpPage() {
-      window.scrollTo( 0, 0 )
-    },
-    globalSearch() {
-      this.globalSearchFilm( this.search.toLowerCase() )
-    },
-    toPage() {
-      this.fetchListByGenre( { genres: this.$route.query.genres, page: this.$route.hash.replace( '#page=', '' ) } )
-      window.scrollTo( 0, 0 )
-    },
-  },
-  computed: {
-    ...mapGetters( [ 'getFilmList', 'getGlobalFilm', 'getUser', 'getFilmsByGenre' ] ),
-    filteredFilm() {
-      return this.getFilmList.filter( el => el.title.toLowerCase().includes( this.search.toLowerCase() ) )
-    },
-    isGlobalFilm() {
-      // есть ли глобл фильм вообще
-      return Object.keys( this.getGlobalFilm ).length !== 0
-    },
-    user() {
-      return this.getUser ? this.getUser.username : ''
-    },
-    isGenreList() {
-      return !!this.$route.query.genres
-    },
-    page() {
-      return this.currentPage
-    },
-    isQueryRouteGenres() {
-      return !!this.$route.query.genres
-    }
-  },
-  watch: {},
-  mounted() {
-    this.fetchFilmList()
-        .then( () => {
-          this.loading = false
-          this.removeGlobalFilm()
-        } )
-  }
 }
 </script>
 
 <style scoped>
-@media (max-width: 540px) {
-  .form-control {
-    width: unset;
-  }
-}
-.header-search {
-  padding: 0 12em;
-  margin-top: 6px;
-  display: flex;
-  justify-content: center;
-  height: 50px;
-}
-.load-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 5rem;
-}
+
 .main {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
+
 .welcome-text {
-  margin-left: 4em;
-  display: block;
-  border-left: 1px solid;
+    margin-left: 4em;
+    display: block;
+    border-left: 1px solid;
 }
+
 .text-title p {
-  font-size: 44px;
-  font-family: fantasy;
-  line-height: 2;
-  letter-spacing: 8px;
+    font-size: 44px;
+    font-family: fantasy;
+    line-height: 2;
+    letter-spacing: 8px;
 }
+
 p {
-  font-size: 20px;
-  font-family: sans-serif;
+    font-size: 20px;
+    font-family: sans-serif;
 }
 </style>

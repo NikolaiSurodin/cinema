@@ -1,15 +1,18 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import MainLayout from "@/view/MainLayout";
-import FilmItem from "@/components/FilmItem";
-import Login from "@/components/Login";
-import FavoriteFilms from "@/components/FavoriteFilms";
-import PopularListFilm from "@/components/PopularListFilm";
-import ActorPage from "@/components/actorPages/ActorPage";
-import Page404 from "@/components/pages/Page404";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import MainLayout from '@/view/MainLayout'
+import FilmItem from '@/components/FilmItem'
+import Login from '@/components/Login'
+import FavoriteFilms from '@/components/FavoriteFilms'
+import PopularListFilm from '@/components/PopularListFilm'
+import ActorPage from '@/components/actorPages/ActorPage'
+import Account from '@/components/Account'
+import DefaultContainer from '@/components/_partial/DefaultContainer'
 
-import { store } from "@/store";
-import PopularActorsPage from "@/components/actorPages/PopularActorsPage";
+
+import Page404 from '@/components/pages/Page404'
+import { store } from '@/store'
+import PopularActorsPage from '@/components/actorPages/PopularActorsPage'
 
 Vue.use( VueRouter )
 
@@ -18,84 +21,98 @@ const router = new VueRouter( {
     routes: [
         {
             path: '/',
-            name: 'login',
-            component: Login,
-            beforeEnter: ( to, from, next ) => {
-                if ( store.getters[ 'getIsLoggedIn' ] ) {
-                    next( '/films' )
-                } else {
-                    next()
-                }
-            }
-        },
-        {
-            path: '/films',
-            name: 'films',
-            props: true,
-            component: MainLayout,
-            meta: { auth: true }
-        },
-        {
-            path: '/popularFilms',
-            component: PopularListFilm,
-            props: true,
-            meta: { auth: true }
-        },
-        {
-            path: '/likeFilms',
-            component: FavoriteFilms,
-            props: true,
-            meta: { auth: true }
-        },
-        {
-            path: '/films/:id',
-            component: {
-                render( c ) {
-                    return c( 'router-view' )
-                }
-            },
+            component: DefaultContainer,
             children: [
                 {
-                    path: '',
-                    component: FilmItem,
-                    meta: { auth: true }
-                }
-            ]
-        },
-        {
-            path: '/popularPerson',
-            component: PopularActorsPage,
-            props: true,
-            meta: { auth: true }
-        },
-        {
-            path: '/actor/:id',
-            component: {
-                render( c ) {
-                    return c( 'router-view' )
-                }
-            },
-            children: [
+                    path: '/login',
+                    name: 'login',
+                    component: Login,
+                    beforeEnter: ( to, from, next ) => {
+                        if( store.getters[ 'getIsLoggedIn' ] ) {
+                            next( '/films' )
+                        } else {
+                            next()
+                        }
+                    }
+                },
                 {
-                    path: '',
-                    component: ActorPage,
+                    path: '/',
+                    props: true,
+                    component: MainLayout
+                },
+                {
+                    path: '/films',
+                    name: 'films',
+                    props: true,
+                    component: MainLayout
+                },
+                {
+                    path: '/popularFilms',
+                    component: PopularListFilm,
+                    props: true
+                },
+                {
+                    path: '/:id/likeFilms',
+                    component: FavoriteFilms,
+                    props: true,
                     meta: { auth: true }
+                },
+                {
+                    path: '/films/:id',
+                    component: {
+                        render( c ) {
+                            return c( 'router-view' )
+                        }
+                    },
+                    children: [
+                        {
+                            path: '',
+                            component: FilmItem
+                        }
+                    ]
+                },
+                {
+                    path: '/popularPerson',
+                    component: PopularActorsPage,
+                    props: true
+                },
+                {
+                    path: '/actor/:id',
+                    component: {
+                        render( c ) {
+                            return c( 'router-view' )
+                        }
+                    },
+                    children: [
+                        {
+                            path: '',
+                            component: ActorPage
+                        }
+                    ]
+                },
+                {
+                    path: '/account',
+                    component: Account,
+                    props: true,
+                    meta: { auth: true }
+
+                },
+                {
+                    path: '*',
+                    name: '404',
+                    props: true,
+                    component: Page404
                 }
             ]
-        },
-        {
-            path: '*',
-            name: '404',
-            props: true,
-            component: Page404,
-        },
+        }
+
     ]
 } )
 
 
 router.beforeEach( ( to, from, next ) => {
-    if ( to.matched.some( route => route.meta.auth ) && !store.getters[ 'getIsLoggedIn' ] ) {
-        next( '/' )
+    if( to.matched.some( route => route.meta.auth ) && !store.getters[ 'getIsLoggedIn' ] ) {
+        next( '/films' )
     } else {
         next()
     }
