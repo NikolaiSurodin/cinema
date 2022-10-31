@@ -1,95 +1,125 @@
 <template>
-  <div class="container">
-    <div class="genres">
-      <div class="genres__item"
-           v-for="genre in getGenresList" :key="genre.id"
-           :class="{'genres__item_active':genre.isActive}"
-           @click="selectGenre(genre)"
-      >
-        {{ genre.name }}
-      </div>
-      <div class="genres__button">
-        <b-button class="genres__button_button"
-                  v-if="activeGenre.length"
-                  @click="search">
-          Search
-        </b-button>
-      </div>
+    <div
+            class="container genres"
+            v-if="getGenresList.length"
+    >
+        <div class="genres__list">
+            <div class="genres__item"
+                 v-for="genre in getGenresList"
+                 :key="genre.id"
+                 :class="{'genres__item--active':genre.isActive}"
+                 @click="selectGenre(genre)"
+            >
+                {{ genre.name }}
+            </div>
+        </div>
+        <div class="genres__remove-filter-button" v-if="activeGenre.length">
+            <b-button
+                    class="genres__button_button"
+                    @click="remove"
+            >
+                Remove you filter
+            </b-button>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: "GenresList",
-  data() {
-    return {
-      on: false,
-      activeGenre: [],
-    }
-  },
-  methods: {
-    ...mapActions( [ 'fetchGenres', 'clearGenresList', 'selectedGenre', 'fetchListByGenre' ] ),
-    selectGenre( genre ) {
-      this.selectedGenre( genre )
-      this.activeGenre = [ ...this.getGenresList.filter( el => el.isActive ) ]
+    name: 'GenresList',
+    data() {
+        return {
+            on: false,
+            activeGenre: [],
+        }
     },
-    search() {
-      let a = this.activeGenre.map( ( el ) => ({
-            id: el.id,
-            name: el.name
-          })
-      )
-      let ids = []
-      for ( let i = 0; i < a.length; i++ ) {
-        ids.push( a[ i ].id )
-      }
-      let names = []
-      for ( let i = 0; i < a.length; i++ ) {
-        names.push( a[ i ].name )
-      }
-      this.fetchListByGenre( { genres: ids, page: 1 } )
-          .then( () => {
-            this.$router.push( { path: '/films', query: { genres: `${ names }` } } )
-          } )
+    props: {
+        activeG: {
+            type: Array
+        }
+    },
+    methods: {
+        ...mapActions( [ 'fetchGenres', 'clearGenresList', 'selectedGenre', 'fetchListByGenre' ] ),
+        selectGenre( genre ) {
+            this.selectedGenre( genre )
+            this.activeGenre = [ ...this.getGenresList.filter( el => el.isActive ) ]
+        },
+        remove() {
+            this.activeGenre = []
+            this.$emit( 'remove' )
+        }
+    },
+    computed: {
+        ...mapGetters( [ 'getGenresList' ] )
+    },
+    created() {
+        this.fetchGenres()
+    },
+    beforeDestroy() {
+        this.clearGenresList()
     }
-  },
-  computed: {
-    ...mapGetters( [ 'getGenresList' ] ),
-  },
-  created() {
-    this.fetchGenres()
-  },
-  beforeDestroy() {
-     this.clearGenresList()
-  }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .genres {
-  width: 100%;
-  height: 100%;
+  min-height: 150px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   border: 1px solid #3e3e3e;
+
+  &__list {
+    display: flex;
+    width: 70%;
+    flex-wrap: wrap;
+    border-right: 1px solid #3e3e3e;
+
+  }
+
+  &__item {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    position: relative;
+
+    &:before {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: white;
+      content: "";
+      transition: width 0.3s ease-out;
+    }
+
+    &:hover:before,
+    &:focus:before {
+      width: 100%;
+    }
+
+    &--active {
+      &:before {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        content: "";
+        transition: width 0.3s ease-out;
+      }
+    }
+  }
 }
 
-.genres__item {
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 16px;
 
-}
-
-.genres__item_active {
-  text-decoration: underline;
-  font-size: 20px;
-}
 </style>

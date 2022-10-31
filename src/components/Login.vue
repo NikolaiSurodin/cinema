@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="login">
     <form class="form">
       <p class="text">Sign In to your account</p>
       <b-input-group size="md" class="mb-3">
@@ -73,13 +73,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.login {
+  height: calc(100vh - 290px);
+}
 .form {
   width: 100%;
   padding: 15px;
   margin: auto;
   border: 1px transparent;
-  margin-top: 50px;
+  margin-top: 150px;
   position: absolute;
   top: 0;
   right: 0;

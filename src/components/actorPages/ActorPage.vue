@@ -1,6 +1,5 @@
 <template>
   <div>
-    <main-header/>
     <div class="container">
       <div class="actor-section d-flex">
         <div class="actor-section__img">
@@ -43,13 +42,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import FilmsSlider from "@/components/slider/FilmsSlider"
-import MainHeader from "@/components/MainHeader"
 
 export default {
   name: "ActorPage",
   components: {
-    FilmsSlider,
-    MainHeader
+    FilmsSlider
   },
   data() {
     return {

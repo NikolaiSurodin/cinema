@@ -1,53 +1,71 @@
 <template>
-  <div>
-    <b-navbar type="dark" variant="dark" style="--bs-bg-opacity: 0;">
-      <b-navbar-nav>
-        <div class="d-flex flex-grow-0 justify-content-between">
-          <div class="d-flex flex-grow-0">
-            <b-nav-item @click="toHome">Home</b-nav-item>
-            <b-nav-item-dropdown text="User" right>
-              <b-dropdown-item href="#">Account</b-dropdown-item>
-              <b-dropdown-item @click="toFavoriteFilms">
-                You favorite films
-              </b-dropdown-item>
-            </b-nav-item-dropdown>
-          </div>
-          <div>
-            <b-nav-item @click="sendLogout">Logout</b-nav-item>
-          </div>
-        </div>
+    <div>
+        <b-navbar type="dark" variant="dark" style="--bs-bg-opacity: 0;" fixed="true">
+            <b-navbar-nav>
+                <div class="d-flex flex-grow-0 justify-content-between">
+                    <div class="d-flex flex-grow-0">
+                        <b-nav-item @click="toHome">Movies</b-nav-item>
+                        <b-nav-item-dropdown text="User" right>
+                            <b-dropdown-item>
+                                <router-link to="/account">
+                                    Account
+                                </router-link>
 
-      </b-navbar-nav>
-    </b-navbar>
-  </div>
+                            </b-dropdown-item>
+                        </b-nav-item-dropdown>
+                    </div>
+                    <div>
+                        <b-nav-item
+                                @click="sendLogout"
+                                v-if="getIsLoggedIn"
+                        >
+                            Logout
+                        </b-nav-item>
+                        <b-nav-item
+                                @click="login"
+                                v-else
+                        >
+                            Login
+                        </b-nav-item>
+                    </div>
+                </div>
+
+            </b-navbar-nav>
+        </b-navbar>
+    </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: "MainHeader",
-  data() {
-    return {}
-  },
-  props: [ 'value' ],
-  methods: {
-    ...mapActions( [ 'logout' ] ),
-    toFavoriteFilms() {
-      this.$router.push( '/likeFilms' )
+    name: 'MainHeader',
+    data() {
+        return {}
     },
-    toHome() {
-      this.$router.push( '/films' )
+    props: [ 'value' ],
+    computed: {
+        ...mapGetters( [ 'getFavoriteFilms', 'getIsLoggedIn' ] )
     },
-    sendLogout() {
-      this.logout().then( () => {
-        this.$router.push( '/' )
-      } )
+    methods: {
+        ...mapActions( [ 'logout' ] ),
+
+        toFavoriteFilms() {
+            this.$router.push( '/likeFilms' )
+        },
+        toHome() {
+            this.$router.push( '/films' )
+        },
+        sendLogout() {
+            this.logout().then( () => {
+                this.$router.push( '/films' )
+            } )
+        },
+        login() {
+            this.$router.push( '/login' )
+        }
     }
-  },
-  computed: {
-    ...mapGetters( [ 'getFavoriteFilms' ] )
-  }
+
 }
 </script>
 
