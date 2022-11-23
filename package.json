@@ -7,13 +7,15 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "surge --project ./dist --domain s-cinema-test.surge.sh"
+    "deploy": "surge --project ./dist --domain s-cinema-test.surge.sh",
+    "icons_windows": "node ./node_modules/icon-font-generator-casaper/bin/icon-font-generator src/assets/svg/*.svg --normalize --center -o src/assets/icons/ --name sbs-icon-font --prefix icon-sbs --csspath src/assets/icons/icons.css --json false --html false --fontspath src/assets/icons/ --height 1000"
   },
   "dependencies": {
     "axios": "^0.22.0",
     "bootstrap": "^5.1.2",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
+    "icon-font-generator-casaper": "^2.2.4",
     "node-sass": "^4.14.1",
     "sass-loader": "^7.1.0",
     "sweetalert2": "^11.1.9",

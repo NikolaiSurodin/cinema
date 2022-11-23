@@ -8,5 +8,8 @@ export default {
     getPopularFilmList: state => state.popularFilmList,
     getSimilarListFilm: state => state.similarFIlmList,
     getGenresList: state => state.genres,
-    getFilmsByGenre: state => state.filmListByGenre
+    getActiveGenreList: state => state.genres.filter( el => el.isActive ),
+    getActiveGenreListIdList: state => state.activeGenreListIdList,
+    getFilmsByGenre: state => state.filmListByGenre,
+    getPayloadFilter: state => state.payloadFilter
 }

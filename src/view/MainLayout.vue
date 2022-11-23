@@ -1,50 +1,58 @@
 <template>
-    <div class="wrapper">
-        <main class="main">
-            <custom-input v-model="search"
-                          @input="searchFilm"
-            />
-            <div class="pop d-flex justify-content-center flex-wrap">
-                <b-button class="mt-2" style="background: unset">What`s popular films?</b-button>
-                <b-button class="mt-2" style="background: unset">Popular people.</b-button>
-            </div>
-            <template>
-                <div class="welcome-text">
-                    <div class="text-title">
-                        <p>Welcome <span>, {{ user }}</span></p>
-                    </div>
-                    <p>Millions of movies, TV shows and people. Explore now.</p>
+    <div class="main-page">
+        <div class="main-page__header">
+            <div class="main-page__content" style="color: white">
+                <div class="main-page__title">
+                    Welcome.
                 </div>
-            </template>
-            <template>
-                <genres-list
-                        @remove="removeFilterFilmList"
-                />
-            </template>
+                <div class="main-page__description">
+                    Millions of movies, TV shows and people to discover. Explore now.
+                </div>
+                <div class="main-page__input">
+                    <custom-input
+                            v-model="search"
+                            :is-scale="true"
+                            placeholder="search for movie"
+                    />
+                    <b-button v-if="search" @click="searchFilm">Search</b-button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-page__filters">
+        </div>
+
+        <div class="main-page__film-list">
+            <filter-side-bar />
             <template v-if="loading">
                 <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
             </template>
-            <div v-else ref="films">
-                <film-table :film-list="films"
-                            @loadData="loadData"
-                />
-            </div>
-        </main>
+            <film-table
+                    v-else
+                    :film-list="films"
+                    @loadData="loadData"
+            />
+        </div>
+
     </div>
 </template>
 
 <script>
-import FilmCard from '@/components/FilmCard'
-import ButtonToUp from '@/components/ButtonToUp'
-import GenresList from '@/components/GenresList'
-import Pagination from '@/components/Pagination'
 import CustomInput from '@/components/_partial/CustomInput'
 import FilmTable from '@/components/FilmTable'
+
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { filmList, searchFilm } from '@/services/film.service'
+
+import { filmList } from '@/services/film.service'
+import FilterSideBar from '@/components/FilterSideBar'
 
 export default {
     name: 'MainLayout',
+    components: {
+        CustomInput,
+        FilmTable,
+        FilterSideBar
+    },
     data() {
         return {
             search: '',
@@ -56,13 +64,8 @@ export default {
             films: []
         }
     },
-    components: {
-        CustomInput,
-        FilmCard,
-        ButtonToUp,
-        GenresList,
-        Pagination,
-        FilmTable
+    mounted() {
+        this.fetchFilmList()
     },
     methods: {
         ...mapActions(
@@ -77,10 +80,9 @@ export default {
             ] ),
 
         fetchFilmList() {
-            filmList( {
-                with_genres: this.activeFilmId,
-                page: this.currentPage
-            } )
+            filmList(
+                this.getPayloadFilter
+            )
                 .then( ( result ) => {
                     this.films = result
                     this.loading = false
@@ -89,22 +91,14 @@ export default {
         toFilm( id ) {
             this.$router.push( `/films/${ id }` )
         },
-        removeFilterFilmList() {
-            this.activeFilmId = ''
-            this.clearGenderFilter()
-        },
         searchFilm() {
             if( this.search ) {
-                this.films = []
-                searchFilm( this.search ).then( ( res ) => {
-                    this.films = res
-                } )
-            } else {
-                this.fetchFilmList()
+                this.$router.push( { path: '/search', query: { search: this.search } } )
             }
         },
         loadData() {
             this.currentPage++
+
             filmList( {
                 with_genres: this.activeFilmId,
                 page: this.currentPage
@@ -122,46 +116,61 @@ export default {
                 'getGlobalFilm',
                 'getUser',
                 'getFilmsByGenre',
-                'getGenresList'
+                'getGenresList',
+                'getPayloadFilter'
             ] ),
-        ...mapState( [ 'user' ] ),
-
-        selectFilterByGenges() {
-            return this.getGenresList.filter( el => el.isActive ).map( ( el ) => ( { id: el.id } ) )
-        }
+        ...mapState( [ 'user' ] )
     },
     watch: {
-        selectFilterByGenges() {
-            let genresId = []
-            this.selectFilterByGenges.forEach( el => genresId.push( el.id ) )
-            this.activeFilmId = genresId.toString()
+        getPayloadFilter() {
             this.fetchFilmList()
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
-.main {
-    flex: 1 1 auto;
-}
+.main-page {
+  &__film-list {
+    display: flex;
+  }
 
-.welcome-text {
-    margin-left: 4em;
-    display: block;
-    border-left: 1px solid;
-}
+  &__header {
+    min-height: 350px;
+    background-image: linear-gradient(to right, rgba(27, 68, 101, 0.8) 0%, rgba(93, 84, 84, 0) 100%), url('.././assets/images/main-title-image.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    justify-content: center;
+  }
 
-.text-title p {
-    font-size: 44px;
-    font-family: fantasy;
-    line-height: 2;
-    letter-spacing: 8px;
-}
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px 15px;
+  }
 
-p {
-    font-size: 20px;
-    font-family: sans-serif;
+  &__title {
+    font-size: 3em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__description {
+    font-size: 2em;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__input {
+    display: flex;
+    justify-content: center;
+  }
+
 }
 </style>

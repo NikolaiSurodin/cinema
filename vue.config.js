@@ -10,6 +10,18 @@ module.exports = {
                 prepareData: '@import "@/assets/styles.scss";'
             }
         }
+    },
+    chainWebpack: config => {
+        config
+            .plugin( 'html' )
+            .tap( args => {
+                if ( process.env.VUE_APP_ENV && process.env.VUE_APP_ENV !== 'local' ) {
+                    args[ 0 ].template = `./public/index-${process.env.VUE_APP_ENV}.html`
+                } else {
+                    args[ 0 ].template = './public/index.html'
+                }
+                return args
+            } )
     }
 
 }

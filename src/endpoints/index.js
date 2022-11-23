@@ -7,7 +7,7 @@ const endpoints = {
     },
     films: {
         getFilmList: '/discover/movie',
-        getSearchFilm: '/search/movie',
+        getSearchFilm: '/search/multi',
         getMovie: '/movie/{movie_id}',
         getRecommendationsFilmList: '/movie/{movie_id}/recommendations?api_key={:api_key}&language=en-US&page=1',
         getTrailer: '/movie/{movie_id}/videos',
@@ -26,6 +26,9 @@ const endpoints = {
         getPersonMovie: '/person/{:person_id}/movie_credits?api_key={:api_key}&language=en-US',
         getPopularPerson: '/person/popular?api_key={:api_key}&language=en-US&page={:page}',
         getSearchPerson: '/search/person?api_key={:api_key}&language=en-US&query={:search}&page=1&include_adult=false'
+    },
+    search: {
+        getKeyWordList: '/search/keyword'
     }
 }
 

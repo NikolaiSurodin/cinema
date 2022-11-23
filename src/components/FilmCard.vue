@@ -87,6 +87,7 @@ export default {
     transition: 1s;
     display: flex;
     width: 100%;
+    color: black;
 }
 
 .card :hover {
@@ -95,7 +96,6 @@ export default {
 
 .card-film__footer {
     text-align: end;
-    color: black;
 }
 
 .rating-icon {
@@ -107,13 +107,10 @@ export default {
 }
 
 .card-film__overview {
-    color: black;
     word-break: break-word;
     display: block;
     height: 94px;
     text-overflow: ellipsis;
-    /* width: 370px; */
-    /* white-space: nowrap; */
     overflow: hidden;
 }
 

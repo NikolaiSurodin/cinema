@@ -1,16 +1,14 @@
 <template>
-    <div class="wrapper">
-        <div class="layout">
+        <div class="film-list">
             <film-card
                     v-for="film in filmList"
                     :key="film.id"
                     :film="film"
                     @clickOnFilm="toFilm(film.id)"
             />
+            <b-button @click="loadingFilmList">Loading</b-button>
 
         </div>
-        <b-button @click="loadingFilmList">Loading</b-button>
-    </div>
 
 </template>
 
@@ -42,6 +40,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+
+.film-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  column-gap: 30px;
+  row-gap: 50px;
+  padding: 16px;
+}
 
 </style>

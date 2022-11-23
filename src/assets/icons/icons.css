@@ -1,0 +1,26 @@
+@font-face {
+    font-family: "sbs-icon-font";
+    src: url("sbs-icon-font.eot?396ebdbaf4ec15841835160449512048?#iefix") format("embedded-opentype"),
+url("sbs-icon-font.woff2?396ebdbaf4ec15841835160449512048") format("woff2"),
+url("sbs-icon-font.woff?396ebdbaf4ec15841835160449512048") format("woff"),
+url("sbs-icon-font.ttf?396ebdbaf4ec15841835160449512048") format("truetype"),
+url("sbs-icon-font.svg?396ebdbaf4ec15841835160449512048#sbs-icon-font") format("svg");
+}
+
+i[class^="icon-sbs-"]:before, i[class*=" icon-sbs-"]:before {
+    font-family: sbs-icon-font !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sbs-arrow:before {
+    content: "\f101";
+}
+.icon-sbs-test:before {
+    content: "\f102";
+}

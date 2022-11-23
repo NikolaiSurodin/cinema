@@ -1,50 +1,74 @@
 <template>
-  <div class="header-search">
-    <input   class="custom-input"
-             placeholder="Search film..."
-             @input="handleInput( $event.target.value )"
-             :value="value"
+    <div
+            class="search"
+            :class="{ 'search--active-scale': isScale }"
     >
+        <input
+                class="search__custom-input"
+                :placeholder="placeholder"
+                @input="handleInput( $event.target.value )"
+                :value="value"
+        >
 
-  </div>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "CustomInput",
-  data() {
-    return {
-
-    }
-  },
-  props:{
-    value: {
-      type: [ String, Number ],
-      default: ''
+    name: 'CustomInput',
+    data() {
+        return {}
     },
-  },
-  methods: {
-    handleInput( value ) {
-      this.$emit( 'input', value )
+    props: {
+        value: {
+            type: [ String, Number ],
+            default: ''
+        },
+        placeholder: {
+            type: String,
+            default: 'Search'
+        },
+        isScale: {
+            type: Boolean,
+            default: false
+        }
+    },
+    methods: {
+        handleInput( value ) {
+            this.$emit( 'input', value )
+        }
     }
-  }
 }
 </script>
 
-<style scoped>
-.header-search {
-  padding: 0 12em;
-  margin-top: 6px;
+<style lang="scss">
+
+.search {
   display: flex;
   justify-content: center;
-  height: 50px;
+  height: 40px;
+
+  &--active-scale {
+    input {
+      &:focus {
+        width: 400px;
+      }
+    }
+  }
+  input {
+    width: 250px;
+    transition: all 0.4s;
+    text-indent: 15px;
+  }
+
+  &__custom-input {
+    outline: none;
+    width: 100%;
+    border: 1px transparent;
+    border-radius: 4px;
+    font-size: 20px;
+  }
+
 }
-.custom-input {
-  outline: none;
-  width: 100%;
-  border: 1px transparent;
-  border-radius: 4px;
-  font-size: 20px;
-  background: #ffffff;
-}
+
 </style>

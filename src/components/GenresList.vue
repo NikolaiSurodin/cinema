@@ -3,23 +3,16 @@
             class="container genres"
             v-if="getGenresList.length"
     >
+
         <div class="genres__list">
             <div class="genres__item"
                  v-for="genre in getGenresList"
                  :key="genre.id"
-                 :class="{'genres__item--active':genre.isActive}"
+                 :class="{ 'genres__item--active': getActiveGenreListIdList.includes( genre.id ) }"
                  @click="selectGenre(genre)"
             >
                 {{ genre.name }}
             </div>
-        </div>
-        <div class="genres__remove-filter-button" v-if="activeGenre.length">
-            <b-button
-                    class="genres__button_button"
-                    @click="remove"
-            >
-                Remove you filter
-            </b-button>
         </div>
     </div>
 </template>
@@ -32,7 +25,7 @@ export default {
     data() {
         return {
             on: false,
-            activeGenre: [],
+            activeGenreList: [],
         }
     },
     props: {
@@ -41,18 +34,23 @@ export default {
         }
     },
     methods: {
-        ...mapActions( [ 'fetchGenres', 'clearGenresList', 'selectedGenre', 'fetchListByGenre' ] ),
+        ...mapActions(
+            [
+                'fetchGenres',
+                'clearGenresList',
+                'selectedGenre',
+                'fetchListByGenre',
+            ] ),
         selectGenre( genre ) {
             this.selectedGenre( genre )
-            this.activeGenre = [ ...this.getGenresList.filter( el => el.isActive ) ]
         },
         remove() {
-            this.activeGenre = []
+            this.activeGenreList = []
             this.$emit( 'remove' )
         }
     },
     computed: {
-        ...mapGetters( [ 'getGenresList' ] )
+        ...mapGetters( [ 'getGenresList', 'getActiveGenreList', 'getActiveGenreListIdList' ] )
     },
     created() {
         this.fetchGenres()
@@ -64,59 +62,31 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .genres {
-  min-height: 150px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: center;
-  border: 1px solid #3e3e3e;
-
-  &__list {
-    display: flex;
-    width: 70%;
-    flex-wrap: wrap;
-    border-right: 1px solid #3e3e3e;
-
-  }
 
   &__item {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 16px;
-    position: relative;
+    display: inline-flex;
+    border: 1px solid #9e9e9e;
+    border-radius: 14px;
+    padding: 4px 12px;
+    font-size: 0.9em;
+    margin-right: 6px;
+    margin-top: 8px;
+    background-color: white;
 
-    &:before {
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: white;
-      content: "";
-      transition: width 0.3s ease-out;
-    }
-
-    &:hover:before,
-    &:focus:before {
-      width: 100%;
+    &:hover {
+      background-color: #1F3197;
+      color: white;
+      cursor: pointer;
     }
 
     &--active {
-      &:before {
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: white;
-        content: "";
-        transition: width 0.3s ease-out;
-      }
+      background-color: #5162ce !important;
+      color: white;
     }
   }
 }

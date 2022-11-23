@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar type="dark" variant="dark" style="--bs-bg-opacity: 0;" fixed="true">
+        <b-navbar type="dark" variant="dark" fixed="true">
             <b-navbar-nav>
                 <div class="d-flex flex-grow-0 justify-content-between">
                     <div class="d-flex flex-grow-0">
