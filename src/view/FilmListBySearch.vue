@@ -9,12 +9,6 @@
             />
         </header>
         <section class="films-by-search__content">
-            <div class="films-by-search__categories">
-                <div class="films-by-search__categories-header">Search Results</div>
-                <div class="films-by-search__categories-item">Movies</div>
-                <div class="films-by-search__categories-item">TV SHOW</div>
-                <div class="films-by-search__categories-item">People</div>
-            </div>
             <div class="films-by-search__results">
                 <film-table
                         :film-list="filmList"
@@ -52,9 +46,10 @@ export default {
     },
     methods: {
         loadData() {
-            searchFilm( this.$route.query.search ).then( ( response ) => {
-                this.filmList = response
-            } )
+            searchFilm( this.$route.query.search )
+                .then( ( response ) => {
+                    this.filmList = response
+                } )
         }
     }
 }
@@ -65,11 +60,13 @@ export default {
   &__content {
     display: flex;
   }
+
   &__categories {
     max-width: 150px;
     border: 1px solid;
     border-radius: 5px;
   }
+
   &__categories-header {
     background-color: cornflowerblue;
     color: white;

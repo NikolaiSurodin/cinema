@@ -5,7 +5,7 @@
                 <div class="d-flex flex-grow-0 justify-content-between">
                     <div class="d-flex flex-grow-0">
                         <b-nav-item @click="toHome">Movies</b-nav-item>
-                        <b-nav-item-dropdown text="User" right>
+                        <b-nav-item-dropdown text="User" right v-if="getIsLoggedIn">
                             <b-dropdown-item>
                                 <router-link to="/account">
                                     Account

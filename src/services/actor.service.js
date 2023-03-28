@@ -3,7 +3,7 @@ import { instance, API_KEY } from "@/helpers/http.helper"
 
 export const person = ( person_id ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.actor.getPerson.replace( '{:person_id}', person_id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.actor.getPerson.replace( '{:person_id}', person_id ) )
             .then( response => {
                 resolve( response.data )
             } )

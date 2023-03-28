@@ -1,5 +1,6 @@
 <template>
     <div>
+        <BackButton />
         <div v-if="loading" class="text-center mt-5">
             <b-spinner class="main-layout-spin" type="grow"></b-spinner>
         </div>
@@ -68,14 +69,21 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+
+import BackButton from '@/components/_partial/BackButton'
 import RecomendTable from '@/components/RecomendTable'
 import ActorsSlider from '@/components/slider/ActorsSlider'
+
 import { getVideo, getInfoFilm, getSimilarFilmList } from '@/services/film.service'
 
 
 export default {
     name: 'FilmItem',
-    components: { RecomendTable, ActorsSlider },
+    components: {
+        RecomendTable,
+        ActorsSlider,
+        BackButton
+    },
     data() {
         return {
             like: false,
@@ -167,7 +175,7 @@ export default {
 
 .favorite-film-card {
   display: flex;
-  color: white;
+  color: black;
   max-width: 1300px;
   z-index: 10;
 
@@ -189,6 +197,7 @@ export default {
 
   &__info-film {
     display: flex;
+
   }
 
   &__date {
@@ -257,7 +266,7 @@ export default {
 .card-body {
   background: linear-gradient(
                   352deg, black, #626262);
-  color: #ffff;
+  color: black;
 }
 
 .card-title {

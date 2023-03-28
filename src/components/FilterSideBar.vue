@@ -61,10 +61,11 @@
             </div>
         </b-collapse>
         <div>
-            <b-button @click="search">Search</b-button>
-            <b-button @click="removeFilter">
+            <button class="button button-primary" @click="search">Search</button>
+
+            <button class="button button-secondary" @click="removeFilter">
                 Remove you filter
-            </b-button>
+            </button>
         </div>
     </div>
 </template>
