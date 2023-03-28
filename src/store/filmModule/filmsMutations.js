@@ -47,6 +47,14 @@ export default {
     },
     SET_ACTIVE_GENRE( state, genre ) {
         genre.isActive = !genre.isActive
+        if( state.activeGenreListIdList.includes( genre.id ) ) {
+            state.activeGenreListIdList = state.activeGenreListIdList.filter( id => id !== genre.id )
+        } else {
+            state.activeGenreListIdList.push( genre.id )
+        }
+    },
+    CLEAR_ACTIVE_GENRE_LIST( state ) {
+        state.activeGenreListIdList = []
     },
     SET_FILMS_BY_GENRE( state, films ) {
         state.filmListByGenre = films
@@ -58,7 +66,10 @@ export default {
         state.favoriteFilmList = filmList
         localStorage.setItem( 'favoriteFilms', JSON.stringify( state.favoriteFilmList ) )
     },
-    REMOVE_GENDER_FILTER(state) {
-        state.genres.forEach(el => el.isActive = false)
+    REMOVE_GENDER_FILTER( state ) {
+        state.genres.forEach( el => el.isActive = false )
+    },
+    SET_FILTER_PAYLOAD( state, data ) {
+        state.payloadFilter = data
     }
 }

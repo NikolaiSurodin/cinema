@@ -14,21 +14,18 @@ body * {
 
 body {
     height: 100%;
-    background: black;
-    color: white;
+    /*background: black;*/
 }
 
 ::-webkit-scrollbar {
     width: 10px; /* ширина для вертикального скролла */
     background-color: #3e3e3e;
 }
+img {
+    width: 100%;
+    height: 100%;
+}
 
-/*.layout {*/
-/*    display: grid;*/
-/*    grid-template-columns: 1fr 1fr 1fr 1fr;*/
-/*    grid-gap: 2vw;*/
-/*    padding: 4px;*/
-/*}*/
 .layout {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -42,6 +39,12 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.gb-container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1440px;
 }
 
 @media (max-width: 470px) {
@@ -72,7 +75,7 @@ body {
 }
 
 .main {
-    flex: 1 1 auto;
+    /*flex: 1 1 auto;*/
 }
 .main_title {
     text-align: center;

@@ -8,6 +8,7 @@ import PopularListFilm from '@/components/PopularListFilm'
 import ActorPage from '@/components/actorPages/ActorPage'
 import Account from '@/components/Account'
 import DefaultContainer from '@/components/_partial/DefaultContainer'
+import FilmListBySearch from '@/view/FilmListBySearch'
 
 
 import Page404 from '@/components/pages/Page404'
@@ -45,6 +46,12 @@ const router = new VueRouter( {
                     name: 'films',
                     props: true,
                     component: MainLayout
+                },
+                {
+                    path: '/search',
+                    name: 'searchFilms',
+                    props: true,
+                    component: FilmListBySearch
                 },
                 {
                     path: '/popularFilms',

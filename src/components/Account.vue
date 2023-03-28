@@ -140,7 +140,7 @@ export default {
   }
 
   &__avatar {
-    background: $bacground-avatar;
+    background: $background-avatar;
     width: 150px;
     height: 150px;
     border-radius: 50%;

@@ -1,27 +1,27 @@
 <template>
-    <div class="card card-film img-responsive" @click.stop="toFilm()">
-        <div class="card-film__img">
-            <img :src="getIMG_URL+film.poster_path">
-            <button
-                    v-if="!isShowLikeButton && getIsLoggedIn"
-                    class="like-button"
-                    @click.stop="likesFilm(film)"
-            >
-                Like!
-            </button>
-        </div>
-        <div class="card-body-custom">
-            <div class="card-film__title">
-                {{ film.title }}
-            </div>
-            <div class="card-film__overview">
-                {{ filmOverview }}
-            </div>
-            <hr>
-            <div class="card-film__footer">
-                <b-icon icon="star-fill" class="rating-icon"></b-icon>
-                {{ film.vote_average }} ({{ new Date( film.release_date ).getFullYear() }})
-                <span>
+  <div class="card card-film img-responsive" @click.stop="toFilm()">
+    <div class="card-film__img">
+      <img :src="getIMG_URL+film.poster_path">
+      <button
+          v-if="!isShowLikeButton && getIsLoggedIn"
+          class="like-button"
+          @click.stop="likesFilm(film)"
+      >
+        Like!
+      </button>
+    </div>
+    <div class="card-body-custom">
+      <div class="card-film__title">
+        {{ film.title }}
+      </div>
+      <div class="card-film__overview">
+        {{ filmOverview }}
+      </div>
+      <hr>
+      <div class="card-film__footer">
+        <b-icon icon="star-fill" class="rating-icon"></b-icon>
+        {{ film.vote_average }} ({{ new Date( _.get( film, 'release_date', '' ) ).getFullYear() || '' }})
+        <span>
               <b-button v-if="isShowLikeButton"
                         variant="light"
                         type="button"
@@ -32,51 +32,51 @@
                 <b-icon icon="x-circle" scale="1" style="cursor: pointer;"></b-icon>
               </b-button>
       </span>
-            </div>
-        </div>
-
+      </div>
     </div>
+
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-    name: 'FilmCard',
-    data() {
-        return {}
+  name: 'FilmCard',
+  data() {
+    return {}
+  },
+  props: {
+    film: Object
+  },
+  methods: {
+    ...mapActions( [ 'addLikeFilm' ] ),
+    toFilm() {
+      this.$emit( 'clickOnFilm' )
     },
-    props: {
-        film: Object
+    deleteLikeFilm() {
+      this.$emit( 'deleteLikeFilm' )
     },
-    methods: {
-        ...mapActions( [ 'addLikeFilm' ] ),
-        toFilm() {
-            this.$emit( 'clickOnFilm' )
-        },
-        deleteLikeFilm() {
-            this.$emit( 'deleteLikeFilm' )
-        },
-        likesFilm( film ) {
-            this.addLikeFilm( film )
-                .then( () => {
-                    this.like = true
-                    this.$popup.toast( 'this movie was added to the "Like" list' )
-                } )
-                .catch( () => {
-                    this.$popup.error( 'This film in you favorite list already' )
-                } )
-        }
-    },
-    computed: {
-        ...mapGetters( [ 'getIMG_URL', 'getIsLoggedIn' ] ),
-        filmOverview() {
-            return this.film.overview !== '' ? this.film.overview : 'Overview no'
-        },
-        isShowLikeButton() {
-            return !!this.$route.path.includes( 'likeFilms' )
-        }
+    likesFilm( film ) {
+      this.addLikeFilm( film )
+        .then( () => {
+          this.like = true
+          this.$popup.toast( 'this movie was added to the "Like" list' )
+        } )
+        .catch( () => {
+          this.$popup.error( 'This film in you favorite list already' )
+        } )
     }
+  },
+  computed: {
+    ...mapGetters( [ 'getIMG_URL', 'getIsLoggedIn' ] ),
+    filmOverview() {
+      return this.film.overview !== '' ? this.film.overview : 'Overview no'
+    },
+    isShowLikeButton() {
+      return !!this.$route.path.includes( 'likeFilms' )
+    }
+  }
 }
 </script>
 
@@ -87,6 +87,7 @@ export default {
     transition: 1s;
     display: flex;
     width: 100%;
+    color: black;
 }
 
 .card :hover {
@@ -95,7 +96,6 @@ export default {
 
 .card-film__footer {
     text-align: end;
-    color: black;
 }
 
 .rating-icon {
@@ -107,13 +107,10 @@ export default {
 }
 
 .card-film__overview {
-    color: black;
     word-break: break-word;
     display: block;
     height: 94px;
     text-overflow: ellipsis;
-    /* width: 370px; */
-    /* white-space: nowrap; */
     overflow: hidden;
 }
 

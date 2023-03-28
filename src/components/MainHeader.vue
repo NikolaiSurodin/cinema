@@ -1,11 +1,11 @@
 <template>
     <div>
-        <b-navbar type="dark" variant="dark" style="--bs-bg-opacity: 0;" fixed="true">
+        <b-navbar type="dark" variant="dark" fixed="true">
             <b-navbar-nav>
                 <div class="d-flex flex-grow-0 justify-content-between">
                     <div class="d-flex flex-grow-0">
                         <b-nav-item @click="toHome">Movies</b-nav-item>
-                        <b-nav-item-dropdown text="User" right>
+                        <b-nav-item-dropdown text="User" right v-if="getIsLoggedIn">
                             <b-dropdown-item>
                                 <router-link to="/account">
                                     Account

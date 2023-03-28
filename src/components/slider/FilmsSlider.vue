@@ -47,6 +47,9 @@ export default {
 </script>
 
 <style scoped>
+.swiper {
+    max-width: 60rem !important;
+}
 .actor-section__info_films {
   position: absolute;
 }
