@@ -1,73 +1,73 @@
 <template>
-    <div class="search-dropdown">
-        <div class="search-dropdown__chosen-menu">
-            <div
-                    class="search-dropdown__chosen-item"
-                    v-for="item in chosenWordList"
-                    :key="item.id"
-                    @click="removeChosenWord( item )"
-            >
-                {{ item.name }}
-            </div>
-        </div>
-        <input
-                placeholder="key word"
-                @input="handleInput( $event.target.value )"
-                :value="value"
-        />
-        <template v-if="keyWordList.length">
-        <div class="search-dropdown__password-icon" @click="clearSearch">X</div>
-        <div class="search-dropdown__menu">
-            <div
-                    class="search-dropdown__item"
-                    v-for="word in keyWordList"
-                    :key="word.id"
-                    @click="chooseWord( word )"
-            >
-                {{ word.name }}
-            </div>
-        </div>
-        </template>
-
+  <div class="search-dropdown">
+    <div class="search-dropdown__chosen-menu">
+      <div
+          class="search-dropdown__chosen-item"
+          v-for="item in chosenWordList"
+          :key="item.id"
+          @click="removeChosenWord( item )"
+      >
+        {{ item.name }}
+      </div>
     </div>
+    <input
+        placeholder="key word"
+        @input="handleInput( $event.target.value )"
+        :value="value"
+    />
+    <template v-if="keyWordList.length">
+      <div class="search-dropdown__password-icon" @click="clearSearch">X</div>
+      <div class="search-dropdown__menu">
+        <div
+            class="search-dropdown__item"
+            v-for="word in keyWordList"
+            :key="word.id"
+            @click="chooseWord( word )"
+        >
+          {{ word.name }}
+        </div>
+      </div>
+    </template>
+
+  </div>
 </template>
 
 <script>
 
 export default {
-    name: 'SearchDropdown',
-    components: {},
-    data() {
-        return {}
+  name: 'SearchDropdown',
+  components: {},
+  data() {
+    return {}
+  },
+  props: {
+    value: {
+      type: [ String, Number ],
+      default: ''
     },
-    props: {
-        value: {
-            type: [ String, Number ],
-            default: ''
-        },
-        keyWordList: {
-            type: Array,
-            default: () => ( [] )
-        },
-        chosenWordList: {
-            type: Array,
-            default: () => ( [] )
-        }
+    keyWordList: {
+      type: Array,
+      default: () => ( [] )
     },
-    methods: {
-        handleInput( value ) {
-            this.$emit( 'input', value )
-        },
-        chooseWord( item ) {
-            this.$emit( 'chooseWord', item )
-        },
-        removeChosenWord( word ) {
-            this.$emit( 'removeChosenWord', word )
-        },
-        clearSearch() {
-            this.$emit( 'clearSearch' )
-        }
+    chosenWordList: {
+      type: Array,
+      default: () => ( [] )
     }
+  },
+  methods: {
+    handleInput( value ) {
+      this.$emit( 'input', value )
+    },
+    chooseWord( item ) {
+      this.$emit( 'chooseWord', item )
+    },
+    removeChosenWord( word ) {
+      this.$emit( 'removeChosenWord', word )
+    },
+    clearSearch() {
+      this.$emit( 'clearSearch' )
+    }
+  }
 }
 </script>
 
@@ -122,5 +122,6 @@ input {
   border: 0;
   border-radius: 0;
   background: #f1f1f1;
+  width: 100%;
 }
 </style>

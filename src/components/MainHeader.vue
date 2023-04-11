@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-header">
         <b-navbar type="dark" variant="dark" fixed="true">
             <b-navbar-nav>
                 <div class="d-flex flex-grow-0 justify-content-between">
@@ -11,6 +11,16 @@
                                     Account
                                 </router-link>
 
+                            </b-dropdown-item>
+                        </b-nav-item-dropdown>
+                        <b-nav-item-dropdown text="Lang" right>
+                            <b-dropdown-item
+                                    v-for="( item, index ) in langList"
+                                    :key="index"
+                            >
+                                <div class="lang" @click="switchLang(item.key)">
+                                    {{ item.title }}
+                                </div>
                             </b-dropdown-item>
                         </b-nav-item-dropdown>
                     </div>
@@ -38,10 +48,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
+import languages from '@/const/languages'
+
 export default {
     name: 'MainHeader',
     data() {
-        return {}
+        return {
+            langList: languages
+        }
     },
     props: [ 'value' ],
     computed: {
@@ -63,6 +77,10 @@ export default {
         },
         login() {
             this.$router.push( '/login' )
+        },
+        switchLang( key ) {
+            localStorage.setItem( 'lang', key )
+            location.reload()
         }
     }
 
@@ -70,5 +88,7 @@ export default {
 </script>
 
 <style scoped>
+.main-header {
 
+}
 </style>

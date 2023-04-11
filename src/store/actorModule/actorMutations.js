@@ -3,7 +3,7 @@ export default {
         state.actor = actor
     },
     SET_POPULAR_FILM_LIST_BY_ACTOR( state, films ) {
-        state.popularFilmListByActor = films.sort( ( a, b ) => b.popularity - a.popularity ).slice( 0, 10 )
+        state.popularFilmListByActor = films
     },
     SET_POPUlAR_PERSON( state, personList ) {
         state.personList = personList

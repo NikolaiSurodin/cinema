@@ -3,7 +3,7 @@ import { instance, API_KEY } from "@/helpers/http.helper"
 
 export const getToken = () => {
     return new Promise( resolve => {
-        instance.get( endpoints.me.token.replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.me.token )
             .then( response => {
                 let token = response.data.request_token
                 resolve( token )

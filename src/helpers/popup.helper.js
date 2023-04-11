@@ -33,7 +33,7 @@ class Popup {
     toast( message ) {
         const Toast = this.$swal.mixin( {
             toast: true,
-            position: 'top-end',
+            position: 'bottom-right',
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,

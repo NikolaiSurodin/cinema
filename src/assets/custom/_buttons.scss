@@ -39,7 +39,7 @@
   background-color: #fcfcfc;
   color: black !important;
   opacity: 0.8;
-  border: none;
+  border: 0.5px solid red;
   height: 45px;
   display: flex;
   align-items: center;
@@ -51,4 +51,15 @@
     border: 2px solid red;
     transform: scale(1.02);
   }
+}
+.button-like {
+  background-color: #d3fcee;
+  color: black !important;
+  opacity: 0.8;
+  border: 0.5px solid #b6ff9e;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: unset !important;
 }

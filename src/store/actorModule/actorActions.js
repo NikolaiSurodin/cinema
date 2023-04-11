@@ -1,9 +1,9 @@
-import { person, filmsByPerson, popularPerson, searchPerson } from "@/services/actor.service"
+import { fetchPerson, filmsByPerson, popularPerson, searchPerson } from "@/services/actor.service"
 
 export default {
     fetchActor( { commit }, id ) {
         return new Promise( resolve => {
-            person( id )
+            fetchPerson( id )
                 .then( ( actor ) => {
                     commit( 'SET_ACTOR', actor )
                     resolve()

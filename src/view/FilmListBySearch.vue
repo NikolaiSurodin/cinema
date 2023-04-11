@@ -3,21 +3,20 @@
         <header class="films-by-search__header">
             <custom-input
                     v-model="$route.query.search"
-                    @input="loadData"
+                    @searchFilm="loadData"
+                    :search="$route.query.search"
                     :is-scale="true"
                     placeholder="search for movie"
             />
         </header>
-        <section class="films-by-search__content">
-            <div class="films-by-search__results">
+        <section class="films-by-search__no-results" v-if="!filmList.length">
+            There are no movies that matched your query.
+        </section>
+        <section class="films-by-search__content" v-else>
                 <film-table
                         :film-list="filmList"
-                        @loadData="loadData"
+                        @loadData="loadByPage"
                 />
-            </div>
-            <div class="films-by-search__no-results">
-                There are no movies that matched your query.
-            </div>
         </section>
     </div>
 </template>
@@ -28,7 +27,6 @@ import FilmTable from '@/components/FilmTable'
 
 import { searchFilm } from '@/services/film.service'
 
-
 export default {
     name: 'FilmListBySearch',
     components: {
@@ -38,6 +36,7 @@ export default {
     data() {
         return {
             search: '',
+            page: 1,
             filmList: []
         }
     },
@@ -45,10 +44,14 @@ export default {
         this.loadData()
     },
     methods: {
+        loadByPage() {
+          this.page++
+          this.loadData()
+        },
         loadData() {
-            searchFilm( this.$route.query.search )
-                .then( ( response ) => {
-                    this.filmList = response
+            searchFilm( this.$route.query.search, this.page )
+                .then( ( filmList ) => {
+                    this.filmList = [...this.filmList, ...filmList ]
                 } )
         }
     }
@@ -56,9 +59,24 @@ export default {
 </script>
 
 <style lang="scss">
+
 .films-by-search {
-  &__content {
+  padding-top: 56px;
+
+  &__header {
     display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+
+  &__content {
+    margin-top: 50px;
+  }
+  &__no-results {
+    min-height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__categories {

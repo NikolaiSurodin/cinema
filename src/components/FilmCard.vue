@@ -1,146 +1,144 @@
 <template>
-  <div class="card card-film img-responsive" @click.stop="toFilm()">
-    <div class="card-film__img">
-      <img :src="getIMG_URL+film.poster_path">
-      <button
-          v-if="!isShowLikeButton && getIsLoggedIn"
-          class="like-button"
-          @click.stop="likesFilm(film)"
-      >
-        Like!
-      </button>
-    </div>
-    <div class="card-body-custom">
-      <div class="card-film__title">
-        {{ film.title }}
-      </div>
-      <div class="card-film__overview">
-        {{ filmOverview }}
-      </div>
-      <hr>
-      <div class="card-film__footer">
-        <b-icon icon="star-fill" class="rating-icon"></b-icon>
-        {{ film.vote_average }} ({{ new Date( _.get( film, 'release_date', '' ) ).getFullYear() || '' }})
-        <span>
-              <b-button v-if="isShowLikeButton"
-                        variant="light"
-                        type="button"
-                        class="btn-sm"
-                        title="Delete this film"
-                        @click.stop="deleteLikeFilm"
-              >
-                <b-icon icon="x-circle" scale="1" style="cursor: pointer;"></b-icon>
-              </b-button>
-      </span>
-      </div>
-    </div>
+    <router-link
+            class="film-card"
+            :to="`/films/${ film.id }`"
+    >
+        <div class="film-card__img">
+            <img src="@/assets/no_photo.png" v-if="film.poster_path === null">
+            <img :src="getIMG_URL+film.poster_path" v-else>
 
-  </div>
+        </div>
+        <div class="film-card__like-button">
+            <button
+                    class="button button-like"
+                    @click.prevent="likesFilm( film )"
+            >
+                Like!
+            </button>
+        </div>
+        <div
+                class="film-card__rating"
+                v-if="film.vote_average > 0"
+                :style="{ 'background': ratingColor }"
+        >
+            {{ film.vote_average }}
+        </div>
+        <div class="film-card__info">
+            <div class="film-card__title">
+                {{ film.title }}
+            </div>
+            <div class="film-card__overview">
+                {{ film.overview || 'No overview' }}
+            </div>
+            <hr>
+            <div class="film-card__footer" v-if="film.release_date">
+                ({{ new Date( _.get( film, 'release_date', '' ) ).getFullYear() || '' }})
+            </div>
+        </div>
+    </router-link>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+import rating from '@/const/rating'
+
 export default {
-  name: 'FilmCard',
-  data() {
-    return {}
-  },
-  props: {
-    film: Object
-  },
-  methods: {
-    ...mapActions( [ 'addLikeFilm' ] ),
-    toFilm() {
-      this.$emit( 'clickOnFilm' )
+    name: 'FilmCard',
+    data() {
+        return {}
     },
-    deleteLikeFilm() {
-      this.$emit( 'deleteLikeFilm' )
+    props: {
+        film: Object
     },
-    likesFilm( film ) {
-      this.addLikeFilm( film )
-        .then( () => {
-          this.like = true
-          this.$popup.toast( 'this movie was added to the "Like" list' )
-        } )
-        .catch( () => {
-          this.$popup.error( 'This film in you favorite list already' )
-        } )
+    methods: {
+        ...mapActions( [ 'addLikeFilm' ] ),
+
+        likesFilm( film ) {
+            if( !this.getIsLoggedIn ) {
+                this.$popup.toast( 'You can login' )
+            } else {
+                this.addLikeFilm( film )
+                    .then( () => {
+                        this.$popup.toast( 'this movie was added to the "Like" list' )
+                    } )
+            }
+        }
+    },
+    computed: {
+        ...mapGetters( [ 'getIMG_URL', 'getIsLoggedIn' ] ),
+
+        ratingColor() {
+            let color = rating.GOOD_RATING.color
+
+            if( this.film.vote_average < rating.GOOD_RATING.value ) {
+                color = rating.BAD_RATING.color
+            } else if( this.film.vote_average >= rating.GREAT_RATING.value ) {
+                color = rating.GREAT_RATING.color
+            }
+            return color
+        }
     }
-  },
-  computed: {
-    ...mapGetters( [ 'getIMG_URL', 'getIsLoggedIn' ] ),
-    filmOverview() {
-      return this.film.overview !== '' ? this.film.overview : 'Overview no'
-    },
-    isShowLikeButton() {
-      return !!this.$route.path.includes( 'likeFilms' )
-    }
-  }
 }
 </script>
 
-<style scoped>
-.card {
-    cursor: pointer;
-    box-shadow: 1px 1px 1px white;
-    transition: 1s;
-    display: flex;
-    width: 100%;
-    color: black;
-}
+<style scoped lang="scss">
 
-.card :hover {
-    filter: grayscale(0);
-}
+.film-card {
+  cursor: pointer;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  position: relative;
 
-.card-film__footer {
-    text-align: end;
-}
+  &:hover {
+    transform: scale(1.1);
 
-.rating-icon {
-    color: burlywood;
-}
+    .film-card__like-button {
+      opacity: 1;
+    }
+  }
 
-.card h4 {
-    color: darkcyan;
-}
+  &__like-button {
+    opacity: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #fff;
+    transition: opacity .3s;
+  }
 
-.card-film__overview {
+  &__rating {
+    display: inline-block;
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  &__overview {
     word-break: break-word;
     display: block;
     height: 94px;
     text-overflow: ellipsis;
     overflow: hidden;
-}
+  }
 
-.bt-close {
+  &__img {
+    border-radius: 5px;
+
+    img {
+      border-radius: 5px;
+    }
+  }
+
+  &__footer {
     display: flex;
-    justify-content: end;
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 
-.img-responsive {
-    position: relative;
-}
-
-.like-button {
-    opacity: 0;
-    position: absolute;
-    width: 200px;
-    height: 40px;
-    top: 100px;
-    background: rgba(0, 0, 0, .3);
-    left: calc(50% - 100px);
-    color: #fff;
-    transition: opacity .3s;
-}
-
-.img-responsive:hover button {
-    opacity: 1;
-    transition: opacity .3s;
-}
-
-.card-film__img img {
-    max-width: 100%;
-}
 </style>

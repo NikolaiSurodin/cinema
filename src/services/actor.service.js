@@ -1,7 +1,7 @@
 import { endpoints } from "@/endpoints"
 import { instance, API_KEY } from "@/helpers/http.helper"
 
-export const person = ( person_id ) => {
+export const fetchPerson = ( person_id ) => {
     return new Promise( resolve => {
         instance.get( endpoints.actor.getPerson.replace( '{:person_id}', person_id ) )
             .then( response => {

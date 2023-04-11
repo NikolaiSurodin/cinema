@@ -1,43 +1,54 @@
 <template>
-    <div
-            class="search"
-            :class="{ 'search--active-scale': isScale }"
+  <div
+      class="search"
+      :class="{ 'search--active-scale': isScale }"
+  >
+    <input
+        class="search__custom-input"
+        :placeholder="placeholder"
+        @input="handleInput( $event.target.value )"
+        @keydown.enter="$emit('searchFilm')"
+        :value="value"
     >
-        <input
-                class="search__custom-input"
-                :placeholder="placeholder"
-                @input="handleInput( $event.target.value )"
-                :value="value"
-        >
-
-    </div>
+    <button
+        class="button button-primary"
+        v-if="search"
+        @click="$emit('searchFilm')"
+    >
+      Search
+    </button>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'CustomInput',
-    data() {
-        return {}
+  name: 'CustomInput',
+  data() {
+    return {}
+  },
+  props: {
+    value: {
+      type: [ String, Number ],
+      default: ''
     },
-    props: {
-        value: {
-            type: [ String, Number ],
-            default: ''
-        },
-        placeholder: {
-            type: String,
-            default: 'Search'
-        },
-        isScale: {
-            type: Boolean,
-            default: false
-        }
+    placeholder: {
+      type: String,
+      default: 'Search'
     },
-    methods: {
-        handleInput( value ) {
-            this.$emit( 'input', value )
-        }
+    isScale: {
+      type: Boolean,
+      default: false
+    },
+    search: {
+      type: String,
+      default: ''
     }
+  },
+  methods: {
+    handleInput( value ) {
+      this.$emit( 'input', value )
+    }
+  }
 }
 </script>
 
@@ -55,6 +66,7 @@ export default {
       }
     }
   }
+
   input {
     width: 250px;
     transition: all 0.4s;
@@ -67,6 +79,7 @@ export default {
     border: 1px transparent;
     border-radius: 4px;
     font-size: 20px;
+    margin-right: 15px;
   }
 
 }

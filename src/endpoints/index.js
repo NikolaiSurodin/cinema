@@ -1,21 +1,21 @@
 const endpoints = {
     me: {
-        token: '/authentication/token/new?api_key={:api_key}',
-        login: '/authentication/token/validate_with_login?api_key={:api_key}',
-        session: '/authentication/session/new?api_key={:api_key}',
-        account: '/account?api_key={:api_key}&session_id={:session_id}'
+        token: '/authentication/token/new',
+        login: '/authentication/token/validate_with_login',
+        session: '/authentication/session/new',
+        account: '/account?&session_id={:session_id}'
     },
     films: {
         getFilmList: '/discover/movie',
         getSearchFilm: '/search/multi',
         getMovie: '/movie/{movie_id}',
-        getRecommendationsFilmList: '/movie/{movie_id}/recommendations?api_key={:api_key}&language=en-US&page=1',
+        getRecommendationsFilmList: '/movie/{movie_id}/recommendations?language=en-US&page=1',
         getTrailer: '/movie/{movie_id}/videos',
-        getPopularFilmList: '/movie/popular?api_key={:api_key}&language=en-US&page=1',
+        getPopularFilmList: '/movie/popular?language=en-US&page=1',
         getSimilarList: '/movie/{movie_id}/similar',
-        getListByGenre: '/discover/movie?api_key={:api_key}&with_genres={genres}&page=1',
-        likeFilm: '/account/{:account_id}/favorite?api_key={:api_key}&session_id={:session_id}',
-        getFavoriteFilmList: 'https://api.themoviedb.org/3/account/{:account_id}/favorite/movies?api_key={:api_key}&session_id={:session_id}&language=en-US&sort_by=created_at.asc&page=1',
+        getListByGenre: '/discover/movie?with_genres={genres}&page=1',
+        likeFilm: '/account/{:account_id}/favorite?session_id={:session_id}',
+        getFavoriteFilmList: 'account/{:account_id}/favorite/movies?&session_id={:session_id}&language=en-US&sort_by=created_at.asc&page=1',
 
     },
     genres: {

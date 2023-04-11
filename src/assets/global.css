@@ -14,16 +14,22 @@ body * {
 
 body {
     height: 100%;
-    /*background: black;*/
+    /*background: #1f1f1f;*/
 }
 
 ::-webkit-scrollbar {
     width: 10px; /* ширина для вертикального скролла */
     background-color: #3e3e3e;
 }
+
 img {
     width: 100%;
     height: 100%;
+}
+
+a {
+    text-decoration-skip-ink: auto;
+    text-decoration: none !important;
 }
 
 .layout {
@@ -77,6 +83,7 @@ img {
 .main {
     /*flex: 1 1 auto;*/
 }
+
 .main_title {
     text-align: center;
     font-size: 29px;
@@ -92,6 +99,7 @@ img {
 .genres__button .genres__button_button {
     background: unset
 }
+
 .no-favorite-text {
     text-align: center;
     margin: 5rem auto;

@@ -1,69 +1,73 @@
 <template>
-    <div>
+    <div class="film">
         <BackButton />
-        <div v-if="loading" class="text-center mt-5">
+        <div v-if="loading" class="main-layout-spinner">
             <b-spinner class="main-layout-spin" type="grow"></b-spinner>
         </div>
-        <div
-                class="wrapper-card"
-                v-else
-        >
-            <img class="wrapper-card__bg" :src="getIMG_URL+film.backdrop_path">
-            <div class="favorite-film-card"
-                 role="button"
-            >
-                <div class="favorite-film-card__image">
-                    <img :src="getIMG_URL+film.poster_path">
-                </div>
-                <div class="favorite-film-card__info">
-                    <div class="favorite-film-card__title">
-                        {{ film.title }} ({{ new Date( film.release_date ).getFullYear() }})
-                        <div class="favorite-film-card__info-film">
-                            <div class="favorite-film-card__date">
-                                {{ film.release_date }}
-                            </div>
-                            <div class="favorite-film-card__genres">
-                           <span
-                                   v-for="genre in film.genres"
-                                   :key="genre.id"
-                           >
-                               {{ genre.name }}
-                           </span>
+        <template v-else>
+            <div class="film__card">
+                <img class="film__bg" :src="getIMG_URL+film.backdrop_path">
+                <div class="film__info">
+                    <div class="film__poster-image">
+                        <img :src="getIMG_URL+film.poster_path">
+                    </div>
+                    <div class="film__wrapper">
+                        <div class="film__title">
+                            <p class="film__name">{{ film.title }}
+                                ({{ new Date( film.release_date ).getFullYear() }})</p>
+                            <div class="film__info-film">
+                                <p class="film__date">
+                                    {{ film.release_date }}
+                                </p>
+                                <div class="film__genres">
+                  <span
+                          v-for="genre in film.genres"
+                          :key="genre.id"
+                  >
+                    {{ genre.name }}
+                  </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="film__description">
+                            Overview:
+                            <p>{{ film.overview }}</p>
+                        </div>
+                        <div class="film__actions">
+                            <b-button variant="light"
+                                      type="button"
+                                      class="btn-sm"
+                                      title="Like this film"
+                                      :disabled="like"
+                                      @click.stop="likesFilm(film)"
+                                      v-if="getIsLoggedIn"
+                            >
+                                <img src="../assets/like_favorite_heart_5759.png" />
+                            </b-button>
+                            <button class="button button-like" style="height: 45px;" @click="showVideo">
+                                <b-icon icon="play" aria-hidden="true"></b-icon>
+                                Info video
+                            </button>
+                            <button
+                                    class="button button-primary"
+                                    @click="showSimilarFilmLIst"
+                            >
+                                similar films
+                            </button>
+                        </div>
 
-                    <div class="favorite-film-card__description">
-                        {{ film.overview }}
                     </div>
-                    <div class="favorite-film-card__actions">
-                        <b-button variant="light"
-                                  type="button"
-                                  class="btn-sm"
-                                  title="Like this film"
-                                  :disabled="like"
-                                  @click.stop="likesFilm(film)"
-                        >
-                            <img src="../assets/like_favorite_heart_5759.png" />
-                        </b-button>
-                        <p style="cursor: pointer" @click="showVideo">
-                            <b-icon icon="play" aria-hidden="true"></b-icon>
-                            trailer
-                        </p>
-                        <p style="cursor: pointer" @click="showRecomend">similar films</p>
-                    </div>
-
+                </div>
+                <div class="film__actors container">
+                    <actors-slider :actor-list="actors"
+                                   @toActor="toActor"
+                    />
                 </div>
             </div>
-        </div>
-        <div class="slider-card container">
-            <actors-slider :actor-list="actors"
-                           @toActor="toActor"
-            />
-        </div>
-        <div class="table" v-if="similar">
-            <recomend-table :recomend-film-list="recomendFilmList" />
-        </div>
+            <div class="film__similar-films" v-if="similar" ref="similar">
+                <film-table :film-list="similarFilmList" />
+            </div>
+        </template>
     </div>
 </template>
 
@@ -71,16 +75,15 @@
 import { mapGetters, mapActions } from 'vuex'
 
 import BackButton from '@/components/_partial/BackButton'
-import RecomendTable from '@/components/RecomendTable'
+import FilmTable from '@/components/FilmTable'
 import ActorsSlider from '@/components/slider/ActorsSlider'
 
 import { getVideo, getInfoFilm, getSimilarFilmList } from '@/services/film.service'
 
-
 export default {
     name: 'FilmItem',
     components: {
-        RecomendTable,
+        FilmTable,
         ActorsSlider,
         BackButton
     },
@@ -90,17 +93,22 @@ export default {
             loading: true,
             similar: false,
             film: {},
-            recomendFilmList: []
+            similarFilmList: []
         }
     },
     computed: {
         ...mapGetters( [
+            'getIsLoggedIn',
             'getIMG_URL',
             'getFilm'
         ] ),
+
         actors() {
             return _.get( this.film, 'credits.cast', [] )
         }
+    },
+    created() {
+        this.fetchFilmInfo()
     },
     methods: {
         ...mapActions( [ 'addLikeFilm', 'fetchSimilarFilms' ] ),
@@ -125,42 +133,33 @@ export default {
         toActor( id ) {
             this.$router.push( `/actor/${ id }` )
         },
-        showRecomend() {
+        showSimilarFilmLIst() {
             this.similar = true
             getSimilarFilmList( this.$route.params.id )
                 .then( ( response ) => {
-                    this.recomendFilmList = response
+                    this.similarFilmList = response
+                    this.$refs[ 'similar' ].scrollIntoView( { behavior: 'smooth', block: 'start', inline: 'start' } )
                 } )
         },
         showVideo() {
             getVideo( this.$route.params.id )
-                .then( ( video ) => {
-                    this.$popup.video( video.key )
+                .then( ( videoList ) => {
+                    this.$popup.video( videoList[ Math.floor( Math.random() * videoList.length ) ].key )
                 } )
-        }
-    },
-    watch: {
-        '$route.params.id': {
-            handler: function() {
-                this.fetchFilmInfo()
-                if( this.similar ) {
-                    this.similar = false
-                    this.recomendFilmList = []
-                }
-            },
-            deep: true,
-            immediate: true
         }
     }
 }
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/media-mixin.scss";
 
-.wrapper-card {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+.film {
+  min-height: 70vh;
+
+  &__card {
+    position: relative;
+  }
 
   &__bg {
     position: absolute;
@@ -168,150 +167,107 @@ export default {
     right: 0;
     width: 100%;
     object-fit: cover;
-    opacity: 0.1;
-    z-index: 0;
+    opacity: 0.3;
+    z-index: -1;
   }
-}
 
-.favorite-film-card {
-  display: flex;
-  color: black;
-  max-width: 1300px;
-  z-index: 10;
-
-  &__image {
-    margin-right: 10px;
+  &__poster-image {
     width: 300px;
     height: 450px;
     flex-shrink: 0;
 
     img {
-      width: 100%;
-      height: 100%;
+      object-fit: cover;
     }
   }
 
-  &__title {
+  &__name {
     font-size: 32px;
+  }
+
+  &__info {
+    padding: 110px 100px 0 100px;
+    display: flex;
+
+    @include laptop {
+      padding: 100px 10px 0 10px;
+    }
+
+    @include tablet {
+      flex-direction: column;
+      align-items: center;
+    }
+
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-left: 50px;
+
+    @include tablet {
+      padding-left: 10px;
+    }
   }
 
   &__info-film {
     display: flex;
-
+    justify-content: flex-start;
+    font-size: 24px;
   }
 
-  &__date {
-    margin-right: 10px;
+  &__film-date {
+    padding-right: 20px;
   }
 
   &__description {
-    padding-top: 50px;
-  }
+    padding-top: 20px;
 
-  &__info {
-    position: relative;
+    P {
+      padding-top: 15px;
+      font-size: 20px;
+    }
   }
 
   &__actions {
     display: flex;
+    justify-content: space-evenly;
     width: 100%;
-    justify-content: space-around;
-    position: absolute;
-    bottom: 0;
-  }
-}
+    padding: 32px;
 
-.card {
-  margin: 5rem;
-  height: 100%;
-}
+    button {
+      margin: 0 3px;
+    }
 
-.genres h4 {
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-.about h4 {
-  font-size: 20px;
-}
-
-@media (max-width: 1144px) {
-  .card {
-    display: inherit;
-    margin: 0;
+    @include mobile {
+      flex-direction: column;
+      row-gap: 10px;
+      padding: 10px;
+    }
   }
 
-  img {
-    width: 100%;
+  &__date {
+    display: flex;
+    background-color: #b6ff9e;
+    padding: 5px 10px;
+    margin-bottom: 0;
+    height: 35px;
+    flex-shrink: 0;
   }
 
-  .actions-item {
-    position: relative;
-    margin-top: 16px;
+  &__genres {
+    display: flex;
+    flex-direction: row;
+    row-gap: 10px;
+    flex-wrap: wrap;
+
+    span {
+      background-color: #01b4e4;
+      padding: 5px 10px;
+      border-radius: 20px;
+      color: white;
+      margin: 0 10px;
+    }
   }
-}
-
-.wrap {
-  margin-top: 60px;
-  display: grid;
-  grid-gap: 2vw;
-  padding: 4px;
-}
-
-.actors-title {
-  padding: 4px;
-  font-size: 18px;
-}
-
-.card-body {
-  background: linear-gradient(
-                  352deg, black, #626262);
-  color: black;
-}
-
-.card-title {
-  text-align: right;
-}
-
-.button-review {
-  display: flex;
-  justify-content: end;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: center;
-  background: linear-gradient(
-                  180deg, black, #626262);
-}
-
-.up-button-block {
-  position: relative;
-  bottom: -90%;
-  left: 100%;
-}
-
-.actions-item {
-  display: flex;
-  text-align: center;
-  justify-content: space-between;
-  position: relative;
-  bottom: 0;
-  width: 97%;
-  align-items: center;
-  padding-bottom: 6px;
-
-}
-
-.card-body {
-  position: relative;
-}
-
-h1 {
-  font-size: 22px;
-}
-
-@media (max-width: 1024px) {
-
 }
 </style>

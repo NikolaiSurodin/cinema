@@ -1,12 +1,13 @@
 import { endpoints } from '@/endpoints'
 import { instance, API_KEY } from '@/helpers/http.helper'
 
-export const searchFilm = ( searchValue ) => {
+export const searchFilm = ( searchValue, page ) => {
     return new Promise( resolve => {
         let global = []
         instance.get( endpoints.films.getSearchFilm, {
             params: {
-                query: searchValue
+                query: searchValue,
+                page: page
             }
         } )
 
@@ -43,12 +44,12 @@ export const filmList = ( params ) => {
         instance.get( endpoints.films.getFilmList, {
             params
         } )
-            .then(response => {
-                resolve(response.data.results)
-            })
-            .catch(() => {
+            .then( response => {
+                resolve( response.data.results )
+            } )
+            .catch( () => {
                 reject()
-            })
+            } )
     } )
 }
 
@@ -87,7 +88,7 @@ export const getVideo = ( id ) => {
     return new Promise( resolve => {
         instance.get( endpoints.films.getTrailer.replace( '{movie_id}', id ) )
             .then( response => {
-                resolve( response.data.results[ 0 ] )
+                resolve( response.data.results )
             } )
     } )
 }

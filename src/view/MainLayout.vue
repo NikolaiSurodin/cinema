@@ -1,40 +1,41 @@
 <template>
-    <div class="main-page">
-        <div class="main-page__header">
-            <div class="main-page__content" style="color: white">
-                <div class="main-page__title">
-                    Welcome.
-                </div>
-                <div class="main-page__description">
-                    Millions of movies, TV shows and people to discover. Explore now.
-                </div>
-                <div class="main-page__input">
-                    <custom-input
-                            v-model="search"
-                            :is-scale="true"
-                            placeholder="search for movie"
-                    />
-                    <b-button v-if="search" @click="searchFilm">Search</b-button>
-                </div>
-            </div>
+  <div class="main-page">
+    <div class="main-page__header">
+      <div class="main-page__content" style="color: white">
+        <div class="main-page__title">
+          Welcome.
         </div>
-
-        <div class="main-page__filters">
+        <div class="main-page__description">
+          Millions of movies, TV shows and people to discover. Explore now.
         </div>
-
-        <div class="main-page__film-list">
-            <filter-side-bar />
-            <template v-if="loading">
-                <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
-            </template>
-            <film-table
-                    v-else
-                    :film-list="films"
-                    @loadData="loadData"
-            />
+        <div class="main-page__input">
+          <custom-input
+              v-model="search"
+              :is-scale="true"
+              :search="search"
+              @searchFilm="searchFilm"
+              placeholder="search for movie"
+          />
         </div>
-
+      </div>
     </div>
+    <div class="main-page__film-list">
+      <template v-if="loading">
+        <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
+      </template>
+      <template v-else>
+        <filter-side-bar
+            @searchFilms="fetchFilmList"
+            @clearFilter="fetchFilmList"
+        />
+        <film-table
+            style="position: relative; min-height: 75vh"
+            :film-list="films"
+            @loadData="loadData"
+        />
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -47,93 +48,94 @@ import { filmList } from '@/services/film.service'
 import FilterSideBar from '@/components/FilterSideBar'
 
 export default {
-    name: 'MainLayout',
-    components: {
-        CustomInput,
-        FilmTable,
-        FilterSideBar
-    },
-    data() {
-        return {
-            search: '',
-            globalFilm: {},
-            activeFilmId: '',
-            loading: true,
-            currentPage: 1,
-            global: false,
-            films: []
-        }
-    },
-    mounted() {
-        this.fetchFilmList()
-    },
-    methods: {
-        ...mapActions(
-            [
-                'fetchFilmList',
-                'fetchOnPageFilms',
-                'globalSearchFilm',
-                'removeGlobalFilm',
-                'fetchListByGenre',
-                'clearFilmListByGenre',
-                'clearGenderFilter'
-            ] ),
-
-        fetchFilmList() {
-            filmList(
-                this.getPayloadFilter
-            )
-                .then( ( result ) => {
-                    this.films = result
-                    this.loading = false
-                } )
-        },
-        toFilm( id ) {
-            this.$router.push( `/films/${ id }` )
-        },
-        searchFilm() {
-            if( this.search ) {
-                this.$router.push( { path: '/search', query: { search: this.search } } )
-            }
-        },
-        loadData() {
-            this.currentPage++
-
-            filmList( {
-                with_genres: this.activeFilmId,
-                page: this.currentPage
-            } )
-                .then( ( result ) => {
-                    this.films = [ ...this.films, ...result ]
-                    this.loading = false
-                } )
-        }
-    },
-    computed: {
-        ...mapGetters(
-            [
-                'getFilmList',
-                'getGlobalFilm',
-                'getUser',
-                'getFilmsByGenre',
-                'getGenresList',
-                'getPayloadFilter'
-            ] ),
-        ...mapState( [ 'user' ] )
-    },
-    watch: {
-        getPayloadFilter() {
-            this.fetchFilmList()
-        }
+  name: 'MainLayout',
+  components: {
+    CustomInput,
+    FilmTable,
+    FilterSideBar
+  },
+  data() {
+    return {
+      search: '',
+      globalFilm: {},
+      activeFilmId: '',
+      loading: true,
+      currentPage: 1,
+      global: false,
+      films: []
     }
+  },
+  mounted() {
+    this.fetchFilmList()
+  },
+  methods: {
+    ...mapActions(
+      [
+        'fetchFilmList',
+        'fetchOnPageFilms',
+        'globalSearchFilm',
+        'removeGlobalFilm',
+        'fetchListByGenre',
+        'clearFilmListByGenre',
+        'clearGenderFilter'
+      ] ),
+
+    fetchFilmList() {
+      filmList( this.getPayloadFilter )
+        .then( ( result ) => {
+          this.films = result
+          this.loading = false
+        } )
+    },
+    toFilm( id ) {
+      this.$router.push( `/films/${ id }` )
+    },
+    searchFilm() {
+      if( this.search ) {
+        this.$router.push( { path: '/search', query: { search: this.search } } )
+      }
+    },
+    loadData() {
+      this.currentPage++
+
+      filmList( {
+        with_genres: this.activeFilmId,
+        page: this.currentPage
+      } )
+        .then( ( result ) => {
+          this.films = [ ...this.films, ...result ]
+          this.loading = false
+        } )
+    }
+  },
+  computed: {
+    ...mapGetters(
+      [
+        'getFilmList',
+        'getGlobalFilm',
+        'getUser',
+        'getFilmsByGenre',
+        'getGenresList',
+        'getPayloadFilter'
+      ] ),
+    ...mapState( [ 'user' ] )
+  }
 }
 </script>
 
 <style lang="scss">
+@import "@/assets/media-mixin.scss";
 
 .main-page {
+  padding-top: 56px;
+
   &__film-list {
     display: flex;
+    position: relative;
+    @include desktopbig {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   &__header {

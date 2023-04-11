@@ -1,85 +1,103 @@
 <template>
-    <footer class="footer">
-        <div class="info-section">
-            <div class="footer-section">
-                <p class="section-heading">Product Collection</p>
-                <div class="section-content">
-                    <ul>
-                        <li>Current and Forecast APIs</li>
-                        <li>Historical Weather Data</li>
-                        <li>Weather Maps</li>
-                        <li>Widgets</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-section">
-                <p class="section-heading">Subscription</p>
-                <div class="section-content">
-                    <ul>
-                        <li>How to start</li>
-                        <li>Pricing</li>
-                        <li>FAQ</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-section">
-                <p class="section-heading">About us</p>
-                <div class="section-content">
-                    <p>OpenWeather is a team of IT experts and data scientists that has been practising deep weather
-                        data
-                        science
-                        since 2014. For each point on the globe, OpenWeather provides historical, current and forecasted
-                        weather
-                        data
-                        via light-speed APIs. Headquarters in London, UK.</p>
-                </div>
-            </div>
-        </div>
-        <div class="socal-section">
-            <a href="#"><img src="../assets/social/icon_facebook.png" height="80" width="39" /></a>
-            <a href="#"> <img href="#" src="../assets/social/icon_twitter.png" height="80" width="39" /></a>
-            <a href="#"> <img src="../assets/social/icon_telegram.png" height="80" width="39" /></a>
-            <a href="#"> <img src="../assets/social/icon_github.png" height="80" width="39" /></a>
-        </div>
-    </footer>
+  <footer class="footer">
+    <div class="footer__info-section">
+      <div class="footer__logo">
+        <img src="../assets/svg/movieDB.svg">
+      </div>
+      <div class="footer__join-button" v-if="!getIsLoggedIn">
+        <button class="button button-primary">Join to us</button>
+      </div>
+    </div>
+    <div class="footer__social-section">
+      <a v-for="(item, index) in socialIconList"
+         :key="index"
+      >
+        <img :src="require(`../assets/social/icon_${item.icon}.png`)" height="80" width="39" />
+      </a>
+    </div>
+  </footer>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-    name: 'AppFooter'
+  name: 'AppFooter',
+  data() {
+    return {
+      socialIconList: [
+        {
+          icon: 'facebook',
+          path: '#'
+        },
+        {
+          icon: 'twitter',
+          path: '#'
+        },
+        {
+          icon: 'telegram',
+          path: '#'
+        },
+        {
+          icon: 'github',
+          path: '#'
+        }
+      ]
+    }
+  },
+  computed: {
+    ...mapGetters( [ 'getIsLoggedIn' ] )
+  }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/variables.scss";
+
 .footer {
-    background-color: white;
-    padding-top: 40px;
-    position: relative;
-    z-index: 100;
-}
+  background: $blue-dark;
+  position: relative;
+  z-index: 100;
 
-.footer-section {
-    color: black;
-}
+  &__info-section {
+    padding: 15px 0 15px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+  }
 
-.section-content p {
-    width: 17rem;
-    color: black;
-}
-
-.socal-section a img {
-    width: auto;
-    height: 12pt;
-}
-
-ul {
-    list-style-type: none;
-}
-
-.socal-section {
+  &__social-section {
     background: white;
     display: flex;
     justify-content: space-around;
-    padding-bottom: 30px;
+    padding: 10px 0 10px;
+
+    p {
+      width: 17rem;
+      color: white;
+    }
+
+    a img {
+      width: auto;
+      height: 30px;
+    }
+  }
+
+  &__logo {
+    width: 195px;
+    height: 94px;
+  }
 }
+
+.footer-section {
+  color: white;
+}
+
+
+ul {
+  list-style-type: none;
+}
+
+
 </style>
