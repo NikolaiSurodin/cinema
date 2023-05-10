@@ -126,6 +126,7 @@ export default {
 <style lang="scss">
 @import "@/assets/media-mixin.scss";
 
+
 .main-page {
   padding-top: 56px;
 

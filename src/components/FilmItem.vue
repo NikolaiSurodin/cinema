@@ -1,6 +1,6 @@
 <template>
     <div class="film">
-        <BackButton />
+        <BackButton/>
         <div v-if="loading" class="main-layout-spinner">
             <b-spinner class="main-layout-spin" type="grow"></b-spinner>
         </div>
@@ -14,18 +14,19 @@
                     <div class="film__wrapper">
                         <div class="film__title">
                             <p class="film__name">{{ film.title }}
-                                ({{ new Date( film.release_date ).getFullYear() }})</p>
+                                ({{ new Date(film.release_date).getFullYear() }})</p>
                             <div class="film__info-film">
                                 <p class="film__date">
                                     {{ film.release_date }}
                                 </p>
+
                                 <div class="film__genres">
-                  <span
-                          v-for="genre in film.genres"
-                          :key="genre.id"
-                  >
-                    {{ genre.name }}
-                  </span>
+                                    <Badge
+                                            v-for="genre in film.genres"
+                                            :key="genre.id"
+                                            :title="genre.name"
+                                            bg="#01b4e4"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -42,7 +43,7 @@
                                       @click.stop="likesFilm(film)"
                                       v-if="getIsLoggedIn"
                             >
-                                <img src="../assets/like_favorite_heart_5759.png" />
+                                <img src="../assets/like_favorite_heart_5759.png"/>
                             </b-button>
                             <button class="button button-like" style="height: 45px;" @click="showVideo">
                                 <b-icon icon="play" aria-hidden="true"></b-icon>
@@ -65,27 +66,29 @@
                 </div>
             </div>
             <div class="film__similar-films" v-if="similar" ref="similar">
-                <film-table :film-list="similarFilmList" />
+                <film-table :film-list="similarFilmList"/>
             </div>
         </template>
     </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 
 import BackButton from '@/components/_partial/BackButton'
 import FilmTable from '@/components/FilmTable'
 import ActorsSlider from '@/components/slider/ActorsSlider'
+import Badge from "./UI/Badge.vue";
 
-import { getVideo, getInfoFilm, getSimilarFilmList } from '@/services/film.service'
+import {getVideo, getInfoFilm, getSimilarFilmList} from '@/services/film.service'
 
 export default {
     name: 'FilmItem',
     components: {
         FilmTable,
         ActorsSlider,
-        BackButton
+        BackButton,
+        Badge
     },
     data() {
         return {
@@ -97,55 +100,55 @@ export default {
         }
     },
     computed: {
-        ...mapGetters( [
+        ...mapGetters([
             'getIsLoggedIn',
             'getIMG_URL',
             'getFilm'
-        ] ),
+        ]),
 
         actors() {
-            return _.get( this.film, 'credits.cast', [] )
+            return _.get(this.film, 'credits.cast', [])
         }
     },
     created() {
         this.fetchFilmInfo()
     },
     methods: {
-        ...mapActions( [ 'addLikeFilm', 'fetchSimilarFilms' ] ),
+        ...mapActions(['addLikeFilm', 'fetchSimilarFilms']),
 
         fetchFilmInfo() {
-            getInfoFilm( this.$route.params.id, { append_to_response: 'credits' } )
-                .then( ( response ) => {
+            getInfoFilm(this.$route.params.id, {append_to_response: 'credits'})
+                .then((response) => {
                     this.film = response
                     this.loading = false
-                } )
+                })
         },
-        likesFilm( film ) {
-            this.addLikeFilm( film )
-                .then( () => {
+        likesFilm(film) {
+            this.addLikeFilm(film)
+                .then(() => {
                     this.like = true
-                    this.$popup.toast( 'this movie was added to the "Like" list' )
-                } )
-                .catch( () => {
-                    this.$popup.error( 'This film in you favorite list already' )
-                } )
+                    this.$popup.toast('this movie was added to the "Like" list')
+                })
+                .catch(() => {
+                    this.$popup.error('This film in you favorite list already')
+                })
         },
-        toActor( id ) {
-            this.$router.push( `/actor/${ id }` )
+        toActor(id) {
+            this.$router.push(`/actor/${id}`)
         },
         showSimilarFilmLIst() {
             this.similar = true
-            getSimilarFilmList( this.$route.params.id )
-                .then( ( response ) => {
+            getSimilarFilmList(this.$route.params.id)
+                .then((response) => {
                     this.similarFilmList = response
-                    this.$refs[ 'similar' ].scrollIntoView( { behavior: 'smooth', block: 'start', inline: 'start' } )
-                } )
+                    this.$refs['similar'].scrollIntoView({behavior: 'smooth', block: 'start', inline: 'start'})
+                })
         },
         showVideo() {
-            getVideo( this.$route.params.id )
-                .then( ( videoList ) => {
-                    this.$popup.video( videoList[ Math.floor( Math.random() * videoList.length ) ].key )
-                } )
+            getVideo(this.$route.params.id)
+                .then((videoList) => {
+                    this.$popup.video(videoList[Math.floor(Math.random() * videoList.length)].key)
+                })
         }
     }
 }
@@ -214,6 +217,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     font-size: 24px;
+    gap: 10px;
   }
 
   &__film-date {
@@ -258,16 +262,8 @@ export default {
   &__genres {
     display: flex;
     flex-direction: row;
-    row-gap: 10px;
+    gap: 10px;
     flex-wrap: wrap;
-
-    span {
-      background-color: #01b4e4;
-      padding: 5px 10px;
-      border-radius: 20px;
-      color: white;
-      margin: 0 10px;
-    }
   }
 }
 </style>
