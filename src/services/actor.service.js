@@ -1,5 +1,5 @@
 import { endpoints } from "@/endpoints"
-import { instance, API_KEY } from "@/helpers/http.helper"
+import { instance } from "@/helpers/http.helper"
 
 export const fetchPerson = ( person_id ) => {
     return new Promise( resolve => {
@@ -11,7 +11,7 @@ export const fetchPerson = ( person_id ) => {
 }
 export const filmsByPerson = ( person_id ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.actor.getPersonMovie.replace( '{:person_id}', person_id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.actor.getPersonMovie.replace( '{:person_id}', person_id ) )
             .then( response => {
                 resolve( response.data.cast )
             } )
@@ -19,7 +19,7 @@ export const filmsByPerson = ( person_id ) => {
 }
 export const popularPerson = (page) => {
     return new Promise( resolve => {
-        instance.get( endpoints.actor.getPopularPerson.replace( '{:api_key}', API_KEY ).replace('{:page}', page) )
+        instance.get( endpoints.actor.getPopularPerson.replace('{:page}', page) )
             .then( response => {
                 resolve( response.data.results )
             } )
@@ -27,7 +27,7 @@ export const popularPerson = (page) => {
 }
 export const searchPerson = ( search, page ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.actor.getSearchPerson.replace( '{:api_key}', API_KEY ).replace( '{:search}', search ).replace( '{:page}', page  ) )
+        instance.get( endpoints.actor.getSearchPerson.replace( '{:search}', search ).replace( '{:page}', page  ) )
             .then( response => {
                 resolve( response.data.results[ 0 ] )
             } )

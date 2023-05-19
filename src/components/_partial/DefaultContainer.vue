@@ -1,12 +1,10 @@
 <template>
-  <div class="main" ref="page">
-    <div class="main-header">
-      <MainHeader />
-    </div>
-    <main class="main-content">
+  <div class="main">
+    <MainHeader/>
+    <main class="main-content" @scroll="handleScroll">
       <router-view :key="$route.path"></router-view>
     </main>
-    <AppFooter />
+    <AppFooter/>
   </div>
 </template>
 
@@ -15,24 +13,42 @@ import MainHeader from '@/components/MainHeader'
 import AppFooter from '@/components/AppFooter'
 
 
-
 export default {
   name: 'DefaultContainer',
   data() {
-    return {}
+    return {
+      prevScrollPos: 0
+    }
   },
   components: {
     MainHeader,
     AppFooter
+  },
+  methods: {
+    handleScroll() {
+      console.log(123)
+      // const scrollPos = this.$refs.scrollContainer.scrollTop;
+      //
+      // if ( scrollPos > this.prevScrollPos ) {
+      //   console.log( 'Scrolling down' );
+      // } else if ( scrollPos < this.prevScrollPos ) {
+      //   console.log( 'Scrolling up' );
+      // }
+      //
+      // this.prevScrollPos = scrollPos;
+    }
   }
 
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+
 .main-header {
-    position: fixed;
-    width: 100%;
-    z-index: 9999;
+  //position: absolute;
+  //top: $header-height;
+}
+.main-content {
+  height: 100%;
 }
 </style>

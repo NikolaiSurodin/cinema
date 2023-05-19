@@ -2,17 +2,24 @@
   <footer class="footer">
     <div class="footer__info-section">
       <div class="footer__logo">
-        <img src="../assets/svg/movieDB.svg">
+        <img src="../assets/svg/movieDB.svg" alt="logo">
       </div>
       <div class="footer__join-button" v-if="!getIsLoggedIn">
-        <button class="button button-primary">Join to us</button>
+        <a
+            role="button"
+            class="button button-primary"
+            href="https://www.themoviedb.org/"
+            target="_blank"
+        >
+          Join to us
+        </a>
       </div>
     </div>
     <div class="footer__social-section">
       <a v-for="(item, index) in socialIconList"
          :key="index"
       >
-        <img :src="require(`../assets/social/icon_${item.icon}.png`)" height="80" width="39" />
+        <img :src="require(`../assets/social/icon_${item.icon}.png`)" height="80" width="39" alt="social"/>
       </a>
     </div>
   </footer>

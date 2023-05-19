@@ -1,5 +1,5 @@
 import { endpoints } from "@/endpoints"
-import { instance, API_KEY } from "@/helpers/http.helper"
+import { instance } from "@/helpers/http.helper"
 
 export const getToken = () => {
     return new Promise( resolve => {
@@ -12,7 +12,7 @@ export const getToken = () => {
 }
 export const login = ( user ) => {
     return new Promise( ( resolve, reject ) => {
-        instance.post( endpoints.me.login.replace( '{:api_key}', API_KEY ), user )
+        instance.post( endpoints.me.login, user )
             .then( response => {
                 let success = response.data.success
                 console.log( success )
@@ -25,7 +25,7 @@ export const login = ( user ) => {
 }
 export const openSession = ( data ) => {
     return new Promise( ( resolve, reject ) => {
-        instance.post( endpoints.me.session.replace( '{:api_key}', API_KEY ), data )
+        instance.post( endpoints.me.session, data )
             .then( response => {
                 resolve( response )
             } )
@@ -42,7 +42,7 @@ export const redirect = ( REQUEST_TOKEN ) => {
 }
 export const account = ( session_id ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.me.account.replace( '{:api_key}', API_KEY ).replace( '{:session_id}', session_id ) )
+        instance.get( endpoints.me.account.replace( '{:session_id}', session_id ) )
             .then( response  => {
                 resolve( response.data )
             } )

@@ -1,5 +1,8 @@
 <template>
   <div class="login">
+    <div class="login__bg">
+      <img :src="getImgUrl()" alt="">
+    </div>
     <form class="form">
       <p class="text">Sign In to your account</p>
       <b-input-group size="md" class="mb-3">
@@ -27,14 +30,13 @@
       </b-input-group>
 
       <div>
-        <b-button class="mt-3"
-                  variant="primary"
-                  type="submit"
-                  @click.prevent="loginClick"
+        <button class="mt-3 button btn-primary login__button"
+                type="submit"
+                @click.prevent="loginClick"
         >
           <b-spinner variant="primary" small v-if="loading"></b-spinner>
           login
-        </b-button>
+        </button>
       </div>
     </form>
   </div>
@@ -42,6 +44,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+
+import { getRandomImage } from '@/helpers/getRandomImage'
 
 export default {
   name: "Login",
@@ -57,6 +61,11 @@ export default {
   },
   methods: {
     ...mapActions( [ 'login', 'sendLogin' ] ),
+
+    getImgUrl() {
+      return require( '../assets/images/bg/' + getRandomImage() + '.jpg' )
+    },
+
     loginClick() {
       this.loading = true
       this.login( this.user )
@@ -75,26 +84,62 @@ export default {
 
 <style scoped lang="scss">
 .login {
-  height: calc(100vh - 290px);
+  position: relative;
+  height: calc(100vh - 223px);
+
+  &__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+
+    img {
+      object-fit: cover;
+    }
+  }
+  &__button {
+    height: 32px;
+  }
 }
+
 .form {
   width: 100%;
   padding: 15px;
   margin: auto;
-  border: 1px transparent;
+  border: 1px solid #20a8d8;
   margin-top: 150px;
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
-  background: white;
+  background: transparent;
   max-width: 25rem;
   border-radius: 5px;
   box-shadow: 1px -1px 11px -4px;
+
 }
 
 .form-input {
-  height: 2.1rem;
+  height: 2rem;
+}
+
+.input-group-text {
+  background: #20a8d8;
+  border: transparent;
+}
+
+input {
+  background-color: white;
+  border: transparent;
+}
+
+.input-group {
+  margin-left: -6px;
+}
+
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: -6px;
 }
 
 .btn-primary {
@@ -104,6 +149,6 @@ export default {
 }
 
 .text {
-  color: #73818f
+  color: white;
 }
 </style>

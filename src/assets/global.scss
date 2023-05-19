@@ -14,12 +14,11 @@ body * {
 
 body {
     height: 100%;
-    /*background: #1f1f1f;*/
 }
 
 ::-webkit-scrollbar {
-    width: 10px; /* ширина для вертикального скролла */
-    background-color: #3e3e3e;
+    width: 3px; /* ширина для вертикального скролла */
+    background-color: #01b4e4;
 }
 
 img {
@@ -30,6 +29,13 @@ img {
 a {
     text-decoration-skip-ink: auto;
     text-decoration: none !important;
+}
+ul  {
+    margin: 0;
+    padding: 0;
+}
+li {
+    list-style: none;
 }
 
 .layout {
@@ -55,7 +61,6 @@ a {
 
 @media (max-width: 470px) {
     .wrapper {
-        overflow: hidden;
         padding: 0;
         margin: 0;
     }
@@ -81,7 +86,13 @@ a {
 }
 
 .main {
-    /*flex: 1 1 auto;*/
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    background: var(--sbs-grey-1);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
 .main_title {

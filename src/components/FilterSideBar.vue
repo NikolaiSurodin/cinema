@@ -1,81 +1,61 @@
 <template>
     <div class="side-bar">
-        <div
-                v-b-toggle.collapse-1 class="m-1 side-bar__filter-block">
-            Sort
-            <span style="width: 15px; height: 15px;">
-            <img src="../assets/svg/arrow.svg" alt="arrow">
-            </span>
-        </div>
-        <b-collapse id="collapse-1">
-            <b-dropdown id="dropdown-left" :text="activeFilter" class="m-2">
-                <b-dropdown-item
-                        href="#"
-                        v-for="( item, index ) in sortingFilters"
-                        :key="index"
-                        @click="setActiveFilter( item )"
-                >
-                    {{ item.name }}
-                </b-dropdown-item>
-            </b-dropdown>
-        </b-collapse>
-
-        <div v-b-toggle.collapse-2 class="m-1 side-bar__filter-block">
+        <div class="m-1 side-bar__filter-block">
             Filters
             <span style="width: 15px; height: 15px;">
             <img src="../assets/svg/arrow.svg" alt="arrow">
             </span>
         </div>
-        <b-collapse id="collapse-2" :visible="true">
-            <div class="side-bar__filter-item-wrapper">
-                Certification
-                <div class="side-bar__filter-item">
-                    <div
-                            class="side-bar__certification-item"
-                            :class="{'side-bar__certification-item--active': item.active}"
-                            role="button"
-                            v-for="( item, index ) in certificateList"
-                            :key="index"
-                            @click="setActiveCertificate( item )"
-                    >
-                        {{ item.value }}
-                    </div>
+        <div class="side-bar__filter-item-wrapper">
+            Certification
+            <div class="side-bar__filter-item">
+                <div
+                        class="side-bar__certification-item"
+                        :class="{'side-bar__certification-item--active': item.active}"
+                        role="button"
+                        v-for="( item, index ) in certificateList"
+                        :key="index"
+                        @click="setActiveCertificate( item )"
+                >
+                    {{ item.value }}
                 </div>
+            </div>
 
-            </div>
-            <div class="side-bar__filter-item-wrapper">
-                Genres
-                <genres-list/>
-            </div>
-            <div class="side-bar__filter-item-wrapper side-bar__key-word-section">
-                Keywords
-                <search-dropdown
-                        v-model="keyWord"
-                        :key-word-list="keyWordList"
-                        :chosen-word-list="chosenWordList"
-                        @chooseWord="chooseWord"
-                        @removeChosenWord="removeChosenWord"
-                        @clearSearch="clearSearch"
-                        @input="debounceSearch"
-                />
-            </div>
-        </b-collapse>
-        <div class="side-bar__bottom">
-            <button
-                    :disabled="isEmptyFilter"
-                    class="button button-primary"
-                    @click="search"
-            >
-                Search
-            </button>
+        </div>
+        <div class="side-bar__filter-item-wrapper">
+            Genres
+            <genres-list/>
+        </div>
+        <div class="side-bar__filter-item-wrapper side-bar__key-word-section">
+            Keywords
+            <search-dropdown
+                    v-model="keyWord"
+                    :key-word-list="keyWordList"
+                    :chosen-word-list="chosenWordList"
+                    @chooseWord="chooseWord"
+                    @removeChosenWord="removeChosenWord"
+                    @clearSearch="clearSearch"
+                    @input="debounceSearch"
+            />
+        </div>
+        <div>
+            <div class="side-bar__bottom">
+                <button
+                        :disabled="isEmptyFilter"
+                        class="button button-primary"
+                        @click="search"
+                >
+                    Search
+                </button>
 
-            <button
-                    class="button button-secondary"
-                    @click="removeFilter"
-                    :disabled="isEmptyFilter"
-            >
-                Clear
-            </button>
+                <button
+                        class="button button-secondary"
+                        @click="removeFilter"
+                        :disabled="isEmptyFilter"
+                >
+                    Clear
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -238,14 +218,14 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/variables";
 
 .side-bar {
   color: black;
   background-color: white;
-  border-radius: 8px;
-  z-index: 1050;
   padding: 16px;
-  margin: 16px;
+  position: sticky;
+  top: $header-height;
 
   &__bottom {
     display: flex;

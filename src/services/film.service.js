@@ -1,5 +1,5 @@
 import { endpoints } from '@/endpoints'
-import { instance, API_KEY } from '@/helpers/http.helper'
+import { instance } from '@/helpers/http.helper'
 
 export const searchFilm = ( searchValue, page ) => {
     return new Promise( resolve => {
@@ -20,7 +20,7 @@ export const searchFilm = ( searchValue, page ) => {
 export const recomendFilmList = ( id ) => {
     return new Promise( resolve => {
         let films = []
-        instance.get( endpoints.films.getRecommendationsFilmList.replace( '{movie_id}', id ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getRecommendationsFilmList.replace( '{movie_id}', id ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -57,7 +57,7 @@ export const filmList = ( params ) => {
 export const getNewFilms = ( page ) => {
     return new Promise( resolve => {
         let addedFilms = [] // добавленные новые фильмы
-        instance.get( endpoints.films.getFilmList.replace( '{:api_key}', API_KEY ).replace( 'page=1', `page=${ page }` ) )
+        instance.get( endpoints.films.getFilmList.replace( 'page=1', `page=${ page }` ) )
             .then( response => {
                 addedFilms = response.data.results
                 resolve( addedFilms )
@@ -67,7 +67,7 @@ export const getNewFilms = ( page ) => {
 export const getPopularFilmList = ( page ) => {
     return new Promise( resolve => {
         let films = []
-        instance.get( endpoints.films.getPopularFilmList.replace( 'page=1', `page=${ page }` ).replace( '{:api_key}', API_KEY ) )
+        instance.get( endpoints.films.getPopularFilmList.replace( 'page=1', `page=${ page }` ) )
             .then( response => {
                 films = response.data.results
                 resolve( films )
@@ -102,7 +102,7 @@ export const getGenres = () => {
 }
 export const getFilmListByGenre = ( genres, page ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.films.getListByGenre.replace( 'page=1', `page=${ page }` ).replace( '{:api_key}', API_KEY ).replace( '{genres}', genres ) )
+        instance.get( endpoints.films.getListByGenre.replace( 'page=1', `page=${ page }` ).replace( '{genres}', genres ) )
             .then( response => {
                 resolve( response.data.results )
             } )
@@ -110,7 +110,7 @@ export const getFilmListByGenre = ( genres, page ) => {
 }
 export const markFavorite = ( film, account_id, session_id ) => {
     return new Promise( resolve => {
-        instance.post( endpoints.films.likeFilm.replace( '{:account_id}', account_id ).replace( '{:session_id}', session_id ).replace( '{:api_key}', API_KEY ), film )
+        instance.post( endpoints.films.likeFilm.replace( '{:account_id}', account_id ).replace( '{:session_id}', session_id ), film )
             .then( () => {
                 resolve()
             } )
@@ -118,7 +118,7 @@ export const markFavorite = ( film, account_id, session_id ) => {
 }
 export const favoriteFilmList = ( account_id, session_id ) => {
     return new Promise( resolve => {
-        instance.get( endpoints.films.getFavoriteFilmList.replace( '{:account_id}', account_id ).replace( '{:api_key}', API_KEY ).replace( '{:session_id}', session_id ) )
+        instance.get( endpoints.films.getFavoriteFilmList.replace( '{:account_id}', account_id ).replace( '{:session_id}', session_id ) )
             .then( response => {
                 resolve( response.data.results )
             } )

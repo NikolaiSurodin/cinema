@@ -1,7 +1,4 @@
 import {
-    globalFilm,
-    recomendFilmList,
-    infoFilm,
     filmList,
     getNewFilms,
     getPopularFilmList,
@@ -34,36 +31,6 @@ export default {
                 } )
         } )
     },
-    fetchInfoDetailFilm( { commit }, id ) {
-        return new Promise( ( resolve, reject ) => {
-            infoFilm( id )
-                .then( ( film ) => {
-                    commit( 'SET_FILM_INFO', film )
-                    resolve()
-                } )
-                .catch( () => {
-                    reject()
-                } )
-        } )
-    },
-    clearFIlmItem( { commit } ) {
-        return new Promise( resolve => {
-            commit( 'CLEAR' )
-            resolve()
-        } )
-    },
-    globalSearchFilm( { commit }, searchValue ) {
-        return new Promise( resolve => {
-            globalFilm( searchValue )
-                .then( ( film ) => {
-                    commit( 'SET_GLOBAL_FILM', film )
-                } )
-            resolve()
-        } )
-    },
-    removeGlobalFilm( { commit } ) {
-        commit( 'REMOVE_GLOBAL_FILM' )
-    },
     addLikeFilm( { getters }, film ) {
         return new Promise( ( resolve ) => {
             markFavorite( {
@@ -86,15 +53,6 @@ export default {
                 getters.getUser.username,
                 getters.getSession_id )
             commit( 'DELETE_LIKE_FILM', film )
-            resolve()
-        } )
-    },
-    fetchRecomendFilms( { commit }, id ) {
-        return new Promise( resolve => {
-            recomendFilmList( id )
-                .then( ( films ) => {
-                    commit( 'SET_RECOMEND', films )
-                } )
             resolve()
         } )
     },

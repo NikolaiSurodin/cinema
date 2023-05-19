@@ -24,15 +24,20 @@
         <b-spinner class="main-layout-spinner" type="grow"></b-spinner>
       </template>
       <template v-else>
-        <filter-side-bar
-            @searchFilms="fetchFilmList"
-            @clearFilter="fetchFilmList"
-        />
-        <film-table
-            style="position: relative; min-height: 75vh"
-            :film-list="films"
-            @loadData="loadData"
-        />
+        <div class="main-page__left-side">
+          <filter-side-bar
+              @searchFilms="fetchFilmList"
+              @clearFilter="fetchFilmList"
+          />
+        </div>
+        <div class="main-page__right-side">
+
+          <film-table
+              style="position: relative; min-height: 75vh"
+              :film-list="films"
+              @loadData="loadData"
+          />
+        </div>
       </template>
     </div>
   </div>
@@ -70,28 +75,26 @@ export default {
   },
   methods: {
     ...mapActions(
-      [
-        'fetchFilmList',
-        'fetchOnPageFilms',
-        'globalSearchFilm',
-        'removeGlobalFilm',
-        'fetchListByGenre',
-        'clearFilmListByGenre',
-        'clearGenderFilter'
-      ] ),
+        [
+          'fetchFilmList',
+          'fetchOnPageFilms',
+          'fetchListByGenre',
+          'clearFilmListByGenre',
+          'clearGenderFilter'
+        ] ),
 
     fetchFilmList() {
       filmList( this.getPayloadFilter )
-        .then( ( result ) => {
-          this.films = result
-          this.loading = false
-        } )
+          .then( ( result ) => {
+            this.films = result
+            this.loading = false
+          } )
     },
     toFilm( id ) {
       this.$router.push( `/films/${ id }` )
     },
     searchFilm() {
-      if( this.search ) {
+      if ( this.search ) {
         this.$router.push( { path: '/search', query: { search: this.search } } )
       }
     },
@@ -102,22 +105,22 @@ export default {
         with_genres: this.activeFilmId,
         page: this.currentPage
       } )
-        .then( ( result ) => {
-          this.films = [ ...this.films, ...result ]
-          this.loading = false
-        } )
+          .then( ( result ) => {
+            this.films = [ ...this.films, ...result ]
+            this.loading = false
+          } )
     }
   },
   computed: {
     ...mapGetters(
-      [
-        'getFilmList',
-        'getGlobalFilm',
-        'getUser',
-        'getFilmsByGenre',
-        'getGenresList',
-        'getPayloadFilter'
-      ] ),
+        [
+          'getFilmList',
+          'getGlobalFilm',
+          'getUser',
+          'getFilmsByGenre',
+          'getGenresList',
+          'getPayloadFilter'
+        ] ),
     ...mapState( [ 'user' ] )
   }
 }
@@ -128,11 +131,11 @@ export default {
 
 
 .main-page {
-  padding-top: 56px;
 
   &__film-list {
     display: flex;
     position: relative;
+    width: 100%;
     @include desktopbig {
       display: flex;
       flex-direction: column;

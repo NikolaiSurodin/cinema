@@ -156,12 +156,14 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/media-mixin.scss";
-
+@import "@/assets/variables";
 .film {
   min-height: 70vh;
+  color: $text;
 
   &__card {
     position: relative;
+    background-image: linear-gradient(to right, rgba(10.5, 31.5, 52.5, 1) calc((50vw - 170px) - 340px), rgba(10.5, 31.5, 52.5, 0.84) 50%, rgba(10.5, 31.5, 52.5, 0.84) 100%);
   }
 
   &__bg {
@@ -170,7 +172,6 @@ export default {
     right: 0;
     width: 100%;
     object-fit: cover;
-    opacity: 0.3;
     z-index: -1;
   }
 
