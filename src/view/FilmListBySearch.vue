@@ -2,9 +2,9 @@
     <div class="films-by-search gb-container">
         <header class="films-by-search__header">
             <custom-input
-                    v-model="$route.query.search"
-                    @searchFilm="loadData"
-                    :search="$route.query.search"
+                    v-model="search"
+                    :search="search"
+                    @searchFilm="searchFilm"
                     :is-scale="true"
                     placeholder="search for movie"
             />
@@ -48,10 +48,16 @@ export default {
           this.page++
           this.loadData()
         },
+        searchFilm() {
+          this.page = 1
+          this.filmList = []
+          this.$router.push( { query: { search: this.search } } )
+          this.loadData()
+        },
         loadData() {
             searchFilm( this.$route.query.search, this.page )
                 .then( ( filmList ) => {
-                    this.filmList = [...this.filmList, ...filmList ]
+                    this.filmList = [ ...this.filmList, ...filmList ]
                 } )
         }
     }
@@ -90,6 +96,12 @@ export default {
     color: white;
     padding: 8px 15px;
     flex-shrink: 0;
+  }
+  input {
+    color: black
+  }
+  input::-webkit-input-placeholder {
+    color: black;
   }
 }
 

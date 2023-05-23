@@ -7,7 +7,10 @@
           :film="film"
       />
     </div>
-    <div class="films__load-button" :class="{ 'films__load-button--view': viewButton }">
+    <div
+        class="films__load-button"
+        :class="{ 'films__load-button--view': viewButton }"
+    >
       <button
           @click="loadingFilmList"
           class="button button-primary"

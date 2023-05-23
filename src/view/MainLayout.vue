@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page">
+  <div class="main-page" ref="test" @scroll="handleScroll">
     <div class="main-page__header">
       <div class="main-page__content" style="color: white">
         <div class="main-page__title">
@@ -26,6 +26,7 @@
       <template v-else>
         <div class="main-page__left-side">
           <filter-side-bar
+              :is-show-input-search="isShowInputSearch"
               @searchFilms="fetchFilmList"
               @clearFilter="fetchFilmList"
           />
@@ -61,6 +62,7 @@ export default {
   },
   data() {
     return {
+      isShowInputSearch: false,
       search: '',
       globalFilm: {},
       activeFilmId: '',
@@ -69,6 +71,12 @@ export default {
       global: false,
       films: []
     }
+  },
+  created () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.onScroll);
   },
   mounted() {
     this.fetchFilmList()
@@ -82,7 +90,6 @@ export default {
           'clearFilmListByGenre',
           'clearGenderFilter'
         ] ),
-
     fetchFilmList() {
       filmList( this.getPayloadFilter )
           .then( ( result ) => {
@@ -109,6 +116,9 @@ export default {
             this.films = [ ...this.films, ...result ]
             this.loading = false
           } )
+    },
+    handleScroll() {
+     this.isShowInputSearch =  window.scrollY >= 358
     }
   },
   computed: {
@@ -121,7 +131,8 @@ export default {
           'getGenresList',
           'getPayloadFilter'
         ] ),
-    ...mapState( [ 'user' ] )
+    ...mapState( [ 'user' ] ),
+
   }
 }
 </script>
@@ -143,6 +154,8 @@ export default {
   }
 
   &__header {
+    position: relative;
+    z-index: 2;
     min-height: 350px;
     background-image: linear-gradient(to right, rgba(27, 68, 101, 0.8) 0%, rgba(93, 84, 84, 0) 100%), url('.././assets/images/main-title-image.jpg');
     background-repeat: no-repeat;

@@ -87,12 +87,6 @@ li {
 
 .main {
     position: relative;
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    background: var(--sbs-grey-1);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
 }
 
 .main_title {

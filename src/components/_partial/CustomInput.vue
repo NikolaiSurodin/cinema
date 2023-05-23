@@ -12,7 +12,8 @@
     >
     <button
         class="button button-primary"
-        v-if="search"
+        style="margin-left: 15px;"
+        v-if="search && isButton"
         @click="$emit('searchFilm')"
     >
       Search
@@ -42,6 +43,10 @@ export default {
     search: {
       type: String,
       default: ''
+    },
+    isButton: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
@@ -53,6 +58,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/variables";
 
 .search {
   display: flex;
@@ -71,6 +77,14 @@ export default {
     width: 250px;
     transition: all 0.4s;
     text-indent: 15px;
+    background: transparent;
+    border: 1px solid $blue-color;
+    border-radius: 10px;
+    color: white;
+  }
+
+  input::-webkit-input-placeholder {
+    color: $text;
   }
 
   &__custom-input {
@@ -79,7 +93,6 @@ export default {
     border: 1px transparent;
     border-radius: 4px;
     font-size: 20px;
-    margin-right: 15px;
   }
 
 }
