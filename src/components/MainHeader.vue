@@ -76,10 +76,12 @@ export default {
       activeLang: ''
     }
   },
+
   computed: {
     ...mapGetters( [ 'getFavoriteFilms', 'getIsLoggedIn' ] ),
+
     getActiveLanguage() {
-      return localStorage.getItem( 'lang' ).split( '-' )[ 0 ]
+      return localStorage.getItem( 'lang' ) ? localStorage.getItem( 'lang' ).split( '-' )[ 0 ] : 'en'
     }
   },
   methods: {
