@@ -1,23 +1,15 @@
 <template>
   <div class="main-page" ref="test" @scroll="handleScroll">
     <div class="main-page__header">
-      <div class="main-page__content" style="color: white">
-        <div class="main-page__title">
-          Welcome.
-        </div>
-        <div class="main-page__description">
-          Millions of movies, TV shows and people to discover. Explore now.
-        </div>
-        <div class="main-page__input">
-          <custom-input
-              v-model="search"
-              :is-scale="true"
-              :search="search"
-              @searchFilm="searchFilm"
-              placeholder="search for movie"
-          />
-        </div>
-      </div>
+      <HeaderPage>
+        <custom-input
+            v-model="search"
+            :is-scale="true"
+            :search="search"
+            @searchFilm="searchFilm"
+            placeholder="search for movie"
+        />
+      </HeaderPage>
     </div>
     <div class="main-page__film-list">
       <template v-if="loading">
@@ -32,9 +24,7 @@
           />
         </div>
         <div class="main-page__right-side">
-
           <film-table
-              style="position: relative; min-height: 75vh"
               :film-list="films"
               @loadData="loadData"
           />
@@ -47,6 +37,7 @@
 <script>
 import CustomInput from '@/components/_partial/CustomInput'
 import FilmTable from '@/components/FilmTable'
+import HeaderPage from "@/components/_partial/HeaderPage.vue";
 
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -58,7 +49,8 @@ export default {
   components: {
     CustomInput,
     FilmTable,
-    FilterSideBar
+    FilterSideBar,
+    HeaderPage
   },
   data() {
     return {
@@ -72,11 +64,11 @@ export default {
       films: []
     }
   },
-  created () {
-    window.addEventListener('scroll', this.handleScroll);
+  created() {
+    window.addEventListener( 'scroll', this.handleScroll );
   },
-  destroyed () {
-    window.removeEventListener('scroll', this.onScroll);
+  destroyed() {
+    window.removeEventListener( 'scroll', this.onScroll );
   },
   mounted() {
     this.fetchFilmList()
@@ -118,7 +110,7 @@ export default {
           } )
     },
     handleScroll() {
-     this.isShowInputSearch =  window.scrollY >= 358
+      this.isShowInputSearch = window.scrollY >= 358
     }
   },
   computed: {
@@ -140,9 +132,7 @@ export default {
 <style lang="scss">
 @import "@/assets/media-mixin.scss";
 
-
 .main-page {
-
   &__film-list {
     display: flex;
     position: relative;
@@ -152,44 +142,5 @@ export default {
       flex-direction: column;
     }
   }
-
-  &__header {
-    position: relative;
-    z-index: 2;
-    min-height: 350px;
-    background-image: linear-gradient(to right, rgba(27, 68, 101, 0.8) 0%, rgba(93, 84, 84, 0) 100%), url('.././assets/images/main-title-image.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: white;
-    display: flex;
-    margin: 0 auto;
-    width: 100%;
-    justify-content: center;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 50px 15px;
-  }
-
-  &__title {
-    font-size: 3em;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  &__description {
-    font-size: 2em;
-    font-weight: 600;
-    margin: 0;
-  }
-
-  &__input {
-    display: flex;
-    justify-content: center;
-  }
-
 }
 </style>

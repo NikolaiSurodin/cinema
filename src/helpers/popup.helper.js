@@ -26,11 +26,14 @@ class Popup {
             [ html ? 'html' : 'text' ]: message,
             showConfirmButton: false,
             timer: 1500,
-            background: '#e2e2e2'
+            background: '#e2e2e2',
+            customClass:{
+
+            }
         } )
     }
 
-    toast( message ) {
+    toast( message, type ) {
         const Toast = this.$swal.mixin( {
             toast: true,
             position: 'bottom-right',
@@ -44,7 +47,7 @@ class Popup {
         } )
 
         Toast.fire( {
-            icon: 'success',
+            icon: type === 'error' ? 'error' : 'success',
             title: message
         } )
 
@@ -57,7 +60,7 @@ class Popup {
             imageWidth: 200,
             imageHeight: 300,
             imageAlt: 'Custom image',
-            [ html ? 'html' : 'text' ]: message,
+            [ html ? 'html' : 'text' ]: message
         } )
     }
 
@@ -81,11 +84,11 @@ class Popup {
             title: '',
             icon: '',
             html:
-                `<iframe width="560" height="315" src="https://www.youtube.com/embed/${ key }" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
-            showCloseButton: false,
+                `<iframe width="760" height="500" src="https://www.youtube.com/embed/${ key }" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`,
+            showCloseButton: true,
+            showConfirmButton: false,
             showCancelButton: false,
             confirmButtonColor: 'black',
-            confirmButtonText: 'close',
             focusConfirm: false,
             width: '45em',
             background: '#000000'

@@ -30,6 +30,6 @@ export default {
 
 <style lang="scss">
 .main-content {
-  height: 100%;
+  min-height: calc( 100vh - 184px );
 }
 </style>

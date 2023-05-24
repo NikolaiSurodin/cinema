@@ -9,7 +9,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '@/assets/global.scss'
+import '@/assets/global.css'
 
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'

@@ -9,14 +9,9 @@
           v-model="searchFilmInput"
           :search="searchFilmInput"
           :is-button="false"
+          placeholder="search your movie"
           @searchFilm="searchFilm"
       />
-    </div>
-    <div class="m-1 side-bar__filter-block">
-      Filters
-      <span style="width: 15px; height: 15px;">
-            <img src="../assets/svg/arrow.svg" alt="arrow">
-            </span>
     </div>
     <div class="side-bar__filter-item-wrapper">
       Certification
@@ -63,7 +58,6 @@
         <button
             class="button button-secondary"
             @click="removeFilter"
-            :disabled="isEmptyFilter"
         >
           Clear
         </button>
@@ -253,6 +247,8 @@ export default {
   padding: 16px;
   position: sticky;
   top: $header-height;
+  overflow-y: auto;
+  height: calc(100vh - 30px);
 
   &__bottom {
     display: flex;
@@ -327,6 +323,10 @@ export default {
   }
   input {
     color: black;
+  }
+  input::-webkit-input-placeholder {
+    color: black;
+    opacity: 0.7;
   }
 }
 
